@@ -1,0 +1,11 @@
+development:
+  admin:
+    - "admin.tup"
+  professor:
+    - "professor.tup"
+    - ngrok-free.app
+production:
+  admin:
+    - "admin.tup"
+  professor:
+    - "professor.tup"
