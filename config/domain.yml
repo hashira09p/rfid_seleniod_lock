@@ -1,11 +1,11 @@
 development:
   admin:
-    - "admin.tup"
+    - "admin.com"
   professor:
-    - "professor.tup"
+    - "professor.com"
     - ngrok-free.app
 production:
   admin:
-    - "admin.tup"
+    - "admin.com"
   professor:
-    - "professor.tup"
+    - "professor.com"

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
         sessions: 'admin/users/sessions'
       }, as: :admin
     end
+    root 'admin/home#index', as: :admin_root
   end
 
   constraints(ProfessorDomainConstraint.new) do
