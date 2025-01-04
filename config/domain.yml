@@ -1,9 +1,9 @@
 development:
   admin:
     - "admin.com"
+    - ngrok-free.app
   professor:
     - "professor.com"
-    - ngrok-free.app
 production:
   admin:
     - "admin.com"
