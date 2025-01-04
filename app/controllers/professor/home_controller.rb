@@ -1,3 +1,3 @@
-class Admin::HomeController < AdminApplicationController
+class Professor::HomeController < ApplicationController
   def index;end
 end
