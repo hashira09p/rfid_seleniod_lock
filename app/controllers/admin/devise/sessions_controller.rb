@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::Users::SessionsController < Devise::SessionsController
+class Admin::Devise::SessionsController < Devise::SessionsController
+  skip_before_action :verify_authenticity_token, only: [:create, :new]
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
@@ -9,14 +10,14 @@ class Admin::Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+   super
+  end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    super
+  end
 
   # protected
 

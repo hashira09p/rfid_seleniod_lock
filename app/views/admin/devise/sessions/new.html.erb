@@ -1,0 +1,79 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div class="card shadow-lg" style="width: 32rem; border-radius: 12px; background: #fff;">
+    <div class="card-body p-4">
+      <!-- Added image -->
+      <div class="text-center mb-4">
+        <%= image_tag "tup.jpg", alt: "TUP Logo", class: "img-fluid", style: "max-width: 120px;" %>
+      </div>
+      <h1 class="card-title text-center mb-3 text-dark">Welcome Back Admin</h1>
+      <p class="text-center text-muted mb-4">Log in to your account</p>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |f| %>
+        <div class="mb-3">
+          <%= f.label :email, class: "form-label text-dark" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, class: "form-label text-dark" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="form-check mb-3">
+            <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
+            <%= f.label :remember_me, class: "form-check-label text-dark", for: "remember_me" %>
+          </div>
+        <% end %>
+
+        <div class="d-grid mb-3">
+          <%= f.submit "Log In", class: "btn btn-gradient" %>
+        </div>
+      <% end %>
+
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
+
+<style>
+    /* Gradient button */
+    .btn-gradient {
+        background: linear-gradient(to right, #ff7eb3, #ff65a3); /* Pink to Light Pink gradient */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s ease-in-out;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(to right, #ff65a3, #ff7eb3); /* Reverse gradient on hover */
+        transform: scale(1.05);
+    }
+
+    /* Input field styles */
+    .form-control {
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ff65a3;
+        box-shadow: 0 0 5px rgba(255, 101, 163, 0.5);
+    }
+
+    /* Card background */
+    .card {
+        background: #fff;
+    }
+
+    /* Label and other text color */
+    .form-label, .form-check-label {
+        color: #000;
+    }
+
+    .text-muted {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+</style>
