@@ -1,7 +1,5 @@
 class Admin::HomeController < AdminApplicationController
-  before_action :authenticate_with_api_token
-  skip_before_action :verify_authenticity_token, only: [:create]
-  before_action :authenticate_user!, except: [:create]
+  before_action :authenticate_admin_user!, except: [:create]
   def index;end
 
   def create
@@ -14,12 +12,5 @@ class Admin::HomeController < AdminApplicationController
     else
       render json: { message: "Access denied", unlock: false }, status: :unauthorized
     end
-  end
-
-  private
-
-  def authenticate_with_api_token
-    api_token = request.headers['Authorization']
-    head :unauthorized unless User.exists?(api_token: api_token)
   end
 end
