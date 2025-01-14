@@ -1,5 +1,4 @@
 class Admin::HomeController < AdminApplicationController
-  before_action :authenticate_admin_user!, except: [:create]
   def index;end
 
   def create

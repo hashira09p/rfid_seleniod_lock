@@ -11,7 +11,14 @@ class Admin::Devise::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-   super
+    user_admin = User.admin.find_by(email: params[:admin_user][:email])
+    if user_admin
+      super
+      flash[:alert] = "Welcome, #{user_admin.firstname}"
+    elsif user_admin.nil?
+      flash[:alert] = 'Invalid Account or account is not an admin.'
+      redirect_to new_admin_user_session_path
+    end
   end
 
   # DELETE /resource/sign_out

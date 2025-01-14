@@ -1,0 +1,25 @@
+
+<div class="container my-5">
+  <h2 class="mb-4">User Table</h2>
+  <%= link_to "Add Card", new_card_path %>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>UID</th>
+      <th>User</th>
+      <th>Status</th>
+      <th>Registered At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @cards.each do |card| %>
+      <tr>
+        <td><%= card.uid %></td>
+        <td><%= card.user.firstname %></td>
+        <td><%= card.status %></td>
+        <td><%= card.created_at %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

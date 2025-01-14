@@ -6,13 +6,12 @@ class Admin::RfidsController < AdminApplicationController
   def create
     rfid_uid = params[:uid]
     room_status = params[:room_status]
-    room_number = params[:room_number]
     card = Card.find_by(uid: rfid_uid)
 
     if card && room_status == "Lock"
-      render json: { message: "Access granted", unlock: true }, status: :ok
+      render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
     elsif card && room_status == "Unlock"
-      render json: { message: "Access granted", lock: true }, status: :ok
+      render json: { message: "Access granted", lock: true, user: card.user.firstname }, status: :ok
     else
       render json: { message: "Access denied" }, status: :Unauthorized
     end

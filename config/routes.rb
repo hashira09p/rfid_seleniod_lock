@@ -12,15 +12,17 @@ Rails.application.routes.draw do
       }, as: :admin
       resources :home
       resources :rfids
-      resources :rfid_login
+      resources :cards
     end
     root 'admin/home#index', as: :admin_root
+    post 'registrations', to: 'admin/cards#registrations'
+    post 'cards/handle_scan', to: 'admin/cards#handle_scan'
   end
 
   constraints(ProfessorDomainConstraint.new) do
     scope module: 'professor' do
       devise_for :users, controllers: {
-        sessions: 'professor/devise/sessions'
+        sessions: 'professor/users/sessions'
       }, as: :professor
     end
     root 'professor/home#index', as: :professor_root

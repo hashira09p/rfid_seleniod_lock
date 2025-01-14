@@ -1,0 +1,11 @@
+<%#= javascript_include_tag 'channels/consumer' %>
+<%#= javascript_include_tag 'channels/rfid_scan_channel' %>
+
+<h1>Register a New RFID Card</h1>
+
+<p>Scanned RFID UID: <span id="rfid-uid-placeholder">Waiting for scan...</span></p>
+
+<%= form_with(url: cards_path, method: :post, local: true) do |form| %>
+  <%= form.hidden_field :rfid_uid, id: 'rfid-uid-input' %>
+  <%= form.submit 'Register Card' %>
+<% end %>
