@@ -9,9 +9,13 @@ consumer.subscriptions.create("RfidScanChannel", {
       const placeholder = document.getElementById("rfid-uid-placeholder");
       const hiddenInput = document.getElementById("rfid-uid-input");
 
-      if (placeholder && hiddenInput) {
-        placeholder.textContent = data.uid; // Display the UID
-        hiddenInput.value = data.uid; // Set the hidden input value
+      var uid = data.uid;
+
+      if(uid){
+        placeholder.textContent = uid; // Display the UID
+        hiddenInput.value = uid; // Set the hidden input value
+      }else{
+        placeholder.textContent = "The card is already in use";
       }
     }
   }

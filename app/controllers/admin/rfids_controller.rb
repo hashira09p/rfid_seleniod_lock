@@ -15,14 +15,6 @@ class Admin::RfidsController < AdminApplicationController
     else
       render json: { message: "Access denied" }, status: :Unauthorized
     end
-
-    # uid = params[:uid]
-    # if uid.present?
-    #   Rails.logger.info "Received UID: #{uid}"
-    #   render json: { message: "UID received successfully", uid: uid }, status: :ok
-    # else
-    #   render json: { error: "UID is missing" }, status: :unprocessable_entity
-    # end
   end
 
   private
