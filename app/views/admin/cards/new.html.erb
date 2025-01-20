@@ -1,11 +1,50 @@
-<%#= javascript_include_tag 'channels/consumer' %>
-<%#= javascript_include_tag 'channels/rfid_scan_channel' %>
-
 <h1>Register a New RFID Card</h1>
 
 <p>Scanned RFID UID: <span id="rfid-uid-placeholder">Waiting for scan...</span></p>
 
-<%= form_with(url: cards_path, method: :post, local: true) do |form| %>
-  <%= form.hidden_field :rfid_uid, id: 'rfid-uid-input' %>
+<%= form_with(model: @card, method: :post, local: true) do |form| %>
+  <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
+
+  <%= form.label :status %>
+  <%= form.select :status, options_for_select([['Inactive', 'inactive'], ['Active', 'active']]), {}, { class: 'form-control' } %>
+
+  <div>
+    <%= form.label :add_user, 'Add a user?' %>
+    <%= check_box_tag :add_user, '1', true, id: 'add-user-checkbox', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :user_id, "User", class: "form-label" %>
+    <%= form.select :user_id, User.left_joins(:cards).where(cards: { id: nil }).map { |user| [user.firstname, user.id] },
+                    { include_blank: "Select User" },
+                    { class: "form-select", id: "user-select", required: false } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :uid_type, class: "form-label" %>
+    <%= form.select :uid_type, Card.uid_types.keys.map { |type| [type.capitalize, type] },
+                    { include_blank: "Select UID TYPE" },
+                    { class: "form-select", required: true } %>
+  </div>
+
   <%= form.submit 'Register Card' %>
 <% end %>
+
+<script>
+    // JavaScript to enable/disable the user select field
+    document.addEventListener('DOMContentLoaded', () => {
+        const addUserCheckbox = document.getElementById('add-user-checkbox');
+        const userSelect = document.getElementById('user-select');
+
+        // Function to toggle the disabled state of the user select field
+        const toggleUserSelect = () => {
+            userSelect.disabled = !addUserCheckbox.checked;
+        };
+
+        // Add event listener to the checkbox
+        addUserCheckbox.addEventListener('change', toggleUserSelect);
+
+        // Initial toggle on page load
+        toggleUserSelect();
+    });
+</script>
