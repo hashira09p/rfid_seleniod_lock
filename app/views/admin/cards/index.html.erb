@@ -1,25 +1,42 @@
-
 <div class="container my-5">
-  <h2 class="mb-4">User Table</h2>
-  <%= link_to "Add Card", new_card_path %>
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>UID</th>
-      <th>User</th>
-      <th>Status</th>
-      <th>Registered At</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @cards.each do |card| %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Cards Management</h2>
+    <%= link_to "Add Card", new_card_path, class: "btn btn-primary" %>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark">
       <tr>
-        <td><%= card.uid %></td>
-        <td><%= card.user.firstname %></td>
-        <td><%= card.status %></td>
-        <td><%= card.created_at %></td>
+        <th>UID</th>
+        <th>User</th>
+        <th>UID Type</th>
+        <th>Status</th>
+        <th>Registered Date</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <% @cards.each do |card| %>
+        <tr>
+          <td><%= card.uid %></td>
+          <td>
+            <% if card.user.present? %>
+              <%= card.user.firstname %> <%= card.user.lastname %>
+            <% else %>
+              No Owner
+            <% end %>
+          </td>
+          <td><%= card.uid_type %></td>
+          <td>
+            <span class="badge <%= card.status == 'active' ? 'bg-success' : 'bg-danger' %>">
+              <%= card.status %>
+            </span>
+          </td>
+          <td><%= card.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
