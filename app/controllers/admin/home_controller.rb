@@ -1,5 +1,7 @@
 class Admin::HomeController < AdminApplicationController
-  def index;end
+  def index
+    @users = User.all
+  end
 
   def create
     rfid_uid = params[:uid]
