@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     end
     root 'admin/home#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
-    post 'cards/handle_scan', to: 'admin/cards#handle_scan'
+    post 'card_scan', to: 'admin/cards#card_scan'
   end
 
   constraints(ProfessorDomainConstraint.new) do
