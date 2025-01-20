@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_05_150259) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_18_150313) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "uid_type", default: 0
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
-  create_table "devise", charset: "utf8mb4", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "firstname"
     t.string "middlename"
     t.string "lastname"
@@ -32,6 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_05_150259) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.string "api_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
