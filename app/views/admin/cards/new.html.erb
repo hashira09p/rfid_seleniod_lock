@@ -15,7 +15,7 @@
 
   <div class="mb-3">
     <%= form.label :user_id, "User", class: "form-label" %>
-    <%= form.select :user_id, User.left_joins(:cards).where(cards: { id: nil }).map { |user| [user.firstname, user.id] },
+    <%= form.select :user_id, User.left_joins(:cards).map { |user| [user.firstname, user.id] },
                     { include_blank: "Select User" },
                     { class: "form-select", id: "user-select", required: false } %>
   </div>
