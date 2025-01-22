@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :home
       resources :rfids
       resources :cards
+      resources :users
     end
     root 'admin/home#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
