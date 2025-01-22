@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 class Admin::Devise::RegistrationsController < Devise::RegistrationsController
+  before_action :configure_permitted_parameters
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -59,4 +60,10 @@ class Admin::Devise::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:firstname, :middlename, :lastname, :academic_college, :role])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:firstname, :middlename, :lastname, :academic_college, :role])
+  end
 end
