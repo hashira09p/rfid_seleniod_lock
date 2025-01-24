@@ -8,6 +8,7 @@
       <thead class="table-dark">
       <tr>
         <th>UID</th>
+        <th>Card or Tag Status</th>
         <th>User</th>
         <th>Academic College</th>
         <th>Role</th>
@@ -17,24 +18,39 @@
       </thead>
       <tbody>
       <% @users.each do |user| %>
-        <tr>
-          <td>
-            <% if user.cards.active.present? %>
-              <% user.cards.active.each do |card| %>
-                <%= card.uid %>
+        <% if user.cards.present? %>
+          <% user.cards.each do |card| %>
+            <tr>
+              <% if card.uid.present? %>
+                <td><%= card.uid %></td>
               <% end %>
-            <% elsif user.cards.inactive.present? %>
-                Have registered cards but inactive.
-            <% else %>
-              No cards registered.
-            <% end %>
-          </td>
-          <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
-          <td> <%= user.academic_college %> </td>
-          <td> <%= user.role %> </td>
-          <td> <%= user.email %> </td>
-          <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
-        </tr>
+
+              <td>
+              <span class="badge <%= card.status == 'Active' ? 'bg-success' : 'bg-danger' %>">
+                <%= card.status %>
+              </span>
+              </td>
+
+              <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
+              <td> <%= user.academic_college %> </td>
+              <td> <%= user.role.humanize %> </td>
+              <td> <%= user.email %> </td>
+              <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td>No card registered!</td>
+            <td>None</td>
+
+            <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
+            <td> <%= user.academic_college %> </td>
+            <td> <%= user.role.humanize %> </td>
+            <td> <%= user.email %> </td>
+            <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+          </tr>
+        <% end %>
+
       <% end %>
       </tbody>
     </table>
