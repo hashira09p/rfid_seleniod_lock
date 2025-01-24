@@ -1,57 +1,38 @@
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Room Management</h2>
+    <%= link_to "Register Room", new_room_path, class: "btn btn-primary" %>
   </div>
+
 
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-dark">
       <tr>
-        <th>UID</th>
-        <th>Card or Tag Status</th>
-        <th>User</th>
-        <th>Academic College</th>
-        <th>Role</th>
-        <th>Email</th>
-        <th>Registered Date</th>
+        <th>Room Number</th>
+        <th>Room Status</th>
+        <th>Created at</th>
       </tr>
       </thead>
       <tbody>
-      <% @users.each do |user| %>
-        <% if user.cards.present? %>
-          <% user.cards.each do |card| %>
-            <tr>
-              <% if card.uid.present? %>
-                <td><%= card.uid %></td>
-              <% end %>
-
-              <td>
-              <span class="badge <%= card.status == 'active' ? 'bg-success' : 'bg-danger' %>">
-                <%= card.status %>
-              </span>
-              </td>
-
-              <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
-              <td> <%= user.academic_college %> </td>
-              <td> <%= user.role.humanize %> </td>
-              <td> <%= user.email %> </td>
-              <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
-            </tr>
-          <% end %>
-        <% else %>
+        <% @rooms.each do |room| %>
           <tr>
-            <td>No card registered!</td>
-            <td>None</td>
-
-            <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
-            <td> <%= user.academic_college %> </td>
-            <td> <%= user.role.humanize %> </td>
-            <td> <%= user.email %> </td>
-            <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+            <td><%= room.room_number %></td>
+            <td>
+              <span class="badge <%= room.room_status == 'Available' ? 'bg-success' : 'bg-danger' %>">
+                <%= room.room_status %>
+              </span>
+            </td>
+            <td><%= room.created_at %></td>
           </tr>
         <% end %>
-
-      <% end %>
       </tbody>
     </table>
   </div>
