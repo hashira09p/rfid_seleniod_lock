@@ -65,10 +65,6 @@ class Admin::CardsController < AdminApplicationController
     params.require(:card).permit(:uid, :user_id, :status, :uid_type)
   end
 
-  def set_params_update
-    params.require(:card).permit(:uid, :status, :uid_type)
-  end
-
   def set_card
     @card = Card.find(params[:id])
   end
