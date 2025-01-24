@@ -6,7 +6,9 @@
   <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
 
   <%= form.label :status %>
-  <%= form.select :status, options_for_select([['Inactive', 'inactive'], ['Active', 'active']]), {}, { class: 'form-control' } %>
+  <%= form.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
+                  { include_blank: "Select Status" },
+                  { class: "form-select", required: true } %>
 
   <div>
     <%= form.label :add_user, 'Add a user?' %>

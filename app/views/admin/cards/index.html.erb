@@ -6,7 +6,7 @@
 <% end %>
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Cards Management</h2>
+    <h2 class="mb-0">Card Management</h2>
     <%= link_to "Add Card", new_card_path, class: "btn btn-primary" %>
   </div>
 
@@ -33,9 +33,9 @@
               No Owner
             <% end %>
           </td>
-          <td><%= card.uid_type %></td>
+          <td><%= card.uid_type.humanize %></td>
           <td>
-            <span class="badge <%= card.status == 'active' ? 'bg-success' : 'bg-danger' %>">
+            <span class="badge <%= card.status == 'Active' ? 'bg-success' : 'bg-danger' %>">
               <%= card.status %>
             </span>
           </td>
