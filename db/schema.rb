@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_24_141945) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_25_171542) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -33,8 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_24_141945) do
     t.integer "description"
     t.string "subject"
     t.integer "day"
-    t.datetime "start_time"
-    t.datetime "end_time"
+    t.time "start_time"
+    t.time "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_schedules_on_user_id"
