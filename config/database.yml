@@ -16,6 +16,7 @@ default: &default
   username: root
   password: qwer4321
   host: db
+  timezone: 'Asia/Manila'
 
 development:
   <<: *default

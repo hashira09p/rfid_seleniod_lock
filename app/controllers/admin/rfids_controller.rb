@@ -7,6 +7,8 @@ class Admin::RfidsController < AdminApplicationController
     rfid_uid = params[:uid]
     room_status = params[:room_status]
     card = Card.find_by(uid: rfid_uid)
+    user_schedule = Schedule.find_by('user = ? AND start_time >= ? AND day == ?' , card.user, DateTime.now,
+                                     DateTime.nowstrftime("%A"))
 
     if card && room_status == "Lock"
       render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
