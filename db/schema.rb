@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_25_171542) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_15_095607) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -37,7 +37,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_25_171542) do
     t.time "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "room"
     t.index ["user_id"], name: "index_schedules_on_user_id"
+  end
+
+  create_table "time_tracks", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_time_tracks_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|

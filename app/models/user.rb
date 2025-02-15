@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :cards
   has_many :schedules
+  has_many :time_trackers
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
