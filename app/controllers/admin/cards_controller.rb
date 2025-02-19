@@ -2,6 +2,7 @@ class Admin::CardsController < AdminApplicationController
   skip_before_action :verify_authenticity_token, only: [:card_scan]
   before_action :set_params, only: [:create, :update]
   before_action :set_card, only: [:edit, :destroy, :update, :destroy]
+
   def index
     @cards = Card.includes(:user)
   end
@@ -25,7 +26,7 @@ class Admin::CardsController < AdminApplicationController
     end
   end
 
-  def edit;end
+  def edit; end
 
   def update
     if @card.update(set_params)

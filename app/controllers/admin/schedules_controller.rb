@@ -20,7 +20,7 @@ class Admin::SchedulesController < AdminApplicationController
     end
   end
 
-  def edit;end
+  def edit; end
 
   def update
     if @schedule.update(set_params)

@@ -10,7 +10,7 @@ Rails.application.configure do
 
   config.hosts << "professor.com"
   config.hosts << "admin.com"
-  config.hosts << "c94e-136-158-28-140.ngrok-free.app"
+  config.hosts << "11a6-112-209-66-226.ngrok-free.app"
 
   config.web_console.permissions = '0.0.0.0/0'
   config.web_console.whitelisted_ips = '2001:fd8:1802:1419:96aa:ffc6:43ae:9d27'

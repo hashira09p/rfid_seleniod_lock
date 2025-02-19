@@ -1,5 +1,6 @@
 class Admin::RoomsController < AdminApplicationController
   before_action :set_params, only: [:create, :update]
+
   def index
     @rooms = Room.all
   end
