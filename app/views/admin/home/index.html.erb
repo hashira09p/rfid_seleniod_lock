@@ -1,15 +1,16 @@
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">User Table</h2>
+    <h2 class="mb-0">List of Professors</h2>
   </div>
 
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-dark">
       <tr>
-        <th>UID</th>
-        <th>Card or Tag Status</th>
-        <th>User</th>
+        <th>#</th>
+        <th>Name</th>
+        <th>Card Number</th>
+        <th>Card/Tag Status</th>
         <th>Academic College</th>
         <th>Role</th>
         <th>Email</th>
@@ -17,21 +18,22 @@
       </tr>
       </thead>
       <tbody>
-      <% @users.each do |user| %>
+      <% @users.each_with_index do |user, index| %>
+
         <% if user.cards.present? %>
           <% user.cards.each do |card| %>
             <tr>
+              <td><%= index + 1 %></td>
+              <td><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
               <% if card.uid.present? %>
                 <td><%= card.uid %></td>
               <% end %>
-
               <td>
-              <span class="badge <%= card.status == 'Active' ? 'bg-success' : 'bg-danger' %>">
+              <span class="badge <%= card.Active? ? 'bg-success' : 'bg-danger' %>">
                 <%= card.status %>
               </span>
               </td>
 
-              <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
               <td> <%= user.academic_college %> </td>
               <td> <%= user.role.humanize %> </td>
               <td> <%= user.email %> </td>
@@ -40,10 +42,14 @@
           <% end %>
         <% else %>
           <tr>
-            <td>No card registered!</td>
-            <td>None</td>
-
-            <td><%= user.firstname %> <%= user.middlename %> <%= user.lastname %></td>
+            <td><%= index + 1 %></td>
+            <td><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
+            <td>
+              <span class="badge bg-secondary">No Card Registered</span>
+            </td>
+            <td>
+              <span class="badge bg-secondary">None</span>
+            </td>
             <td> <%= user.academic_college %> </td>
             <td> <%= user.role.humanize %> </td>
             <td> <%= user.email %> </td>

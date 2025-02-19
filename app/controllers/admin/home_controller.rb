@@ -4,7 +4,7 @@ class Admin::HomeController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
 
   def index
-    @users = User.all
+    @users = User.order(:firstname)
   end
 
   def create
