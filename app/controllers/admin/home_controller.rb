@@ -5,6 +5,14 @@ class Admin::HomeController < AdminApplicationController
 
   def index
     @users = User.order(:firstname)
+
+    #filtering
+    @users = @users.where('LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query', query: "%#{params[:name].to_s.downcase}%") if params[:name].present?
+    if params[:card_number].present?
+      @users = @users.joins(:cards).where(cards: { uid: params[:card_number] })
+    end
+    @users = @users.where(academic_college: params[:academic_college]) if params[:academic_college].present?
+    @users = @users.where(role: params[:role]) if params[:role].present?
   end
 
   def create

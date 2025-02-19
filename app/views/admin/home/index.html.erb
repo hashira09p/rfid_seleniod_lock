@@ -3,6 +3,34 @@
     <h2 class="mb-0">List of Professors</h2>
   </div>
 
+  <!-- Filter Form -->
+  <form method="get" action="<%= home_index_path %>" class="mb-4">
+    <div class="d-flex flex-wrap gap-2">
+      <input type="text" name="name" class="form-control" placeholder="Name" value="<%= params[:name] %>" style="flex: 1; min-width: 150px;">
+
+      <input type="text" name="card_number" class="form-control" placeholder="Card Number" value="<%= params[:card_number] %>" style="flex: 1; min-width: 150px;">
+
+      <select name="academic_college" class="form-select" style="flex: 1; min-width: 150px;">
+        <option value="">Academic College</option>
+        <% User.academic_colleges.each do |key, _value| %>
+          <option value="<%= key %>" <%= 'selected' if params[:academic_college] == key %>>
+            <%= key %>
+          </option>
+        <% end %>
+      </select>
+
+      <select name="role" class="form-select" style="flex: 1; min-width: 150px;">
+        <option value="">Role</option>
+        <option value="admin" <%= 'selected' if params[:role] == 'admin' %>>Admin</option>
+        <option value="professor" <%= 'selected' if params[:role] == 'professor' %>>Professor</option>
+      </select>
+
+      <button type="submit" class="btn btn-primary">Search</button>
+
+      <button type="button" class="btn btn-secondary" onclick="window.location.href='<%= home_index_path %>'">Reset</button>
+    </div>
+  </form>
+
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-dark">
