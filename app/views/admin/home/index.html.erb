@@ -53,7 +53,7 @@
       <% else %>
 
         <% row_index = 1 %>
-        <% @users.each_with_index do |user, index| %>
+        <% @users.each do |user| %>
           <% if params[:card_number].present? %>
             <% card = user.cards.find_by(uid: params[:card_number]) %>
             <% if card %>

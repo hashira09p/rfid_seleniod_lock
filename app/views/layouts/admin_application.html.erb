@@ -18,24 +18,29 @@
           background-color: #e6006d;
           width: 100%;
       }
+
       .brand-name {
           font-size: 1.5rem;
           font-weight: bold;
           color: white;
       }
+
       .container-fluid {
           padding: 0;
       }
+
       .sidebar {
           height: 100vh;
           background-color: #f8f9fa;
           padding: 1rem;
           border-right: 1px solid #ddd;
       }
+
       main {
           background-color: #f8f9fa;
           border-radius: 5px;
       }
+
       footer {
           margin-top: auto;
       }
@@ -51,11 +56,12 @@
     <!-- Side Menu -->
     <nav class="col-md-2 sidebar d-flex flex-column">
       <h5 class="mb-4">Menu</h5>
-      <%= link_to "Professor", admin_root_path, class: "btn btn-outline-primary mb-2" %>
-      <%= link_to "Cards", cards_path, class: "btn btn-outline-primary mb-2" %>
-      <%= link_to "Room", rooms_path, class: "btn btn-outline-primary mb-2" %>
-      <%= link_to "Schedules", schedules_path, class: "btn btn-outline-primary mb-2" %>
+      <%= link_to "Professor", admin_root_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(admin_root_path)}" %>
+      <%= link_to "Cards", cards_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(cards_path)}" %>
+      <%= link_to "Room", rooms_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(rooms_path)}" %>
+      <%= link_to "Schedules", schedules_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(schedules_path)}" %>
     </nav>
+
 
     <!-- Main Content Section -->
     <main class="col-md-10 py-4">
