@@ -6,8 +6,18 @@ class Admin::HomeController < AdminApplicationController
   def index
     @users = User.order(:firstname)
 
-    #filtering
-    @users = @users.where('LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query', query: "%#{params[:name].to_s.downcase}%") if params[:name].present?
+    # filtering
+    if params[:fullname].present?
+      search_query = params[:fullname].strip.downcase
+
+      @users = @users.where(
+        'LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query OR ' \
+          'LOWER(CONCAT(firstname, " ", middlename, " ", lastname)) LIKE :query OR ' \
+          'LOWER(CONCAT(firstname, " ", lastname)) LIKE :query',
+        query: "%#{search_query}%"
+      )
+    end
+
     if params[:card_number].present?
       @users = @users.joins(:cards).where(cards: { uid: params[:card_number] })
     end
