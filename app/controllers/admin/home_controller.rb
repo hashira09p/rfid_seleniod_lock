@@ -4,7 +4,7 @@ class Admin::HomeController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
 
   def index
-    @users = User.order(:firstname)
+    @users = User.includes(:cards).order(:firstname)
 
     # filtering
     if params[:fullname].present?

@@ -1,3 +1,13 @@
+<% if @card.errors.any? %>
+  <div class="alert alert-danger">
+    <ul>
+      <% @card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <h1>Edit a RFID Card</h1>
 
 <p>Scanned RFID UID if you want to change your UID: <span id="rfid-uid-placeholder">Waiting for scan...</span></p>

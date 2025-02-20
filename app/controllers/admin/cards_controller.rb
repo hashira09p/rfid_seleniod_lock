@@ -4,7 +4,21 @@ class Admin::CardsController < AdminApplicationController
   before_action :set_card, only: [:edit, :destroy, :update, :destroy]
 
   def index
-    @cards = Card.includes(:user)
+    @cards = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
+
+    # filtering
+    @cards = @cards.where(cards: { uid: params[:uid] }) if params[:uid].present?
+    @cards = @cards.where(status: params[:status]) if params[:status].present?
+    if params[:fullname].present?
+      search_query = params[:fullname].strip.downcase
+
+      @cards = @cards.joins(:user).where(
+        'LOWER(users.firstname) LIKE :query OR LOWER(users.middlename) LIKE :query OR LOWER(users.lastname) LIKE :query OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.middlename, " ", users.lastname)) LIKE :query OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.lastname)) LIKE :query',
+        query: "%#{search_query}%"
+      )
+    end
   end
 
   def new
@@ -21,7 +35,7 @@ class Admin::CardsController < AdminApplicationController
     # end
 
     if @card.save
-      flash[:notice] = "Successfully created card."
+      flash[:notice] = "Card successfully created."
       redirect_to cards_path
     else
       flash[:alert] = "Error creating card."
@@ -33,19 +47,19 @@ class Admin::CardsController < AdminApplicationController
 
   def update
     if @card.update(set_params)
-      flash[:notice] = "Successfully updated card."
+      flash[:notice] = "Card successfully updated."
       redirect_to cards_path
     else
-      flash[:alert] = "Error updated card."
-      redirect_to new_card_path
+      flash[:alert] = "Error updating card."
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     if @card.destroy
-      flash[:notice] = 'Succesfully deleted'
+      flash[:notice] = 'Card successfully deleted.'
     else
-      flash[:alert] = @card.errors.messages
+      flash[:alert] = @card.errors.full_messages.to_sentence
     end
     redirect_to cards_path
   end
