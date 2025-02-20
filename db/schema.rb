@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_15_095607) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_20_074443) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_15_095607) do
     t.string "firstname"
     t.string "middlename"
     t.string "lastname"
-    t.integer "academic_college", default: 0
+    t.integer "academic_college"
     t.integer "role", default: 1
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false

@@ -36,25 +36,6 @@
     <%= f.text_field :lastname, placeholder: 'Enter last name', required: true %>
   </div>
 
-  <!-- Academic College Field -->
-  <div class="field">
-    <%= f.label :academic_college, 'Academic College' %><br />
-    <%= f.select :academic_college, options_for_select([
-                                                         ['CIE', 'CIE'],
-                                                         ['COE', 'COE'],
-                                                         ['CLA', 'CLA'],
-                                                         ['COS', 'COS'],
-                                                         ['CAFA', 'CAFA'],
-                                                         ['CIT', 'CIT']
-                                                       ]), {}, { required: true } %>
-  </div>
-
-  <!-- Role Field -->
-  <div class="field">
-    <%= f.label :role, 'Role' %><br />
-    <%= f.select :role, options_for_select([['Admin', 'admin'], ['Professor', 'professor']]), {}, { required: true } %>
-  </div>
-
   <div class="actions">
     <%= f.submit 'Sign up' %>
   </div>

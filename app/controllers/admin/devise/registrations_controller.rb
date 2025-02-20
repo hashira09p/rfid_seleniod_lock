@@ -63,7 +63,7 @@ class Admin::Devise::RegistrationsController < Devise::RegistrationsController
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:firstname, :middlename, :lastname, :academic_college, :role])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:firstname, :middlename, :lastname, :academic_college, :role])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:firstname, :middlename, :lastname])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:firstname, :middlename, :lastname])
   end
 end
