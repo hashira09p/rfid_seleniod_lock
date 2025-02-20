@@ -81,7 +81,7 @@
             <td> <%= user.academic_college %> </td>
             <td> <%= user.role.humanize %> </td>
             <td> <%= user.email %> </td>
-            <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+            <td><%= user.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
           </tr>
         <% end %>
 

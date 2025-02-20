@@ -39,7 +39,7 @@
               <%= card.status %>
             </span>
           </td>
-          <td><%= card.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+          <td><%= card.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
           <td>
             <%= link_to 'Edit', edit_card_path(card), class: "btn btn-sm btn-warning" %>
             <%= button_to 'Delete', card_path(card), method: :delete, class: "btn btn-sm btn-danger" %>

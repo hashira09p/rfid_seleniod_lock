@@ -13,6 +13,9 @@ class Admin::CardsController < AdminApplicationController
 
   def create
     @card = Card.new(set_params)
+    # The datetime here is optional, not tested yet. Rails automatically handles timestamps but if not, uncomment below.
+    #@card.created_at = DateTime.now
+
     # if params[:card][:user_id].present?
     #   @card.user_id = params[:card][:user_id].to_i
     # end
