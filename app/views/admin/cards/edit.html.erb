@@ -8,9 +8,36 @@
   </div>
 <% end %>
 
-<h1>Edit a RFID Card</h1>
+<h1>Edit RFID Card</h1>
+<div class="card-body mb-3">
+  <h5 class="card-title text-primary mb-3">
+    <i class="bi bi-card-text"></i> Card Information
+  </h5>
 
-<p>Scanned RFID UID if you want to change your UID: <span id="rfid-uid-placeholder">Waiting for scan...</span></p>
+  <div class="mb-2">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-credit-card text-info me-2"></i>
+      <span class="fw-bold text-dark">Card ID:</span>
+      <span class="ms-2 badge bg-light text-secondary">
+        <%= @card.uid %>
+      </span>
+    </div>
+  </div>
+
+  <div>
+    <div class="d-flex align-items-center">
+      <i class="bi bi-person text-warning me-2"></i>
+      <span class="fw-bold text-dark">Name:</span>
+      <span class="ms-2 text-secondary">
+        <%= if @card.user&.firstname.present?
+              "#{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname}"
+            else
+              'NA'
+            end %>
+      </span>
+    </div>
+  </div>
+</div>
 
 <%= form_with(model: @card, method: :put, local: true) do |form| %>
   <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
@@ -19,18 +46,6 @@
   <%= form.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
                   { include_blank: "Select Status" },
                   { class: "form-select", required: true } %>
-
-  <div>
-    <%= form.label :add_user, 'Edit the user?' %>
-    <%= check_box_tag :add_user, '1', false, id: 'add-user-checkbox', class: 'form-check-input' %>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :user_id, "User", class: "form-label" %>
-    <%= form.select :user_id, User.all.map { |user| ["#{[user.firstname, user.middlename, user.lastname].compact.join(' ')} (#{user.email})", user.id] },
-                    { include_blank: "Select User" },
-                    { class: "form-select", id: "user-select", required: false } %>
-  </div>
 
   <div class="mb-3">
     <%= form.label :uid_type, class: "form-label" %>
