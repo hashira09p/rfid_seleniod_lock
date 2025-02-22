@@ -16,9 +16,11 @@
     <%= form.text_field :subject, class: 'form-control', required: true %>
   </div>
 
-  <div class="form-group">
-    <%= form.label :room_number %>
-    <%= form.number_field :room, class: 'form-control', required: true %>
+  <div class="mb-3">
+    <%= form.label :room_id, "Room", class: "form-label" %>
+    <%= form.select :room_id, Room.left_joins(:schedules).map { |room| [room.room_number, room.id] },
+                    { include_blank: "Select Room" },
+                    { class: "form-select", id: "room-select", required: false } %>
   </div>
 
   <div class="form-group">

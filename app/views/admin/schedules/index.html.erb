@@ -19,6 +19,7 @@
     <th scope="col">Start Time</th>
     <th scope="col">End Time</th>
     <th scope="col">Professor</th>
+    <th scope="col">Room ID</th>
     <th scope="col">Actions</th>
   </tr>
   </thead>
@@ -35,6 +36,7 @@
       <% else %>
         <td>No Owner</td>
       <% end %>
+      <td><%= schedule.room_id %></td>
       <td>
         <%= link_to 'Edit', edit_schedule_path(schedule), class: "btn btn-sm btn-warning" %>
         <%= button_to 'Delete', schedule_path(schedule), method: :delete, class: "btn btn-sm btn-danger" %>
