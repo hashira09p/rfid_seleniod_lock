@@ -43,6 +43,7 @@
         <th>Role</th>
         <th>Email</th>
         <th>Registered Date</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -87,7 +88,23 @@
                 <td><%= user.academic_college %></td>
                 <td><%= user.role.humanize %></td>
                 <td><%= user.email %></td>
-                <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+                <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %>
+                <td>
+                  <div class="d-inline-flex gap-2">
+                    <%= link_to edit_card_path(card),
+                                class: "btn btn-sm btn-warning d-flex align-items-center",
+                                title: "Edit" do %>
+                      <i class="bi bi-pencil"></i>
+                    <% end %>
+
+                    <%= button_to card_path(card),
+                                  method: :delete,
+                                  class: "btn btn-sm btn-danger d-flex align-items-center",
+                                  data: { turbo_confirm: 'Are you sure you want to delete this card?', turbo_method: 'delete' } do %>
+                      <i class="bi bi-trash"></i>
+                    <% end %>
+                  </div>
+                </td>
               </tr>
               <% row_index += 1 %>
             <% end %>
