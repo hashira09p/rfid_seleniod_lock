@@ -82,8 +82,20 @@
         <% end %>
         <td><%= schedule.room&.room_number || 'No Room' %></td>
         <td>
-          <%= link_to 'Edit', edit_schedule_path(schedule), class: "btn btn-sm btn-warning" %>
-          <%= button_to 'Delete', schedule_path(schedule), method: :delete, class: "btn btn-sm btn-danger" %>
+          <div class="d-inline-flex gap-2">
+            <%= link_to edit_schedule_path(schedule),
+                        class: "btn btn-sm btn-warning d-flex align-items-center",
+                        title: "Edit" do %>
+              <i class="bi bi-pencil"></i>
+            <% end %>
+
+            <%= button_to schedule_path(schedule),
+                          method: :delete,
+                          class: "btn btn-sm btn-danger d-flex align-items-center",
+                          data: { turbo_confirm: 'Are you sure you want to delete this schedule?', turbo_method: 'delete' } do %>
+              <i class="bi bi-trash"></i>
+            <% end %>
+          </div>
         </td>
       </tr>
     <% end %>
