@@ -3,7 +3,16 @@ class Admin::SchedulesController < AdminApplicationController
   before_action :set_schedule, only: [:edit, :update, :destroy]
 
   def index
-    @schedules = Schedule.includes(:user).all
+    @days = Schedule.pluck(:day).uniq
+    @users = User.pluck(:firstname, :middlename, :lastname, :id)
+    @rooms = Room.pluck(:room_number, :id)
+
+    @schedules = Schedule.includes(:user, :room).order(:day, :start_time)
+
+    # Apply filters if present
+    @schedules = @schedules.where(day: params[:day]) if params[:day].present?
+    @schedules = @schedules.where(user_id: params[:professor_id]) if params[:professor_id].present?
+    @schedules = @schedules.where(room_id: params[:room_id]) if params[:room_id].present?
   end
 
   def new
