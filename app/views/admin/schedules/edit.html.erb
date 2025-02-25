@@ -8,16 +8,22 @@
 <%= form_with(model: @schedule, local: true) do |form| %>
   <div class="form-group">
     <%= form.label :description %>
-    <%= form.select :description, Schedule.descriptions.keys.map { |w| [w.titleize, w] }, {}, class: 'form-control custom-select', required: true %>
+    <%= form.select :description, Schedule.descriptions.keys.map { |w| [w.titleize, w] },
+                    { include_blank: "Select Description" },
+                    class: 'form-control custom-select',
+                    required: true %>
   </div>
 
   <div class="form-group">
     <%= form.label :subject %>
-    <%= form.text_field :subject, class: 'form-control', required: true %>
+    <%= form.text_field :subject,
+                        class: 'form-control',
+                        required: true,
+                        placeholder: 'Enter Subject' %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :room_id, "User", class: "form-label" %>
+    <%= form.label :room_id, "Room", class: "form-label" %>
     <%= form.select :room_id, Room.left_joins(:schedules).map { |room| [room.room_number, room.id] },
                     { include_blank: "Select Room" },
                     { class: "form-select", id: "room-select", required: false } %>
@@ -25,27 +31,34 @@
 
   <div class="form-group">
     <%= form.label :day %>
-    <%= form.select :day, Schedule.days.keys.map { |w| [w.titleize, w] }, {}, class: 'form-control custom-select', required: true %>
+    <%= form.select :day, Schedule.days.keys.map { |w| [w.titleize, w] },
+                    { include_blank: "Select Day" },
+                    class: 'form-control custom-select',
+                    required: true %>
   </div>
 
   <div class="form-group">
     <%= form.label :start_time %>
-    <%= form.time_select :start_time, {ampm: true, minute_step: 15}, class: 'form-control', required: true %>
+    <%= form.time_select :start_time,
+                         { ampm: true, minute_step: 1, default: Time.current.change(hour: 8, min: 0) },
+                         { class: 'form-control', required: true, placeholder: 'Select Start Time' } %>
   </div>
 
   <div class="form-group">
     <%= form.label :end_time %>
-    <%= form.time_select :end_time, {ampm: true, minute_step: 15}, class: 'form-control', required: true %>
+    <%= form.time_select :end_time,
+                         { ampm: true, minute_step: 1, default: Time.current.change(hour: 17, min: 0) },
+                         { class: 'form-control', required: true, placeholder: 'Select End Time' } %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :user_id, "User", class: "form-label" %>
-    <%= form.select :user_id, User.left_joins(:schedules).map { |user| [user.firstname, user.id] },
-                    { include_blank: "Select User" },
+    <%= form.label :user_id, "Professor", class: "form-label" %>
+    <%= form.select :user_id, User.left_joins(:schedules).distinct.map { |user| ["#{user.firstname} #{user.middlename} #{user.lastname}", user.id] },
+                    { include_blank: "Select Professor" },
                     { class: "form-select", id: "user-select", required: false } %>
   </div>
 
   <div class="actions">
-    <%= form.submit 'Create Schedule', class: 'btn btn-primary' %>
+    <%= form.submit 'Update Schedule', class: 'btn btn-primary' %>
   </div>
 <% end %>
