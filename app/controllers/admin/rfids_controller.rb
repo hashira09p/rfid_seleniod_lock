@@ -6,7 +6,6 @@ class Admin::RfidsController < AdminApplicationController
   def index; end
 
   def create
-    @time_track = Time_Track.new
 
     rfid_uid = params[:uid]
     room_status = params[:room_status]

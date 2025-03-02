@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :users
       resources :schedules
       resources :rooms
+      resources :room_display
     end
     root 'admin/home#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'

@@ -1,0 +1,23 @@
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Room Display</h2>
+
+  </div>
+
+  <div class="table-responsive">
+    <table>
+      <% @room_numbers.each do |room| %>
+        <tr>
+          <td><%= room.room_number %><%= room.room_status %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
