@@ -6,21 +6,11 @@ class Admin::RfidsController < AdminApplicationController
   def index; end
 
   def create
-
     rfid_uid = params[:uid]
-    room_status = params[:room_status]
     card = Card.find_by(uid: rfid_uid)
-    room = params[:room]
 
-    user_schedule = Schedule.find_by(
-      'user_id = ? AND start_time >= ? AND day = ? AND room = ?',
-      card.user,
-      DateTime.now,
-      Date.today.strftime("%A"),
-      room
-    )
 
-    if card && room_status == "Lock" && user_schedule.start_time >= DateTime.now && user_schedule.room == room
+    if card && room_status == "Lock"
       render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
     elsif card && room_status == "Unlock"
       render json: { message: "Access granted", lock: true, user: card.user.firstname }, status: :ok
