@@ -11,8 +11,6 @@ Rails.application.routes.draw do
         unlocks: 'admin/devise/unlocks'
       }, as: :admin
       resources :home
-      resources :rfids
-      resources :cards
       resources :users
       resources :schedules
       resources :rooms
@@ -20,8 +18,13 @@ Rails.application.routes.draw do
     end
     root 'admin/home#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
-    post 'card_scan', to: 'admin/cards#card_scan'
   end
+
+  scope module: 'admin' do
+    resources :rfids
+    resources :cards
+  end
+  post 'card_scan', to: 'admin/cards#card_scan'
 
   constraints(ProfessorDomainConstraint.new) do
     scope module: 'professor' do
