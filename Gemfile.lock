@@ -142,6 +142,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.10)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-proxy (0.7.7)
       rack
     rack-test (2.1.0)
@@ -234,6 +236,7 @@ DEPENDENCIES
   jsbundling-rails
   mysql2 (~> 0.5)
   puma (~> 5.0)
+  rack-cors
   rails (~> 7.0.8, >= 7.0.8.4)
   sprockets-rails
   stimulus-rails
