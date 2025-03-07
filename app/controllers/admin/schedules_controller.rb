@@ -54,6 +54,6 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def set_params
-    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time)
+    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id)
   end
 end

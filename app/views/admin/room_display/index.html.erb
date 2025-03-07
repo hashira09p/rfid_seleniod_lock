@@ -12,12 +12,28 @@
   </div>
 
   <div class="table-responsive">
-    <table>
-      <% @room_numbers.each do |room| %>
-        <tr>
-          <td><%= room.room_number %><%= room.room_status %></td>
-        </tr>
+    <div class="container mt-4">
+      <div class="row bg-primary text-white p-2">
+        <div class="col-3 font-weight-bold text-center">Room Name</div>
+        <div class="col-3 font-weight-bold text-center">Room Name</div>
+        <div class="col-3 font-weight-bold text-center">Room Name</div>
+        <div class="col-3 font-weight-bold text-center">Room Name</div>
+      </div>
+      <% @room_statuses.each_slice(4) do |room_group| %>
+        <div class="row border p-2">
+          <% room_group.each do |room_status| %>
+            <div class="col-3 text-center border p-3">
+              <div class="fw-bold"><%= room_status[:room_number].room_number %></div>
+              <div style="color: <%= room_status[:status] == 'Occupied' ? 'red' : 'green' %>;">
+                <%= room_status[:status] %>
+              </div>
+            </div>
+          <% end %>
+          <% (4 - room_group.size).times do %>
+            <div class="col-3 text-center border p-3"></div>
+          <% end %>
+        </div>
       <% end %>
-    </table>
+    </div>
   </div>
 </div>
