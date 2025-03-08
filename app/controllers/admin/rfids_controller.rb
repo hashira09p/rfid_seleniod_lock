@@ -10,20 +10,17 @@
     card = Card.find_by(uid: rfid_uid)
     room_status = params[:room_status]
 
-    day_integer = (DateTime.current.wday + 6) % 7
     current_time = Time.current
     current_day = current_time.wday
     formatted_time = current_time.strftime('%I:%M %p')
 
-    user_schedule = Schedule.where("user_id = ? AND day =?", card.user_id, current_day)
+    user_schedule = Schedule.find_by("user_id = ? AND day =?", card.user_id, current_day)
 
     if card && room_status == "Lock"
-      if user_schedule.day == day_integer && user_schedule.start_time >= formatted_time
-        @time_track = TimeTracker.new(user_id: card.user_id, status: 0)
-        @time_track.save
-      elsif user_schedule.day == day_integer && user_schedule.start_time <= formatted_time
-        @time_track = TimeTracker.new(user_id: card.user_id, status: 0)
-        @time_track.save
+      if user_schedule.day == current_time.strftime("%A") && user_schedule.start_time.strftime('%I:%M %p') >= formatted_time
+        TimeTrack.create(user_id: card.user_id, status: 1)
+      elsif user_schedule.day == current_time.strftime("%A") && user_schedule.start_time.strftime('%I:%M %p') <= formatted_time
+        TimeTrack.create(user_id: card.user_id, status: 0)
       end
       render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
     elsif card && room_status == "Unlock"

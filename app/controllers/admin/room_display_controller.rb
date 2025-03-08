@@ -1,5 +1,6 @@
 class Admin::RoomDisplayController < AdminApplicationController
   before_action :authenticate_admin_user!
+
   def index
     current_time = Time.current
     current_day = current_time.wday
@@ -16,5 +17,4 @@ class Admin::RoomDisplayController < AdminApplicationController
       { room_number: room, status: is_occupied ? "Occupied" : "Available" }
     end
   end
-
 end
