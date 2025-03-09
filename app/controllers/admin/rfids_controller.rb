@@ -10,23 +10,32 @@
     card = Card.find_by(uid: rfid_uid)
     room_status = params[:room_status]
 
+    return render json: { message: "Access denied" }, status: :unauthorized unless card
+
     current_time = Time.current
-    current_day = current_time.wday
     formatted_time = current_time.strftime('%I:%M %p')
 
-    user_schedule = Schedule.find_by("user_id = ? AND day =?", card.user_id, current_day)
+    first_active_user = TimeTrack.where(time_out: nil).order(created_at: :asc).first
 
-    if card && room_status == "Lock"
-      if user_schedule.day == current_time.strftime("%A") && user_schedule.start_time.strftime('%I:%M %p') >= formatted_time
-        TimeTrack.create(user_id: card.user_id, status: 1)
-      elsif user_schedule.day == current_time.strftime("%A") && user_schedule.start_time.strftime('%I:%M %p') <= formatted_time
-        TimeTrack.create(user_id: card.user_id, status: 0)
+    if room_status == "Lock"
+      if first_active_user.nil?
+        TimeTrack.create(user_id: card.user_id, time_in: formatted_time)
+
+        render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
+      else
+        render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
       end
-      render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
-    elsif card && room_status == "Unlock"
-      render json: { message: "Access granted", lock: true, user: card.user.firstname }, status: :ok
+
+    elsif room_status == "Unlock"
+      if first_active_user && first_active_user.user_id == card.user_id
+        first_active_user.update(time_out: formatted_time, status: 1)
+
+        render json: { message: "Access granted", lock: true, user: card.user.firstname }, status: :ok
+      else
+        render json: { message: "Access granted", lock: true, user: card.user.firstname }, status: :ok
+      end
     else
-      render json: { message: "Access denied" }, status: :Unauthorized
+      render json: { message: "Invalid room status" }, status: :unprocessable_entity
     end
   end
 
