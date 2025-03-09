@@ -3,5 +3,5 @@ class TimeTrack < ApplicationRecord
 
   validates :created_at, uniqueness: { scope: :user_id }
 
-  enum status: { Not_late: 0, Late: 1 }
+  enum status: { time_in: 0, time_out: 1 }
 end
