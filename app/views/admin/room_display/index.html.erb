@@ -10,23 +10,25 @@
 
   <div class="container">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <% @rooms.each do |room| %>
-        <% occupied = room.schedules.first.day == Time.current.strftime("%A") &&
-          room.schedules.first.start_time.strftime('%I:%M %p') <= Time.current.strftime('%I:%M %p') &&
-          room.schedules.first.end_time.strftime('%I:%M %p') >= Time.current.strftime('%I:%M %p') %>
+      <% @rooms.each do |rooms| %>
+        <% rooms.schedules.map do |room| %>
+          <% occupied = room.day == Time.current.strftime("%A") &&
+            room.start_time.strftime('%I:%M %p') <= Time.current.strftime('%I:%M %p') &&
+            room.end_time.strftime('%I:%M %p') >= Time.current.strftime('%I:%M %p') %>
 
-        <div class="col">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title text-center">Room <%= room.room_number %></h5>
-              <% if occupied %>
-                <p class="text-center text-danger fw-bold">Occupied</p>
-              <% else %>
-                <p class="text-center text-success fw-bold">Available</p>
-              <% end %>
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title text-center">Room <%= rooms.room_number %></h5>
+                <% if occupied %>
+                  <p class="text-center text-danger fw-bold">Occupied</p>
+                <% else %>
+                  <p class="text-center text-success fw-bold">Available</p>
+                <% end %>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
     </div>
   </div>
