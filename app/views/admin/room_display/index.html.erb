@@ -6,32 +6,26 @@
 <% end %>
 
 <div class="container my-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Room Display</h2>
+  <h2 class="text-center mb-4">Room Display</h2>
 
-  </div>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      <% @rooms.each do |room| %>
+        <% occupied = room.schedules.first.day == Time.current.strftime("%A") &&
+          room.schedules.first.start_time.strftime('%I:%M %p') <= Time.current.strftime('%I:%M %p') &&
+          room.schedules.first.end_time.strftime('%I:%M %p') >= Time.current.strftime('%I:%M %p') %>
 
-  <div class="table-responsive">
-    <div class="container mt-4">
-      <div class="row bg-primary text-white p-2">
-        <div class="col-3 font-weight-bold text-center">Room Name</div>
-        <div class="col-3 font-weight-bold text-center">Room Name</div>
-        <div class="col-3 font-weight-bold text-center">Room Name</div>
-        <div class="col-3 font-weight-bold text-center">Room Name</div>
-      </div>
-      <% @room_statuses.each_slice(4) do |room_group| %>
-        <div class="row border p-2">
-          <% room_group.each do |room_status| %>
-            <div class="col-3 text-center border p-3">
-              <div class="fw-bold"><%= room_status[:room_number].room_number %></div>
-              <div style="color: <%= room_status[:status] == 'Occupied' ? 'red' : 'green' %>;">
-                <%= room_status[:status] %>
-              </div>
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title text-center">Room <%= room.room_number %></h5>
+              <% if occupied %>
+                <p class="text-center text-danger fw-bold">Occupied</p>
+              <% else %>
+                <p class="text-center text-success fw-bold">Available</p>
+              <% end %>
             </div>
-          <% end %>
-          <% (4 - room_group.size).times do %>
-            <div class="col-3 text-center border p-3"></div>
-          <% end %>
+          </div>
         </div>
       <% end %>
     </div>
