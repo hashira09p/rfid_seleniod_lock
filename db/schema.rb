@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_09_150411) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "room_id", null: false
+    t.index ["room_id"], name: "index_schedules_on_room_id"
     t.index ["user_id"], name: "index_schedules_on_user_id"
   end
 
