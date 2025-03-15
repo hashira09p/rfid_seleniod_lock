@@ -8,8 +8,6 @@
     <div class="d-flex flex-wrap gap-2">
       <input type="text" name="fullname" class="form-control" placeholder="Name" value="<%= params[:fullname] %>" style="flex: 1; min-width: 150px;">
 
-      <input type="text" name="card_number" class="form-control" placeholder="Card Number" value="<%= params[:card_number] %>" style="flex: 1; min-width: 150px;">
-
       <select name="academic_college" class="form-select" style="flex: 1; min-width: 150px;">
         <option value="">Academic College</option>
         <% User.academic_colleges.each do |key, _value| %>
@@ -37,8 +35,6 @@
       <tr>
         <th>#</th>
         <th>Name</th>
-        <th>Card Number</th>
-        <th>Card/Tag Status</th>
         <th>Academic College</th>
         <th>Role</th>
         <th>Email</th>
@@ -48,50 +44,20 @@
       <tbody>
       <% if @users.empty? %>
         <tr>
-          <td colspan="8" class="text-center text-muted">No Matching Professors Found</td>
+          <td colspan="6" class="text-center text-muted">No Matching Professors Found</td>
         </tr>
       <% else %>
-
         <% row_index = 1 %>
         <% @users.each do |user| %>
-          <% if params[:card_number].present? %>
-            <% card = user.cards.find_by(uid: params[:card_number]) %>
-            <% if card %>
-              <tr>
-                <td><%= row_index %></td>
-                <td><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
-                <td><%= card.uid %></td>
-                <td>
-          <span class="badge <%= card.Active? ? 'bg-success' : 'bg-danger' %>">
-            <%= card.status %>
-          </span>
-                </td>
-                <td><%= user.academic_college %></td>
-                <td><%= user.role.humanize %></td>
-                <td><%= user.email %></td>
-                <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
-              </tr>
-              <% row_index += 1 %>
-            <% end %>
-          <% else %>
-            <% user.cards.each do |card| %>
-              <tr>
-                <td><%= row_index %></td>
-                <td><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
-                <td><%= card.uid %></td>
-                <td>
-          <span class="badge <%= card.Active? ? 'bg-success' : 'bg-danger' %>">
-            <%= card.status %>
-          </span>
-                </td>
-                <td><%= user.academic_college %></td>
-                <td><%= user.role.humanize %></td>
-                <td><%= user.email %></td>
-                <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %>
-              </tr>
-              <% row_index += 1 %>
-            <% end %>
-          <% end %>
+          <tr>
+            <td><%= row_index %></td>
+            <td><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
+            <td><%= user.academic_college %></td>
+            <td><%= user.role.humanize %></td>
+            <td><%= user.email %></td>
+            <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+          </tr>
+          <% row_index += 1 %>
         <% end %>
       <% end %>
       </tbody>

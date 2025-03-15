@@ -2,7 +2,7 @@ class Admin::HomeController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
 
   def index
-    @users = User.includes(:cards).order(:firstname)
+    @users = User.order(:firstname)
 
     # filtering
     if params[:fullname].present?
@@ -16,9 +16,6 @@ class Admin::HomeController < AdminApplicationController
       )
     end
 
-    if params[:card_number].present?
-      @users = @users.joins(:cards).where(cards: { uid: params[:card_number] })
-    end
     @users = @users.where(academic_college: params[:academic_college]) if params[:academic_college].present?
     @users = @users.where(role: params[:role]) if params[:role].present?
   end
