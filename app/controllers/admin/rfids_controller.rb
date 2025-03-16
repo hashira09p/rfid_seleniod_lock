@@ -9,6 +9,7 @@
     rfid_uid = params[:uid]
     card = Card.find_by(uid: rfid_uid)
     room_status = params[:room_status]
+    room_id = params[:room_number]
 
     return render json: { message: "Access denied" }, status: :unauthorized unless card
 
@@ -19,7 +20,7 @@
 
     if room_status == "Lock"
       if first_active_user.nil?
-        TimeTrack.create(user_id: card.user_id, time_in: formatted_time)
+        TimeTrack.create(user_id: card.user_id, time_in: formatted_time, room_id: room_id)
 
         render json: { message: "Access granted", unlock: true, user: card.user.firstname }, status: :ok
       else
