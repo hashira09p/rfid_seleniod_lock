@@ -1,0 +1,37 @@
+<div class="container my-5">
+  <h2 class="mb-4">Add New Professor</h2>
+
+  <%= form_with model: @user, url: home_index_path, method: :post, local: true, class: "row g-3" do |form| %>
+
+    <div class="col-md-4">
+      <%= form.label :firstname, "First Name" %>
+      <%= form.text_field :firstname, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-4">
+      <%= form.label :middlename, "Middle Name" %>
+      <%= form.text_field :middlename, class: "form-control" %>
+    </div>
+
+    <div class="col-md-4">
+      <%= form.label :lastname, "Last Name" %>
+      <%= form.text_field :lastname, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :academic_college, "Academic College" %>
+      <%= form.text_field :academic_college, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :email, "Email" %>
+      <%= form.email_field :email, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-12 d-flex justify-content-between">
+      <%= link_to "Back", home_index_path, class: "btn btn-secondary" %>
+      <%= form.submit "Create Professor", class: "btn btn-primary" %>
+    </div>
+
+  <% end %>
+</div>
