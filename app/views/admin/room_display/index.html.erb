@@ -11,17 +11,15 @@
   <div class="container">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <% @rooms.each do |room| %>
-        <div class="col">
+        <div class="col room-card" data-room-id="<%= room.id %>">
           <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title text-center">Room <%= room.room_number %></h5>
-
-              <!-- Display room status based on TimeTrack -->
-              <% if @room_statuses[room.id] == "time_in" %>
-                <p class="text-center text-danger fw-bold">Occupied</p>
-              <% else %>
-                <p class="text-center text-success fw-bold">Vacant</p>
-              <% end %>
+              <% status = @room_statuses[room.id] %>
+              <p class="room-status text-center fw-bold
+                <%= status == "unavailable" ? "text-secondary" : (status == "time_in" ? "text-danger" : "text-success") %>">
+                <%= status == "unavailable" ? "Unavailable" : (status == "time_in" ? "Occupied" : "Vacant") %>
+              </p>
             </div>
           </div>
         </div>
