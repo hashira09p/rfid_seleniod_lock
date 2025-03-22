@@ -19,21 +19,4 @@ class Admin::HomeController < AdminApplicationController
     @users = @users.where(academic_college: params[:academic_college]) if params[:academic_college].present?
     @users = @users.where(role: params[:role]) if params[:role].present?
   end
-
-  def create
-    rfid_uid = params[:uid]
-    puts rfid_uid
-    card = Card.find_by(uid: rfid_uid)
-
-    if card
-      render json: { message: "Access granted", unlock: true }, status: :ok
-    else
-      render json: { message: "Access denied", unlock: false }, status: :unauthorized
-    end
-  end
-
-  def authenticate_with_api_token
-    api_token = request.headers['Authorization']
-    head :unauthorized unless User.exists?(api_token: api_token)
-  end
 end
