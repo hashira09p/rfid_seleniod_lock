@@ -10,7 +10,11 @@ Rails.application.routes.draw do
         shared: 'admin/devise/shared',
         unlocks: 'admin/devise/unlocks'
       }, as: :admin
-      resources :home
+      resources :home do
+        member do
+          patch :toggle_status
+        end
+    end
       resources :users
       resources :schedules
       resources :rooms

@@ -1,3 +1,10 @@
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">List of Professors</h2>
@@ -62,14 +69,30 @@
             <td><%= user.role.humanize %></td>
             <td><%= user.email %></td>
             <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
-            <td>
-            <span class="badge <%= user.status == 'Active' ? 'bg-danger' : 'bg-success' %>">
-              <%= user.status %>
-            </span>
+            <td class="d-flex align-items-center gap-2">
+              <span class="badge <%= user.active? ? 'bg-success' : 'bg-danger' %>">
+                <%= user.active? ? 'Active' : 'Inactive' %>
+              </span>
             </td>
 
             <td>
-              <%= link_to "Edit", edit_home_path(user), class: "btn btn-sm btn-warning" %>
+              <%= link_to "Edit", edit_home_path(user), class: "btn btn-sm btn-warning mb-2" %>
+
+              <!-- Toggle Buttons -->
+              <% if user.active? %>
+                <%= button_to "Inactive",
+                              toggle_status_home_path(user, status: :inactive),
+                              method: :patch,
+                              class: "btn btn-sm btn-danger",
+                              data: { turbo_confirm: "Are you sure you want to deactivate #{user.firstname}?" } %>
+              <% else %>
+                <!-- Show Active button if the user is inactive -->
+                <%= button_to "Active",
+                              toggle_status_home_path(user, status: :active),
+                              method: :patch,
+                              class: "btn btn-sm btn-success",
+                              data: { turbo_confirm: "Are you sure you want to activate #{user.firstname}?" } %>
+              <% end %>
             </td>
           </tr>
           <% row_index += 1 %>

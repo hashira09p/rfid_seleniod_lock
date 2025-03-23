@@ -57,6 +57,22 @@ class Admin::HomeController < AdminApplicationController
     end
   end
 
+  def toggle_status
+    @user = User.find(params[:id])
+    new_status = params[:status] == 'active' ? 'active' : 'inactive'
+
+    @user.update(status: new_status)
+
+    if new_status == 'active'
+      @user.cards.update_all(status: 1)
+    else
+      @user.cards.update_all(status: 0)
+    end
+
+    flash[:notice] = "#{@user.firstname}'s status and associated cards have been updated to #{new_status.capitalize}."
+    redirect_to home_index_path
+  end
+
   private
 
   def set_user
