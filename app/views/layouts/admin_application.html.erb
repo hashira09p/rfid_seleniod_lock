@@ -60,6 +60,7 @@
       <%= link_to "Cards", cards_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(cards_path)}" %>
       <%= link_to "Room", rooms_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(rooms_path)}" %>
       <%= link_to "Schedules", schedules_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(schedules_path)}" %>
+      <%= link_to "Daily Logs", time_track_index_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(time_track_index_path)}" %>
       <%= link_to "Room Display", room_display_index_path, class: "btn btn-outline-primary mb-2 #{'active' if current_page?(room_display_index_path)}" %>
     </nav>
 

@@ -1,0 +1,84 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Edit Time Track</h4>
+    </div>
+
+    <div class="card-body">
+      <%= form_with model: @time_track, url: time_track_path(@time_track), method: :patch, local: true, class: "needs-validation" do |f| %>
+
+        <div class="row g-4">
+
+          <!-- Professor Name -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Professor Name:</label>
+              <p class="form-control-plaintext border bg-light px-3 rounded">
+                <%= "#{@time_track.user.firstname} #{@time_track.user.middlename} #{@time_track.user.lastname}" %>
+              </p>
+              <%= f.hidden_field :user_id, value: @time_track.user_id %>
+            </div>
+          </div>
+
+          <!-- Room Number -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Room Number:</label>
+              <p class="form-control-plaintext border bg-light px-3 rounded">
+                <%= @time_track.room.room_number %>
+              </p>
+              <%= f.hidden_field :room_id, value: @time_track.room_id %>
+            </div>
+          </div>
+
+          <!-- Time In -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :time_in, "Time In", class: "form-label fw-bold" %>
+              <%= f.time_field :time_in,
+                               value: (@time_track.time_in.present? ? Time.parse(@time_track.time_in).strftime("%H:%M") : nil),
+                               class: "form-control" %>
+            </div>
+          </div>
+
+          <!-- Time Out -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :time_out, "Time Out", class: "form-label fw-bold" %>
+              <%= f.time_field :time_out,
+                               value: (@time_track.time_out.present? ? Time.parse(@time_track.time_out).strftime("%H:%M") : nil),
+                               class: "form-control" %>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :status, "Status", class: "form-label fw-bold" %>
+              <%= f.select :status, TimeTrack.statuses.keys, {}, class: "form-select" %>
+            </div>
+          </div>
+
+          <!-- Created At -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :created_at, "Date", class: "form-label fw-bold" %>
+              <p class="form-control-plaintext border bg-light px-3 rounded">
+                <%= @time_track.created_at.present? ? @time_track.created_at.strftime("%B %d, %Y") : "N/A" %>
+              </p>
+              <%= f.hidden_field :created_at, value: @time_track.created_at %>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between mt-4">
+          <%= link_to "Back", time_track_index_path, class: "btn btn-outline-secondary px-4" %>
+          <%= f.submit "Update", class: "btn btn-success px-4" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :rooms
       resources :room_display
       get "room_statuses", to: "room_display#room_statuses"
+      resources :time_track
     end
     root 'admin/home#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
