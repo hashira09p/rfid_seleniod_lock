@@ -44,6 +44,15 @@
         <% end %>
       </select>
 
+      <select name="school_year" class="form-select" style="flex: 1; min-width: 150px;">
+        <option value="">School Year</option>
+        <% @school_years.each do |school_year| %>
+          <option value="<%= school_year %>" <%= 'selected' if params[:school_year] == school_year %>>
+            <%= school_year %>
+          </option>
+        <% end %>
+      </select>
+
       <!-- Search and Reset Buttons -->
       <button type="submit" class="btn btn-primary">Search</button>
       <button type="button" class="btn btn-secondary" onclick="window.location.href='<%= schedules_path %>'">Reset</button>
@@ -64,6 +73,7 @@
       <th scope="col">End Time</th>
       <th scope="col">Professor</th>
       <th scope="col">Room Number</th>
+      <th scope="col">School Year</th>
       <th scope="col">Actions</th>
     </tr>
     </thead>
@@ -81,6 +91,7 @@
           <td>No Owner</td>
         <% end %>
         <td><%= schedule.room&.room_number || 'No Room' %></td>
+        <td><%= schedule.school_year || 'No School Year' %></td>
         <td>
           <div class="d-inline-flex gap-2">
             <%= link_to edit_schedule_path(schedule),

@@ -7,12 +7,18 @@ class Admin::SchedulesController < AdminApplicationController
     @users = User.pluck(:firstname, :middlename, :lastname, :id)
     @rooms = Room.pluck(:room_number, :id)
 
-    @schedules = Schedule.includes(:user, :room).order(:day, :start_time)
+    @school_years = Schedule.distinct.pluck(:school_year).compact.sort
+
+    @schedules = Schedule.includes(:user, :room)
+                         .order(Arel.sql("day ASC, school_year ASC,
+                                      TIME_FORMAT(start_time, '%p') DESC,
+                                      TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 
     # Apply filters if present
     @schedules = @schedules.where(day: params[:day]) if params[:day].present?
     @schedules = @schedules.where(user_id: params[:professor_id]) if params[:professor_id].present?
     @schedules = @schedules.where(room_id: params[:room_id]) if params[:room_id].present?
+    @schedules = @schedules.where(school_year: params[:school_year]) if params[:school_year].present?
   end
 
   def new
@@ -54,6 +60,6 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def set_params
-    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id)
+    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year)
   end
 end

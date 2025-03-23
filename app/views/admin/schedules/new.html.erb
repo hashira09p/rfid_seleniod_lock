@@ -40,14 +40,14 @@
   <div class="form-group">
     <%= form.label :start_time %>
     <%= form.time_select :start_time,
-                         { ampm: true, minute_step: 1, default: Time.current },
+                         { ampm: true, minute_step: 1, default: Time.current.change(hour: 0, min: 0) },
                          { class: 'form-control', required: true, placeholder: 'Select Start Time' } %>
   </div>
 
   <div class="form-group">
     <%= form.label :end_time %>
     <%= form.time_select :end_time,
-                         { ampm: true, minute_step: 1, default: Time.current },
+                         { ampm: true, minute_step: 1, default: Time.current.change(hour: 0, min: 0) },
                          { class: 'form-control', required: true, placeholder: 'Select End Time' } %>
   </div>
 
@@ -56,6 +56,15 @@
     <%= form.select :user_id, User.left_joins(:schedules).distinct.map { |user| ["#{user.firstname} #{user.middlename} #{user.lastname}", user.id] },
                     { include_blank: "Select Professor" },
                     { class: "form-select", id: "user-select", required: false } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :school_year, "School Year" %>
+    <%= form.select :school_year,
+                    ((Date.current.year - 1)..(Date.current.year + 3)).map { |year| ["#{year}-#{year + 1}", "#{year}-#{year + 1}"] },
+                    { include_blank: "Select School Year" },
+                    class: 'form-control custom-select mb-3',
+                    required: true %>
   </div>
 
   <div class="actions">

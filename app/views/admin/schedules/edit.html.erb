@@ -58,6 +58,15 @@
                     { class: "form-select", id: "user-select", required: false } %>
   </div>
 
+  <div class="form-group">
+    <%= form.label :school_year, "School Year" %>
+    <%= form.select :school_year,
+                    Schedule.distinct.pluck(:school_year).sort.map { |year| [year, year] },
+                    { include_blank: "Select School Year" },
+                    class: 'form-control custom-select mb-3',
+                    required: true %>
+  </div>
+
   <div class="actions">
     <%= form.submit 'Update Schedule', class: 'btn btn-primary' %>
   </div>
