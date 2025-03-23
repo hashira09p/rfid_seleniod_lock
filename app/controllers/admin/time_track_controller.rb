@@ -4,49 +4,42 @@ class Admin::TimeTrackController < AdminApplicationController
   before_action :set_time_track, only: [:edit, :update, :destroy]
 
   def index
+    # Fetch initial data
+    @rooms = Room.pluck(:room_number).uniq
+    @professors = User.pluck(:firstname, :middlename, :lastname, :id)
     @time_tracks = TimeTrack.includes(:room, :user)
-
-    # Apply filters only if any filter params are present
-    filters_applied = params[:room_id].present? ||
-      params[:name].present? ||
-      params[:date].present? ||
-      params[:time_in].present? ||
-      params[:time_out].present? ||
-      params[:status].present?
-
-    # Filter by default to today's records if no filters are applied
-    unless filters_applied
-      @time_tracks = @time_tracks.where("DATE(created_at) = ?", Date.current)
-    end
 
     # Apply filters
     if params[:room_number].present?
-      @time_tracks = @time_tracks.joins(:room).where("rooms.room_number ILIKE ?", "%#{params[:room_number]}%")
+      @time_tracks = @time_tracks.joins(:room).where("rooms.room_number = ?", params[:room_number])
     end
 
-    if params[:name].present?
-      @time_tracks = @time_tracks.joins(:user).where(
-        "users.firstname ILIKE ? OR users.middlename ILIKE ? OR users.lastname ILIKE ?",
-        "%#{params[:name]}%", "%#{params[:name]}%", "%#{params[:name]}%"
-      )
+    if params[:professor_id].present?
+      @time_tracks = @time_tracks.where(user_id: params[:professor_id])
     end
 
-    if params[:date].present?
-      @time_tracks = @time_tracks.where("DATE(created_at) = ?", params[:date])
+    if params[:status].present?
+      @time_tracks = @time_tracks.where(status: params[:status])
     end
 
-    if params[:time_in].present?
-      @time_tracks = @time_tracks.where("time_in::time = ?", params[:time_in])
+    # Date filtering logic
+    if params[:start_date].present? && params[:end_date].present?
+      # Filter by range when both dates are provided
+      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) BETWEEN ? AND ?", params[:start_date], params[:end_date])
+    elsif params[:start_date].present?
+      # Filter by start date only (records from start_date onward)
+      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) = ?", params[:start_date])
+    elsif params[:end_date].present?
+      # Filter by end date only (records on or before end_date)
+      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) <= ?", params[:end_date])
+    else
+      # Default to today's records if no date filters are applied
+      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) = ?", Date.current)
     end
 
-    if params[:time_out].present?
-      @time_tracks = @time_tracks.where("time_out::time = ?", params[:time_out])
-    end
-
-    @time_tracks = @time_tracks.where(status: params[:status]) if params[:status].present?
-
-    # Sort by latest record
-    @time_tracks = @time_tracks.order(created_at: :asc)
+    # Sort by room number and created_at
+    @time_tracks = @time_tracks.joins(:room)
+                               .order("rooms.room_number ASC, time_tracks.created_at ASC")
   end
 
   def edit

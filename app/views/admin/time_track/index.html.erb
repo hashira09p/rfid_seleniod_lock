@@ -7,34 +7,24 @@
   <%= form_with url: time_track_index_path, method: :get, local: true, class: "mb-4" do %>
     <div class="row g-3">
 
-      <!-- Room ID -->
+      <!-- Room number -->
       <div class="col-md-2">
-        <%= label_tag :room_id, "Room ID", class: "form-label" %>
-        <%= text_field_tag :room_id, params[:room_id], class: "form-control", placeholder: "Enter Room ID" %>
+        <%= label_tag :room_number, "Room Number", class: "form-label" %>
+        <%= select_tag :room_number, options_for_select(@rooms, params[:room_number]),
+                       include_blank: "Select Room", class: "form-select" %>
       </div>
 
       <!-- Professor Name -->
       <div class="col-md-3">
-        <%= label_tag :name, "Professor Name", class: "form-label" %>
-        <%= text_field_tag :name, params[:name], class: "form-control", placeholder: "Enter Professor Name" %>
-      </div>
-
-      <!-- Date -->
-      <div class="col-md-2">
-        <%= label_tag :date, "Date", class: "form-label" %>
-        <%= date_field_tag :date, params[:date], class: "form-control", placeholder: "Select Date" %>
-      </div>
-
-      <!-- Time In -->
-      <div class="col-md-2">
-        <%= label_tag :time_in, "Time In", class: "form-label" %>
-        <%= time_field_tag :time_in, params[:time_in], class: "form-control", placeholder: "Time In" %>
-      </div>
-
-      <!-- Time Out -->
-      <div class="col-md-2">
-        <%= label_tag :time_out, "Time Out", class: "form-label" %>
-        <%= time_field_tag :time_out, params[:time_out], class: "form-control", placeholder: "Time Out" %>
+        <%= label_tag :professor_id, "Professor Name", class: "form-label" %>
+        <select name="professor_id" class="form-select" style="flex: 1; min-width: 150px;">
+          <option value="">Professor</option>
+          <% @professors.each do |firstname, middlename, lastname, id| %>
+            <option value="<%= id %>" <%= 'selected' if params[:professor_id].to_s == id.to_s %>>
+              <%= "#{firstname} #{middlename} #{lastname}" %>
+            </option>
+          <% end %>
+        </select>
       </div>
 
       <!-- Status -->
@@ -42,6 +32,17 @@
         <%= label_tag :status, "Status", class: "form-label" %>
         <%= select_tag :status, options_for_select(TimeTrack.statuses.keys, params[:status]),
                        include_blank: "Select Status", class: "form-select" %>
+      </div>
+
+      <!-- Date -->
+      <div class="col-md-2">
+        <%= label_tag :start_date, "Start Date", class: "form-label" %>
+        <%= date_field_tag :start_date, params[:start_date], class: "form-control", placeholder: "Select Start Date" %>
+      </div>
+
+      <div class="col-md-2">
+        <%= label_tag :end_date, "End Date", class: "form-label" %>
+        <%= date_field_tag :end_date, params[:end_date], class: "form-control", placeholder: "Select End Date" %>
       </div>
 
       <div class="col-md-2 d-flex align-items-end">
