@@ -1,0 +1,20 @@
+<h1>Edit Room</h1>
+
+<%= form_with(model: @room, local: true) do |form| %>
+  <div class="form-group">
+    <%= form.label :room_number %>
+    <%= form.number_field :room_number, class: 'form-control', required: true %>
+  </div>
+
+  <div>
+    <%= form.label :room_status %>
+    <%= form.select :status, Room.room_statuses.keys.map { |status| [status.capitalize, status] },
+                    { selected: @room.room_status },
+                    { class: "form-select mb-3", required: true } %>
+  </div>
+
+  <div>
+    <%= form.submit 'Update Room' %>
+    <%= link_to 'Cancel', rooms_path %>
+  </div>
+<% end %>
