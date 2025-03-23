@@ -1,51 +1,102 @@
-<h1>Time Tracks</h1>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Time Tracks</h2>
+  </div>
 
-<table class="table table-striped table-bordered">
-  <thead class="thead-dark">
-  <tr>
-    <th>#</th>
-    <th>Room ID</th>
-    <th>Professor Name</th>
-    <th>Date</th>
-    <th>Check-in Time</th>
-    <th>Check-out Time</th>
-    <th>Status</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% row_index = 1 %>
-  <% @time_tracks.each do |track| %>
-    <tr>
-      <td><%= row_index %></td>
-      <td><%= track.room.room_number || "No Room Assigned" %></td>
-      <td><%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %></td>
-      <td><%= track.created_at.strftime("%B %d, %Y") %></td>
-      <td>
-        <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
-      </td>
-      <td>
-        <%= track.time_out.present? ? (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) : "N/A" %>
-      </td>
-      <td><%= track.status %></td>
-      <td>
-        <div class="d-inline-flex gap-2">
-          <%= link_to edit_time_track_path(track),
-                      class: "btn btn-sm btn-warning d-flex align-items-center",
-                      title: "Edit" do %>
-            <i class="bi bi-pencil"></i>
-          <% end %>
+  <!-- Filter Form -->
+  <%= form_with url: time_track_index_path, method: :get, local: true, class: "mb-4" do %>
+    <div class="row g-3">
 
-          <%= button_to time_track_path(track),
-                        method: :delete,
-                        class: "btn btn-sm btn-danger d-flex align-items-center",
-                        data: { turbo_confirm: 'Are you sure you want to delete this time record?', turbo_method: 'delete' } do %>
-            <i class="bi bi-trash"></i>
-          <% end %>
-        </div>
-      </td>
-    </tr>
-    <% row_index += 1 %>
+      <!-- Room ID -->
+      <div class="col-md-2">
+        <%= label_tag :room_id, "Room ID", class: "form-label" %>
+        <%= text_field_tag :room_id, params[:room_id], class: "form-control", placeholder: "Enter Room ID" %>
+      </div>
+
+      <!-- Professor Name -->
+      <div class="col-md-3">
+        <%= label_tag :name, "Professor Name", class: "form-label" %>
+        <%= text_field_tag :name, params[:name], class: "form-control", placeholder: "Enter Professor Name" %>
+      </div>
+
+      <!-- Date -->
+      <div class="col-md-2">
+        <%= label_tag :date, "Date", class: "form-label" %>
+        <%= date_field_tag :date, params[:date], class: "form-control", placeholder: "Select Date" %>
+      </div>
+
+      <!-- Time In -->
+      <div class="col-md-2">
+        <%= label_tag :time_in, "Time In", class: "form-label" %>
+        <%= time_field_tag :time_in, params[:time_in], class: "form-control", placeholder: "Time In" %>
+      </div>
+
+      <!-- Time Out -->
+      <div class="col-md-2">
+        <%= label_tag :time_out, "Time Out", class: "form-label" %>
+        <%= time_field_tag :time_out, params[:time_out], class: "form-control", placeholder: "Time Out" %>
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-2">
+        <%= label_tag :status, "Status", class: "form-label" %>
+        <%= select_tag :status, options_for_select(TimeTrack.statuses.keys, params[:status]),
+                       include_blank: "Select Status", class: "form-select" %>
+      </div>
+
+      <div class="col-md-2 d-flex align-items-end">
+        <%= submit_tag "Filter", class: "btn btn-primary me-2" %>
+        <%= link_to "Reset", time_track_index_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
   <% end %>
-  </tbody>
-</table>
+
+  <!-- Time Track Table -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Room Number</th>
+        <th>Professor Name</th>
+        <th>Date</th>
+        <th>Check-in Time</th>
+        <th>Check-out Time</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% row_index = 1 %>
+      <% @time_tracks.each do |track| %>
+        <tr>
+          <td><%= row_index %></td>
+          <td><%= track.room.room_number || "No Room Assigned" %></td>
+          <td><%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %></td>
+          <td><%= track.created_at.strftime("%B %d, %Y") %></td>
+          <td>
+            <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
+          </td>
+          <td>
+            <%= track.time_out.present? ? (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) : "N/A" %>
+          </td>
+          <td><%= track.status %></td>
+          <td>
+            <div class="d-inline-flex gap-2">
+              <%= link_to edit_time_track_path(track), class: "btn btn-sm btn-warning", title: "Edit" do %>
+                <i class="bi bi-pencil"></i>
+              <% end %>
+
+              <%= button_to time_track_path(track), method: :delete, class: "btn btn-sm btn-danger",
+                            data: { turbo_confirm: 'Are you sure you want to delete this time record?' } do %>
+                <i class="bi bi-trash"></i>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% row_index += 1 %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
