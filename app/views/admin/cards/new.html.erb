@@ -10,14 +10,15 @@
                   { include_blank: "Select Status" },
                   { class: "form-select", required: true } %>
 
-  <div>
-    <%= form.label :add_user, 'Add a user?' %>
-    <%= check_box_tag :add_user, '1', true, id: 'add-user-checkbox', class: 'form-check-input' %>
-  </div>
+<!--  <div>-->
+    <%#= form.label :add_user, 'Add a user?' %>
+    <%#= check_box_tag :add_user, '1', true, id: 'add-user-checkbox', class: 'form-check-input' %>
+<!--  </div>-->
 
   <div class="mb-3">
     <%= form.label :user_id, "User", class: "form-label" %>
-    <%= form.select :user_id, User.all.map { |user| ["#{[user.firstname, user.middlename, user.lastname].compact.join(' ')} (#{user.email})", user.id] },
+    <%= form.select :user_id,
+                    User.active.order(:firstname).map { |user| ["#{[user.firstname, user.middlename, user.lastname].compact.join(' ')} (#{user.email})", user.id] },
                     { include_blank: "Select User" },
                     { class: "form-select", id: "user-select", required: false } %>
   </div>
@@ -32,23 +33,23 @@
   <%= form.submit 'Register Card' %>
 <% end %>
 
-<script>
-    // JavaScript to enable/disable the user select field
-    document.addEventListener('turbo:load', () => {
-        const addUserCheckbox = document.getElementById('add-user-checkbox');
-        const userSelect = document.getElementById('user-select');
+<!--<script>-->
+<!--    // JavaScript to enable/disable the user select field-->
+<!--    document.addEventListener('turbo:load', () => {-->
+<!--        const addUserCheckbox = document.getElementById('add-user-checkbox');-->
+<!--        const userSelect = document.getElementById('user-select');-->
 
-        // Function to toggle the disabled state of the user select field
-        const toggleUserSelect = () => {
-            userSelect.disabled = !addUserCheckbox.checked;
-        };
+<!--        // Function to toggle the disabled state of the user select field-->
+<!--        const toggleUserSelect = () => {-->
+<!--            userSelect.disabled = !addUserCheckbox.checked;-->
+<!--        };-->
 
-        if (addUserCheckbox) {
-            // Add event listener to the checkbox
-            addUserCheckbox.addEventListener('change', toggleUserSelect);
+<!--        if (addUserCheckbox) {-->
+<!--            // Add event listener to the checkbox-->
+<!--            addUserCheckbox.addEventListener('change', toggleUserSelect);-->
 
-            // Initial toggle on page load
-            toggleUserSelect();
-        }
-    });
-</script>
+<!--            // Initial toggle on page load-->
+<!--            toggleUserSelect();-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->

@@ -43,6 +43,8 @@
         <th>Role</th>
         <th>Email</th>
         <th>Registered Date</th>
+        <th>Status</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -60,6 +62,15 @@
             <td><%= user.role.humanize %></td>
             <td><%= user.email %></td>
             <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+            <td>
+            <span class="badge <%= user.status == 'Active' ? 'bg-danger' : 'bg-success' %>">
+              <%= user.status %>
+            </span>
+            </td>
+
+            <td>
+              <%= link_to "Edit", edit_home_path(user), class: "btn btn-sm btn-warning" %>
+            </td>
           </tr>
           <% row_index += 1 %>
         <% end %>

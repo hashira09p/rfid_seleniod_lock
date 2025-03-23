@@ -1,0 +1,48 @@
+<div class="container my-5">
+  <h2 class="mb-4">Edit Professor</h2>
+
+  <%= form_with model: @user, url: home_path(@user), method: :patch, local: true, class: "row g-3" do |form| %>
+
+    <div class="col-md-4">
+      <%= form.label :firstname, "First Name" %>
+      <%= form.text_field :firstname, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-4">
+      <%= form.label :middlename, "Middle Name" %>
+      <%= form.text_field :middlename, class: "form-control" %>
+    </div>
+
+    <div class="col-md-4">
+      <%= form.label :lastname, "Last Name" %>
+      <%= form.text_field :lastname, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :academic_college, "Academic College" %>
+      <%= form.select :academic_college,
+                      User.academic_colleges.keys.map { |key| [key.humanize, key] },
+                      { selected: @user.academic_college },
+                      { class: "form-select", required: true } %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :role, "Role" %>
+      <%= form.select :role,
+                      User.roles.keys.map { |key| [key.humanize, key] },
+                      { selected: @user.role },
+                      { class: "form-select", required: true } %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :email, "Email" %>
+      <%= form.email_field :email, class: "form-control", readonly: true, value: @user.email %>
+    </div>
+
+    <div class="col-12 d-flex justify-content-between">
+      <%= link_to "Back", home_index_path, class: "btn btn-secondary" %>
+      <%= form.submit "Update Professor", class: "btn btn-primary" %>
+    </div>
+
+  <% end %>
+</div>

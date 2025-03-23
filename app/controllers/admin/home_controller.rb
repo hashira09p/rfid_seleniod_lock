@@ -1,5 +1,6 @@
 class Admin::HomeController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
+  before_action :set_user, only: [:edit, :update]
 
   def index
     @users = User.order(:firstname)
@@ -43,12 +44,29 @@ class Admin::HomeController < AdminApplicationController
     end
   end
 
+  def edit;
+  end
+
+  def update
+    if @user.update(user_params)
+      flash[:notice] = "Professor updated successfully!"
+      redirect_to home_index_path
+    else
+      flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
+      render :edit
+    end
+  end
+
   private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 
   def user_params
     params.require(:user).permit(
       :firstname, :middlename, :lastname,
-      :academic_college, :email, :password, :password_confirmation
+      :academic_college, :email, :role, :password, :password_confirmation
     )
   end
 end
