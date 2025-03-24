@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_23_114544) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_24_085147) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_23_114544) do
     t.string "time_in", default: -> { "time_format(current_timestamp(),'%I:%M %p')" }
     t.string "time_out", default: -> { "time_format(current_timestamp(),'%I:%M %p')" }
     t.bigint "room_id"
+    t.integer "card_id"
+    t.index ["card_id"], name: "index_time_tracks_on_card_id"
     t.index ["room_id"], name: "index_time_tracks_on_room_id"
     t.index ["user_id"], name: "index_time_tracks_on_user_id"
   end
