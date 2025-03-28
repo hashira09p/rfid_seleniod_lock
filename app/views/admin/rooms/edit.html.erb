@@ -8,7 +8,7 @@
 
   <div>
     <%= form.label :room_status %>
-    <%= form.select :status, Room.room_statuses.keys.map { |status| [status.capitalize, status] },
+    <%= form.select :room_status, Room.room_statuses.keys.map { |status| [status.capitalize, status] },
                     { selected: @room.room_status },
                     { class: "form-select mb-3", required: true } %>
   </div>
