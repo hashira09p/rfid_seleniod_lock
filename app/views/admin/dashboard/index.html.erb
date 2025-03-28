@@ -1,0 +1,110 @@
+<h1 class="mb-3 fs-4">Dashboard</h1>
+
+<div class="row">
+  <!-- Total Users -->
+  <div class="col-md-3">
+    <div class="card shadow text-white bg-primary h-100">
+      <div class="card-body text-center p-2 d-flex flex-column justify-content-center gap-1">
+        <h6 class="fs-6"><i class="bi bi-person-check"></i> Total Users: <strong><%= @total_users %></strong></h6>
+        <p class="small">Active: <strong><%= @active_users %></strong></p>
+        <p class="small">Inactive: <strong><%= @inactive_users %></strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Cards -->
+  <div class="col-md-3">
+    <div class="card shadow text-white bg-success h-100">
+      <div class="card-body text-center p-2 d-flex flex-column justify-content-center gap-1">
+        <h6 class="fs-6"><i class="bi bi-credit-card"></i> Total Cards: <strong><%= @total_cards %></strong></h6>
+        <p class="small">Active: <strong><%= @active_cards %></strong></p>
+        <p class="small">Inactive: <strong><%= @inactive_cards %></strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Schedules -->
+  <div class="col-md-3">
+    <div class="card shadow text-white bg-info h-100">
+      <div class="card-body text-center p-2 d-flex flex-column justify-content-center gap-1">
+        <h6 class="fs-6"><i class="bi bi-calendar-check"></i> Total Schedules: <strong><%= @total_schedules %></strong></h6>
+        <p class="small"><%= @semester %></p>
+        <p class="small">School Year <%= @school_year %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Room Status & Occupancy -->
+  <div class="col-md-3">
+    <div class="card shadow text-white bg-danger h-100">
+      <div class="card-body text-center p-2 d-flex flex-column justify-content-center gap-1">
+        <h6 class="fs-6"><i class="bi bi-door-closed"></i> Room Overview</h6>
+        <hr class="my-1">
+        <div class="d-flex justify-content-between small">
+          <div class="w-50 border-end">
+            <p><strong>Status</strong></p>
+            <p>Unavailable: <strong><%= @unavailable_rooms %></strong></p>
+            <p>Available: <strong><%= @available_rooms %></strong></p>
+          </div>
+          <div class="w-50">
+            <p><strong>Occupancy</strong></p>
+            <p>Vacant: <strong><%= @vacant_rooms %></strong></p>
+            <p>Occupied: <strong><%= @occupied_rooms %></strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-5 shadow">
+  <div class="card-header bg-primary text-white">
+    <h6 class="mb-0"><i class="bi bi-calendar"></i> Room Schedules - School Year <%= @school_year %></h6>
+  </div>
+  <div class="card-body p-2">
+    <% if @room_schedules.any? %>
+      <% @room_schedules.each do |room_number, schedules| %>
+        <div class="mb-4">
+          <h6 class="fw-bold text-primary"><i class="bi bi-door-closed"></i> Room <%= room_number %></h6>
+          <div class="table-responsive">
+            <table class="table table-bordered text-center small align-middle">
+              <thead class="table-dark">
+              <tr>
+                <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+                  <th><%= day %></th>
+                <% end %>
+              </tr>
+              </thead>
+              <tbody>
+              <% if schedules.any? %>
+                <tr>
+                  <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+                    <td class="text-start">
+                      <% schedules_for_day = schedules.select { |s| s.day == day } %>
+                      <% if schedules_for_day.any? %>
+                        <% schedules_for_day.each do |schedule| %>
+                          <strong><%= schedule.subject %></strong><br>
+                          <span class="text-muted small"><%= schedule.firstname %> <%= schedule.lastname %></span><br>
+                          <span class="fw-bold small"><%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %></span><br><br>
+                        <% end %>
+                      <% else %>
+                        <span class="text-muted">No Schedule</span>
+                      <% end %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% else %>
+                <tr>
+                  <td colspan="7" class="text-center text-muted">No Schedule</td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center text-muted">No Active Room Schedules Available</div>
+    <% end %>
+  </div>
+</div>
