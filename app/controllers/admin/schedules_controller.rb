@@ -24,6 +24,7 @@ class Admin::SchedulesController < AdminApplicationController
   def new
     @schedule = Schedule.new
     @users = User.all
+    @room_statuses = fetch_room_statuses
   end
 
   def create
@@ -35,7 +36,9 @@ class Admin::SchedulesController < AdminApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @room_statuses = fetch_room_statuses
+  end
 
   def update
     if @schedule.update(set_params)
@@ -61,5 +64,13 @@ class Admin::SchedulesController < AdminApplicationController
 
   def set_params
     params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year)
+  end
+
+  def fetch_room_statuses
+    statuses = {}
+    Room.includes(:time_tracks).each do |room|
+      statuses[room.id] = room.Unavailable? ? "unavailable" : "vacant"
+    end
+    statuses
   end
 end

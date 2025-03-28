@@ -24,7 +24,11 @@
 
   <div class="mb-3">
     <%= form.label :room_id, "Room", class: "form-label" %>
-    <%= form.select :room_id, Room.left_joins(:schedules).map { |room| [room.room_number, room.id] },
+    <%= form.select :room_id,
+                    Room.left_joins(:schedules).distinct.order(:room_number).map { |room|
+                      status = @room_statuses[room.id] || "vacant"
+                      ["Room #{room.room_number}", room.id, { disabled: status == "unavailable" }]
+                    },
                     { include_blank: "Select Room" },
                     { class: "form-select", id: "room-select", required: false } %>
   </div>
