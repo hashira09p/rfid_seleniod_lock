@@ -63,7 +63,7 @@
   </div>
   <div class="card-body p-2">
     <% if @room_schedules.any? %>
-      <% @room_schedules.each do |room_number, schedules| %>
+      <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each do |room_number, schedules| %>
         <div class="mb-4">
           <h6 class="fw-bold text-primary"><i class="bi bi-door-closed"></i> Room <%= room_number %></h6>
           <div class="table-responsive">

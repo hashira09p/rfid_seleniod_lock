@@ -30,8 +30,7 @@ class Admin::DashboardController < AdminApplicationController
     @total_schedules = Schedule.where(school_year: @school_year).count
 
     # Fetch only active rooms and their schedules
-    @active_rooms = Room.where(room_status: "Available").includes(:schedules)
-
+    @active_rooms = Room.where(room_status: "Available").includes(:schedules).order(room_number: :ASC)
     # Group schedules by room and day for easier rendering
     @room_schedules = Schedule
                         .joins(:user, :room)
@@ -55,42 +54,4 @@ class Admin::DashboardController < AdminApplicationController
       occupied: occupied_rooms.count
     }
   end
-
-  def calculate_available_time(schedules)
-    full_day_range = (6 * 60..21 * 60).step(1).to_a # 6:00 AM to 9:00 PM in minutes
-    booked_minutes = schedules.reject { |s| s.start_time == s.end_time } # Ignore zero-duration bookings
-                              .map { |s| (s.start_time.hour * 60 + s.start_time.min..s.end_time.hour * 60 + s.end_time.min).to_a }
-                              .flatten
-                              .uniq
-
-    available_minutes = full_day_range - booked_minutes
-    return ["6:00 AM - 9:00 PM"] if available_minutes.size == full_day_range.size # Room is fully available
-
-    format_available_slots(available_minutes)
-  end
-
-  def format_available_slots(available_minutes)
-    return ["No Available Slots"] if available_minutes.empty?
-
-    time_ranges = []
-    start_time = available_minutes.first
-    prev_time = start_time
-
-    available_minutes.each_cons(2) do |curr, next_time|
-      if next_time - curr > 1 # Found a gap between occupied times
-        time_ranges << "#{format_time(start_time)} - #{format_time(prev_time + 1)}"
-        start_time = next_time
-      end
-      prev_time = next_time
-    end
-
-    # Add the last available slot
-    time_ranges << "#{format_time(start_time)} - #{format_time(prev_time + 1)}"
-    time_ranges
-  end
-
-  def format_time(minutes)
-    Time.new(2000, 1, 1, minutes / 60, minutes % 60).strftime('%I:%M %p')
-  end
-
 end
