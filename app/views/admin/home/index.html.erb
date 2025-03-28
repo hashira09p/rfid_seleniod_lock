@@ -97,10 +97,10 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("turbo:load", function () {
         document.querySelectorAll(".toggle-switch").forEach((toggle) => {
             toggle.addEventListener("change", function () {
-                this.closest("form").submit();
+                this.closest("form").requestSubmit(); // Uses requestSubmit for better Turbo compatibility
             });
         });
     });
