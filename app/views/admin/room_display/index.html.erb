@@ -11,17 +11,30 @@
   <div class="container">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <% @rooms.each do |room| %>
-        <div class="col room-card" data-room-id="<%= room.id %>">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title text-center">Room <%= room.room_number %></h5>
-              <% status = @room_statuses[room.id] %>
-              <p class="room-status text-center fw-bold
-                <%= status == "unavailable" ? "text-secondary" : (status == "time_in" ? "text-danger" : "text-success") %>">
-                <%= status == "unavailable" ? "Unavailable" : (status == "time_in" ? "Occupied" : "Vacant") %>
-              </p>
+        <% status = @room_statuses[room.id] %>
+        <div class="col">
+          <% if status == "unavailable" %>
+            <!-- Non-clickable room card for unavailable rooms -->
+            <div class="card h-100 room-card text-secondary" data-room-id="<%= room.id %>">
+              <div class="card-body">
+                <h5 class="card-title text-center">Room <%= room.room_number %></h5>
+                <p class="room-status text-center fw-bold text-secondary">Unavailable</p>
+              </div>
             </div>
-          </div>
+          <% else %>
+            <!-- Clickable room card for available rooms -->
+            <a href="<%= room_display_path(room) %>" class="text-decoration-none">
+              <div class="card h-100 room-card" data-room-id="<%= room.id %>">
+                <div class="card-body">
+                  <h5 class="card-title text-center">Room <%= room.room_number %></h5>
+                  <p class="room-status text-center fw-bold
+                    <%= status == "time_in" ? "text-danger" : "text-success" %>">
+                    <%= status == "time_in" ? "Occupied" : "Vacant" %>
+                  </p>
+                </div>
+              </div>
+            </a>
+          <% end %>
         </div>
       <% end %>
     </div>

@@ -1,0 +1,49 @@
+<div class="container my-5">
+  <h2 class="text-center mb-4">Room <%= @room.room_number %> Schedule</h2>
+
+  <div class="card p-4">
+    <h4>📌 Today's Schedule</h4>
+    <% if @todays_schedules.any? %>
+      <ul class="list-group mb-3">
+        <% @todays_schedules.each do |schedule| %>
+          <li class="list-group-item">
+            <strong><%= schedule.subject %></strong>
+            (<%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %>)
+            <br>
+            <strong>Professor:</strong> <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No schedules for today.</p>
+    <% end %>
+
+    <h4>📅 Overall Schedule</h4>
+    <% if @schedules.any? %>
+      <ul class="list-group mb-3">
+        <% @schedules.each do |schedule| %>
+          <li class="list-group-item">
+            <strong><%= schedule.subject %></strong>
+            (<%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %>)
+            - <%= Date::DAYNAMES[schedule.day.to_i] if schedule.day.present? %>
+            <br>
+            <strong>Professor:</strong> <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No schedules available.</p>
+    <% end %>
+
+    <h4>✅ Available Time Slots</h4>
+    <% if @available_slots.any? %>
+      <ul class="list-group">
+        <% @available_slots.each do |slot| %>
+          <li class="list-group-item"><%= slot %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No available slots today.</p>
+    <% end %>
+  </div>
+</div>
