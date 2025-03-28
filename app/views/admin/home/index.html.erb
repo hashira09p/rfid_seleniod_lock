@@ -70,6 +70,15 @@
             <td><%= user.email %></td>
             <td><%= user.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
             <td class="d-flex align-items-center gap-2">
+              <!-- Toggle Switch -->
+              <div class="form-check form-switch">
+                <%= form_with url: toggle_status_home_path(user), method: :patch, local: false, class: "toggle-form" do |f| %>
+                  <%= check_box_tag "status", "active", user.active?,
+                                    class: "form-check-input toggle-switch" %>
+                <% end %>
+              </div>
+
+              <!-- Status Badge -->
               <span class="badge <%= user.active? ? 'bg-success' : 'bg-danger' %>">
                 <%= user.active? ? 'Active' : 'Inactive' %>
               </span>
@@ -77,22 +86,6 @@
 
             <td>
               <%= link_to "Edit", edit_home_path(user), class: "btn btn-sm btn-warning mb-2" %>
-
-              <!-- Toggle Buttons -->
-              <% if user.active? %>
-                <%= button_to "Inactive",
-                              toggle_status_home_path(user, status: :inactive),
-                              method: :patch,
-                              class: "btn btn-sm btn-danger",
-                              data: { turbo_confirm: "Are you sure you want to deactivate #{user.firstname}?" } %>
-              <% else %>
-                <!-- Show Active button if the user is inactive -->
-                <%= button_to "Active",
-                              toggle_status_home_path(user, status: :active),
-                              method: :patch,
-                              class: "btn btn-sm btn-success",
-                              data: { turbo_confirm: "Are you sure you want to activate #{user.firstname}?" } %>
-              <% end %>
             </td>
           </tr>
           <% row_index += 1 %>
@@ -102,3 +95,13 @@
     </table>
   </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".toggle-switch").forEach((toggle) => {
+            toggle.addEventListener("change", function () {
+                this.closest("form").submit();
+            });
+        });
+    });
+</script>
