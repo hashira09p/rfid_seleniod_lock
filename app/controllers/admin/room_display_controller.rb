@@ -11,6 +11,8 @@ class Admin::RoomDisplayController < AdminApplicationController
     @schedules = @room.schedules.includes(:user).order(:start_time)
     @todays_schedules = @schedules.where(day: Date.today.wday) # Get schedules for today
     @available_slots = calculate_available_time(@todays_schedules)
+    @today_time_tracks = @room.time_tracks.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+                              .order(created_at: :asc).to_a
   end
 
   def room_statuses

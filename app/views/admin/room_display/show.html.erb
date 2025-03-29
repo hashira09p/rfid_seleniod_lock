@@ -18,7 +18,7 @@
       <p class="text-muted">No schedules for today.</p>
     <% end %>
 
-    <h4>📅 Overall Schedule</h4>
+    <h4 class="mt-4">📅 Overall Schedule</h4>
     <% if @schedules.any? %>
       <ul class="list-group mb-3">
         <% @schedules.each do |schedule| %>
@@ -35,7 +35,7 @@
       <p class="text-muted">No schedules available.</p>
     <% end %>
 
-    <h4>✅ Available Time Slots</h4>
+    <h4 class="mt-4">✅ Available Time Slots</h4>
     <% if @available_slots.any? %>
       <ul class="list-group">
         <% @available_slots.each do |slot| %>
@@ -45,5 +45,44 @@
     <% else %>
       <p class="text-muted">No available slots today.</p>
     <% end %>
+
+    <h4 class="mt-5">🕒 Room Time Logs</h4>
+    <div class="card">
+      <div class="card-body">
+        <% if @today_time_tracks.any? %>
+          <table class="table table-bordered text-center">
+            <thead class="table-dark">
+            <tr>
+              <th>Professor</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @today_time_tracks.each do |track| %>
+              <tr>
+                <td><%= track.user&.firstname %> <%= track.user&.lastname %></td>
+                <td><%= track.time_in %></td>
+                <td>
+                  <%= track.time_out.present? ? track.time_out : "<span class='text-danger fw-bold'>Not yet logged out</span>".html_safe %>
+                </td>
+                <td>
+                  <% if track.time_in? %>
+                    <span class="badge bg-warning text-dark">Ongoing</span>
+                  <% else %>
+                    <span class="badge bg-success">Completed</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="text-muted text-center">No time logs recorded today.</p>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
+
