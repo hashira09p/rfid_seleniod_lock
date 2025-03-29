@@ -80,7 +80,7 @@
                 <tr>
                   <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
                     <td class="text-start">
-                      <% schedules_for_day = schedules.select { |s| s.day == day } %>
+                      <% schedules_for_day = schedules.select { |s| s.day == day }.sort_by { |s| s.start_time.seconds_since_midnight } %>
                       <% if schedules_for_day.any? %>
                         <% schedules_for_day.each do |schedule| %>
                           <strong><%= schedule.subject %></strong><br>

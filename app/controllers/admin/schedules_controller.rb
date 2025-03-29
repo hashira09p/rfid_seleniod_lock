@@ -10,7 +10,8 @@ class Admin::SchedulesController < AdminApplicationController
     @school_years = Schedule.distinct.pluck(:school_year).compact.sort
 
     @schedules = Schedule.includes(:user, :room)
-                         .order(Arel.sql("day ASC, school_year ASC,
+                         .joins(:room)
+                         .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
                                       TIME_FORMAT(start_time, '%p') DESC,
                                       TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 
