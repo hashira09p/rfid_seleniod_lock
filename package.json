@@ -28,6 +28,9 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
+  "scripts": {
+    "vercel-build": "ruby -v && bundle install"
+  },
   "browserslist": [
     "defaults"
   ]
