@@ -1,6 +1,6 @@
 class Schedule < ApplicationRecord
   belongs_to :user, optional: true
-  belongs_to :room
+  belongs_to :room, optional: true
 
   enum description: { lab: 0, lecture: 1 }
   enum day: { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6}
