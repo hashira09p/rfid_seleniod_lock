@@ -16,11 +16,11 @@
 <!--  </div>-->
 
   <div class="mb-3">
-    <%= form.label :user_id, "User", class: "form-label" %>
+    <%= form.label :user_id, "Professor", class: "form-label" %>
     <%= form.select :user_id,
                     User.active.order(:firstname).map { |user| ["#{[user.firstname, user.middlename, user.lastname].compact.join(' ')} (#{user.email})", user.id] },
-                    { include_blank: "Select User" },
-                    { class: "form-select", id: "user-select", required: false } %>
+                    { include_blank: "Select Professor" },
+                    { class: "form-select", id: "user-select", required: true } %>
   </div>
 
   <div class="mb-3">

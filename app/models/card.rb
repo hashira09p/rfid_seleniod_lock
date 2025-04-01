@@ -6,5 +6,6 @@ class Card < ApplicationRecord
   has_many :time_tracks
 
   validates :uid, presence: true, uniqueness: true
+  validates :user_id, presence: true
   validates :uid_type, presence: true
 end
