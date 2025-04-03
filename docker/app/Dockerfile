@@ -15,6 +15,4 @@ COPY Gemfile* $APP_PATH/
 RUN gem update --system && bundle install
 COPY . $APP_PATH/
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
-
 EXPOSE 3000
