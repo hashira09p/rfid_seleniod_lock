@@ -27,6 +27,9 @@ services:
       - "3000:3000"
       - "1234:1234"
     environment:
+      - RAILS_ENV=development
+      - RAILS_MAX_THREADS=5
+      - WEB_CONCURRENCY=2
       - REDIS_URL_CACHING=redis://redis:6379/0
     depends_on:
       - db
