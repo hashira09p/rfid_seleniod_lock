@@ -10,11 +10,6 @@
                   { include_blank: "Select Status" },
                   { class: "form-select", required: true } %>
 
-<!--  <div>-->
-    <%#= form.label :add_user, 'Add a user?' %>
-    <%#= check_box_tag :add_user, '1', true, id: 'add-user-checkbox', class: 'form-check-input' %>
-<!--  </div>-->
-
   <div class="mb-3">
     <%= form.label :user_id, "Professor", class: "form-label" %>
     <%= form.select :user_id,
@@ -33,23 +28,31 @@
   <%= form.submit 'Register Card' %>
 <% end %>
 
-<!--<script>-->
-<!--    // JavaScript to enable/disable the user select field-->
-<!--    document.addEventListener('turbo:load', () => {-->
-<!--        const addUserCheckbox = document.getElementById('add-user-checkbox');-->
-<!--        const userSelect = document.getElementById('user-select');-->
+<script>
+    document.addEventListener('turbo:load', () => {
+        const rfidInput = document.getElementById('rfid-uid-input');
+        const rfidPlaceholder = document.getElementById('rfid-uid-placeholder'); // Not used here
 
-<!--        // Function to toggle the disabled state of the user select field-->
-<!--        const toggleUserSelect = () => {-->
-<!--            userSelect.disabled = !addUserCheckbox.checked;-->
-<!--        };-->
+        App.rfid_scans = App.cable.subscriptions.create("RfidScanChannel", {
+            connected() {
+                console.log("Successfully connected to the WebSocket channel.");
+            },
+            disconnected() {
+                console.log("Disconnected from the WebSocket channel.");
+            },
+            received(data) {
+                console.log("Received data:", data);  // Log the received data
 
-<!--        if (addUserCheckbox) {-->
-<!--            // Add event listener to the checkbox-->
-<!--            addUserCheckbox.addEventListener('change', toggleUserSelect);-->
-
-<!--            // Initial toggle on page load-->
-<!--            toggleUserSelect();-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->
+                if (data.action === "display_uid") {
+                    console.log("Display UID action received:", data.uid);
+                    // Set the hidden input field value to the scanned UID
+                    rfidInput.value = data.uid;
+                    rfidPlaceholder.textContent = data.uid;  // Optionally display UID in the placeholder
+                } else {
+                    // Handle the case where the card is already in use
+                    rfidInput.value = "The card is already in use";  // Set the hidden field value to the error message
+                }
+            }
+        });
+    });
+</script>
