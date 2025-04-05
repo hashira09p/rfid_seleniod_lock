@@ -1,75 +1,47 @@
-// Sidebar functionality
 document.addEventListener('turbo:load', function() {
-    initSidebar();
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    initSidebar();
-});
-
-function initSidebar() {
-    // DOM Elements
-    const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
     const mainContent = document.getElementById('main-content');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-    if (!sidebarToggle || !sidebar) return;
-
-    // Sidebar toggle functionality
-    function toggleSidebar() {
-        sidebar.classList.toggle('sidebar-collapsed');
-
+    // Function to check window width and update sidebar state
+    function checkWindowSize() {
         if (window.innerWidth < 992) {
-            if (sidebar.classList.contains('sidebar-collapsed')) {
-                sidebarOverlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            } else {
-                sidebarOverlay.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-    }
-
-    // Remove existing event listeners if any (to prevent duplicates with turbo)
-    sidebarToggle.removeEventListener('click', toggleSidebar);
-    if (sidebarOverlay) {
-        sidebarOverlay.removeEventListener('click', handleOverlayClick);
-    }
-    window.removeEventListener('resize', handleResize);
-
-    // Add event listeners
-    sidebarToggle.addEventListener('click', toggleSidebar);
-
-    function handleOverlayClick() {
-        if (!sidebar.classList.contains('sidebar-collapsed')) {
-            toggleSidebar();
-        }
-    }
-
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', handleOverlayClick);
-    }
-
-    function handleResize() {
-        if (window.innerWidth >= 992) {
             sidebar.classList.remove('sidebar-collapsed');
-            if (sidebarOverlay) {
-                sidebarOverlay.style.display = 'none';
-            }
-            document.body.style.overflow = 'auto';
-        } else {
-            if (!sidebar.classList.contains('sidebar-collapsed')) {
-                sidebar.classList.add('sidebar-collapsed');
-                if (sidebarOverlay) {
-                    sidebarOverlay.style.display = 'none';
-                }
-            }
+            mainContent.classList.remove('content-expanded');
         }
     }
 
-    window.addEventListener('resize', handleResize);
+    // Initial check on page load
+    checkWindowSize();
 
-    // Initialize sidebar state
-    handleResize();
-}
+    // Toggle sidebar on button click
+    sidebarToggle.addEventListener('click', function() {
+        if (window.innerWidth >= 992) {
+            // For desktop: collapse/expand sidebar
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('content-expanded');
+        } else {
+            // For mobile: show/hide sidebar with overlay
+            sidebar.classList.toggle('sidebar-mobile-active');
+            sidebarOverlay.classList.toggle('active');
+        }
+    });
+
+    // Hide sidebar when clicking overlay (mobile only)
+    sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('sidebar-mobile-active');
+        sidebarOverlay.classList.remove('active');
+    });
+
+    // Update on window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 992) {
+            sidebarOverlay.classList.remove('active');
+            sidebar.classList.remove('sidebar-mobile-active');
+        } else {
+            sidebar.classList.remove('sidebar-collapsed');
+            mainContent.classList.remove('content-expanded');
+        }
+    });
+});

@@ -19,6 +19,7 @@
     --active-bg: #d1e7dd;
     --inactive-red: #842029;
     --inactive-bg: #f8d7da;
+    --header-height: 60px;
 }
 
 body {
@@ -29,18 +30,27 @@ body {
     background-color: var(--light-bg);
 }
 
+/* ========== LAYOUT WITH FIXED HEADER ========== */
+.page-wrapper {
+    padding-top: var(--header-height); /* Space for fixed header */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 /* ========== LAYOUT - WRAPPER ========== */
 #wrapper {
     width: 100%;
-    height: calc(100vh - 60px);
-    overflow: hidden;
+    min-height: calc(100vh - var(--header-height));
+    overflow-x: hidden;
     display: flex;
+    position: relative;
 }
 
 /* ========== MAIN CONTENT ========== */
 .main-content {
     flex: 1;
-    height: 100%;
+    min-width: 0; /* Prevent content from overflowing */
     padding: 15px;
     overflow-y: auto;
     background-color: #fff;
@@ -60,13 +70,6 @@ body {
     margin-bottom: 20px;
 }
 
-@media (max-width: 991.98px) {
-    .main-content {
-        width: 100%;
-        margin-left: 0 !important;
-    }
-}
-
 /* ========== SEARCH BOX ========== */
 .search-filter-container {
     background-color: #fff;
@@ -77,8 +80,12 @@ body {
 }
 
 .search-box .input-group {
-    width: 100%;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-box .input-group > * {
+    flex: 1 1 200px;
 }
 
 .search-box .input-group-text {
@@ -89,6 +96,7 @@ body {
 .search-box .form-control {
     border-left: none;
     border-right: none;
+    min-width: 100px;
 }
 
 .search-box .form-control:focus {
@@ -97,9 +105,9 @@ body {
 }
 
 .dropdown-menu-search {
-    max-width: 200px;
-    border-left: none;
-    border-right: none;
+    flex: 1 1 150px;
+    min-width: 150px;
+    border-radius: 4px;
 }
 
 .dropdown-menu-search:focus {
@@ -107,28 +115,32 @@ body {
     border-color: var(--border-color);
 }
 
+.search-btn, .reset-btn {
+    flex: 0 0 auto;
+    min-width: 100px;
+}
+
 /* ========== BUTTONS ========== */
 /* Search button */
-.search-filter-container .input-group .search-btn {
+.search-btn {
     background-color: var(--primary-color);
     color: white;
     border: 1px solid var(--primary-color);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
 }
 
-.search-filter-container .input-group .search-btn:hover {
+.search-btn:hover {
     background-color: var(--primary-color-dark);
+    color: white;
 }
 
 /* Reset button */
-.search-filter-container .input-group .reset-btn {
+.reset-btn {
     background-color: #fff;
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
 
-.search-filter-container .input-group .reset-btn:hover {
+.reset-btn:hover {
     background-color: #f1f1f1;
 }
 
@@ -154,56 +166,49 @@ body {
 }
 
 /* ========== RESPONSIVE STYLES ========== */
-@media (max-width: 991.98px) {
-    .dropdown-menu-search {
-        max-width: 200px;
-    }
-}
-
 @media (max-width: 767.98px) {
+    .main-content {
+        padding: 10px;
+    }
+
+    .main-content h2 {
+        font-size: 20px;
+    }
+
     .search-box .input-group {
         flex-direction: column;
         align-items: stretch;
     }
 
     .search-box .input-group > * {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         width: 100%;
+        flex: 0 0 100%;
     }
 
     .search-box .input-group-text {
-        border-right: none;
         border-radius: 4px 4px 0 0;
         width: auto;
         display: flex;
         justify-content: center;
     }
 
-    .search-box .form-control {
+    .search-box .form-control,
+    .dropdown-menu-search {
         border: 1px solid var(--border-color);
         border-radius: 4px;
+        margin-bottom: 10px;
     }
 
     .dropdown-menu-search {
-        max-width: none;
         width: 100%;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
+        max-width: none;
     }
 
-    .search-btn, .reset-btn {
-        margin-top: 5px;
-        margin-bottom: 5px;
-        border-radius: 4px !important;
-    }
-
-    .search-btn, .reset-btn {
-        width: 100% !important;
-        margin-left: 0 !important;
-    }
-
+    .search-btn,
     .reset-btn {
-        margin-top: 10px;
+        width: 100%;
+        margin: 5px 0;
     }
 }
 
@@ -215,5 +220,10 @@ body {
     .add-professor-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
