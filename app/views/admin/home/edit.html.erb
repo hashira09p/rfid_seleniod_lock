@@ -21,7 +21,7 @@
     <div class="col-md-6">
       <%= form.label :academic_college, "Academic College" %>
       <%= form.select :academic_college,
-                      User.academic_colleges.keys.map { |key| [key.humanize, key] },
+                      User.academic_colleges.keys.map { |key| [key.humanize.upcase, key] },
                       { selected: @user.academic_college },
                       { class: "form-select", required: true } %>
     </div>

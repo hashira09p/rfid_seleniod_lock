@@ -36,11 +36,11 @@ class Admin::HomeController < AdminApplicationController
     @user.password_confirmation = generated_password
 
     if @user.save
-      flash[:notice] = "Professor #{@user.firstname} #{@user.lastname} created successfully! Password: #{generated_password}"
+      flash[:notice] = "Professor #{@user.firstname} #{@user.lastname} created successfully!"
       redirect_to home_index_path
     else
       flash[:alert] = "Failed to create professor: #{@user.errors.full_messages.join(', ')}"
-      render :new
+      redirect_to home_index_path
     end
   end
 
