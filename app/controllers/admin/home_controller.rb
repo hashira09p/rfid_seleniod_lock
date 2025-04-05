@@ -1,6 +1,6 @@
 class Admin::HomeController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
-  before_action :set_user, only: [:edit, :update]
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
     @users = User.order(:firstname)
@@ -55,6 +55,15 @@ class Admin::HomeController < AdminApplicationController
       flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
       render :edit
     end
+  end
+
+  def destroy
+    if @user.destroy
+      flash[:notice] = 'Account successfully deleted.'
+    else
+      flash[:alert] = @user.errors.full_messages.to_sentence
+    end
+    redirect_to home_index_path
   end
 
   def toggle_status

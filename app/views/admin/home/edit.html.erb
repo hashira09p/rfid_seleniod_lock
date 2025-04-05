@@ -22,7 +22,7 @@
       <%= form.label :academic_college, "Academic College" %>
       <%= form.select :academic_college,
                       User.academic_colleges.keys.map { |key| [key.humanize.upcase, key] },
-                      { selected: @user.academic_college },
+                      { include_blank: "Select Academic College", selected: @user.academic_college },
                       { class: "form-select", required: true } %>
     </div>
 
@@ -30,7 +30,7 @@
       <%= form.label :role, "Role" %>
       <%= form.select :role,
                       User.roles.keys.map { |key| [key.humanize, key] },
-                      { selected: @user.role },
+                      { include_blank: "Select Role", selected: @user.role },
                       { class: "form-select", required: true } %>
     </div>
 

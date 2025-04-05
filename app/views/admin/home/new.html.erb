@@ -20,7 +20,7 @@
 
     <div class="col-md-6">
       <%= form.label :academic_college, "Academic College" %>
-      <%= form.select :academic_college, User.academic_colleges.keys.map { |key| [key, key] }, { prompt: "Select College" }, class: "form-select", required: true %>
+      <%= form.select :academic_college, User.academic_colleges.keys.map { |key| [key, key] }, { prompt: "Select Academic College" }, class: "form-select", required: true %>
     </div>
 
     <div class="col-md-6">

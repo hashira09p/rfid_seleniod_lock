@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  has_many :cards
-  has_many :schedules
-  has_many :time_trackers
+  has_many :cards, dependent: :destroy
+  has_many :schedules, dependent: :destroy
+  has_many :time_tracks, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
