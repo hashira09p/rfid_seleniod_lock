@@ -1,29 +1,34 @@
+// app/javascript/channels/rfid_scan_channel.js
 import { createConsumer } from "@rails/actioncable";
 
-const App = App || {};
-
-App.cable = createConsumer(); // Initialize ActionCable consumer
+// Ensure global App object exists
+const App = window.App || {};
+App.cable = createConsumer();
 
 App.rfid_scans = App.cable.subscriptions.create("RfidScanChannel", {
   connected() {
-    console.log("Successfully connected to the channel");
+    console.log("✅ Successfully connected to RfidScanChannel");
   },
+
   disconnected() {
-    console.log("Disconnected from the channel. Reconnecting...");
-    // Attempt to resubscribe if the connection drops
-    App.rfid_scans = App.cable.subscriptions.create("RfidScanChannel", {
-      received(data) {
-        if (data.action === "display_uid") {
-          document.getElementById('rfid-uid-placeholder').textContent = data.uid;
-          document.getElementById('rfid-uid-input').value = data.uid;
-        }
-      }
-    });
+    console.log("⚠️ Disconnected from RfidScanChannel");
+    // ActionCable will attempt to reconnect automatically, no need to resubscribe manually
   },
+
   received(data) {
     if (data.action === "display_uid") {
-      document.getElementById('rfid-uid-placeholder').textContent = data.uid;
-      document.getElementById('rfid-uid-input').value = data.uid;
+      console.log("📡 Received:", data);
+
+      const placeholder = document.getElementById('rfid-uid-placeholder');
+      const input = document.getElementById('rfid-uid-input');
+
+      if (data.denied) {
+        if (placeholder) placeholder.textContent = "Card is already in use";
+        if (input) input.value = ""; // clear the hidden input so it won't submit
+      } else {
+        if (placeholder) placeholder.textContent = `${data.uid}`;
+        if (input) input.value = data.uid;
+      }
     }
   }
 });

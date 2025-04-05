@@ -1,9 +1,11 @@
 <h1>Register a New RFID Card</h1>
 
-<p>Scanned RFID UID: <span id="rfid-uid-placeholder">Waiting for scan...</span></p>
+<p>Scanned RFID UID: <turbo-frame id="rfid-uid-placeholder">Waiting for scan...</turbo-frame>
+  <%= turbo_stream_from "rfid_scans" %>
+</p>
 
 <%= form_with(model: @card, method: :post, local: true) do |form| %>
-  <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
+  <input type="hidden" id="rfid-uid-input" name="card[uid]" />
 
   <%= form.label :status %>
   <%= form.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
@@ -27,32 +29,3 @@
 
   <%= form.submit 'Register Card' %>
 <% end %>
-
-<script>
-    document.addEventListener('turbo:load', () => {
-        const rfidInput = document.getElementById('rfid-uid-input');
-        const rfidPlaceholder = document.getElementById('rfid-uid-placeholder'); // Not used here
-
-        App.rfid_scans = App.cable.subscriptions.create("RfidScanChannel", {
-            connected() {
-                console.log("Successfully connected to the WebSocket channel.");
-            },
-            disconnected() {
-                console.log("Disconnected from the WebSocket channel.");
-            },
-            received(data) {
-                console.log("Received data:", data);  // Log the received data
-
-                if (data.action === "display_uid") {
-                    console.log("Display UID action received:", data.uid);
-                    // Set the hidden input field value to the scanned UID
-                    rfidInput.value = data.uid;
-                    rfidPlaceholder.textContent = data.uid;  // Optionally display UID in the placeholder
-                } else {
-                    // Handle the case where the card is already in use
-                    rfidInput.value = "The card is already in use";  // Set the hidden field value to the error message
-                }
-            }
-        });
-    });
-</script>

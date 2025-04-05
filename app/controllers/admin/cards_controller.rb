@@ -1,24 +1,11 @@
 class Admin::CardsController < AdminApplicationController
   skip_before_action :verify_authenticity_token, only: [:card_scan]
   before_action :set_params, only: [:create, :update]
-  before_action :set_card, only: [:edit, :destroy, :update, :destroy]
+  before_action :set_card, only: [:edit, :destroy, :update]
 
   def index
     @cards = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
-
-    # filtering
-    @cards = @cards.where(cards: { uid: params[:uid] }) if params[:uid].present?
-    @cards = @cards.where(status: params[:status]) if params[:status].present?
-    if params[:fullname].present?
-      search_query = params[:fullname].strip.downcase
-
-      @cards = @cards.joins(:user).where(
-        'LOWER(users.firstname) LIKE :query OR LOWER(users.middlename) LIKE :query OR LOWER(users.lastname) LIKE :query OR ' \
-          'LOWER(CONCAT(users.firstname, " ", users.middlename, " ", users.lastname)) LIKE :query OR ' \
-          'LOWER(CONCAT(users.firstname, " ", users.lastname)) LIKE :query',
-        query: "%#{search_query}%"
-      )
-    end
+    @cards = filter_cards(@cards)
   end
 
   def new
@@ -38,8 +25,8 @@ class Admin::CardsController < AdminApplicationController
       flash[:notice] = "Card successfully created."
       redirect_to cards_path
     else
-      flash[:alert] = "Error creating card."
-      redirect_to new_card_path
+      flash[:alert] = "Failed to create card: #{@card.errors.full_messages.to_sentence}"
+      redirect_to cards_path
     end
   end
 
@@ -65,15 +52,20 @@ class Admin::CardsController < AdminApplicationController
   end
 
   def card_scan
-    scanned_card_id = params[:uid] # Replace with the correct parameter key
+    scanned_card_id = params[:uid]
     card = Card.find_by(uid: scanned_card_id)
 
-    if card.present?
-      ActionCable.server.broadcast("rfid_scans", { action: "display_uid", denied: "The card is already in use" })
-      render json: { success: false }
+    is_denied = card.present?
+    ActionCable.server.broadcast("rfid_scans", {
+      action: "display_uid",
+      uid: scanned_card_id,
+      denied: is_denied ? "The card is already in use" : nil
+    })
+
+    if is_denied
+      render json: { success: false, error: "Card already in use" }
     else
-      ActionCable.server.broadcast("rfid_scans", { action: "display_uid", uid: scanned_card_id })
-      render json: { success: true }
+      render json: { success: true, uid: scanned_card_id }
     end
   end
 
@@ -85,5 +77,20 @@ class Admin::CardsController < AdminApplicationController
 
   def set_card
     @card = Card.find(params[:id])
+  end
+
+  def filter_cards(scope)
+    scope = scope.where(cards: { uid: params[:uid] }) if params[:uid].present?
+    scope = scope.where(status: params[:status]) if params[:status].present?
+
+    if params[:fullname].present?
+      q = "%#{params[:fullname].strip.downcase}%"
+      scope = scope.joins(:user).where(
+        'LOWER(users.firstname) LIKE :q OR LOWER(users.middlename) LIKE :q OR LOWER(users.lastname) LIKE :q OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.middlename, " ", users.lastname)) LIKE :q OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.lastname)) LIKE :q', q: q
+      )
+    end
+    scope
   end
 end
