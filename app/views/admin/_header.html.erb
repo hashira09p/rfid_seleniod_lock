@@ -1,16 +1,15 @@
-<div class="header-bg py-3">
-  <div class="container d-flex justify-content-between align-items-center">
+<%= stylesheet_link_tag "header.css", "data-turbo-track": "reload" %>
+
+<nav class="navbar navbar-expand-lg navbar-dark px-3 w-100">
+  <div class="container-fluid">
 
     <div class="d-flex align-items-center">
-      <%= link_to admin_root_path, class: "d-flex align-items-center text-decoration-none" do %>
-        <img src="/assets/tup.jpg" alt="TUP Logo" class="rounded-circle me-3" style="height: 50px; width: 50px;">
-        <span class="brand-name">Technological University of the Philippines</span>
+      <i class='bx bx-menu' id="sidebar-toggle"></i>
+      <%= link_to admin_root_path, class: "navbar-brand d-flex align-items-center text-decoration-none" do %>
+        <img src="/assets/TUP_Logo.png" alt="TUP Logo" height="30" class="me-2">
+        <span class="text-white">Technological University of the Philippines</span>
       <% end %>
     </div>
 
-    <div class="d-flex align-items-center">
-      <a href="#" class="btn btn-light me-2">Edit Profile</a>
-      <%= button_to "Sign Out", destroy_admin_user_session_path, method: :delete, class: "btn btn-danger" %>
-    </div>
   </div>
-</div>
+</nav>

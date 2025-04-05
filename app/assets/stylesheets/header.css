@@ -1,0 +1,16 @@
+.navbar {
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+    height: 60px;
+    z-index: 1030;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand span {
+    font-size: 14px;
+    letter-spacing: 1px;
+}

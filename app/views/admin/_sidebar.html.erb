@@ -1,0 +1,59 @@
+<%= stylesheet_link_tag "sidebar.css", "data-turbo-track": "reload" %>
+
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-heading">
+    <h3 class="fw-bold">RFID Classroom<br>Access Management</h3>
+  </div>
+
+  <hr>
+
+  <div class="sidebar-menu">
+    <h6 class="text-muted fw-bold">Overview</h6>
+    <ul class="nav flex-column">
+      <%= link_to dashboard_index_path, class: "nav-menu-link #{'active' if current_page?(dashboard_index_path)}" do %>
+        <i class='bx bx-grid-alt me-2'></i> Dashboard
+      <% end %>
+
+      <%= link_to admin_root_path, class: "nav-menu-link #{'active' if current_page?(admin_root_path)}" do %>
+        <i class='bx bx-user me-2'></i> Professors
+      <% end %>
+
+      <%= link_to cards_path, class: "nav-menu-link #{'active' if current_page?(cards_path)}" do %>
+        <i class='bx bx-id-card me-2'></i> Cards
+      <% end %>
+
+      <%= link_to rooms_path, class: "nav-menu-link #{'active' if current_page?(rooms_path)}" do %>
+        <i class='bx bx-building me-2'></i> Rooms
+      <% end %>
+
+      <%= link_to schedules_path, class: "nav-menu-link #{'active' if current_page?(schedules_path)}" do %>
+        <i class='bx bx-calendar me-2'></i> Schedules
+      <% end %>
+    </ul>
+
+    <h6 class="text-muted fw-bold mt-5">Reports</h6>
+    <ul class="nav flex-column">
+      <%= link_to time_track_index_path, class: "nav-menu-link #{'active' if current_page?(time_track_index_path)}" do %>
+        <i class='bx bx-time me-2'></i> Daily Logs
+      <% end %>
+
+      <%= link_to room_display_index_path, class: "nav-menu-link #{'active' if current_page?(room_display_index_path)}" do %>
+        <i class='bx bx-desktop me-2'></i> Room Display
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="user-actions-section">
+    <button type="button" class="user-action-link edit-profile-link">
+      <i class='bx bx-user-circle'></i> Edit Profile
+    </button>
+
+    <%= button_to destroy_admin_user_session_path, method: :delete, class: "user-action-link sign-out-link" do %>
+      <i class='bx bx-log-out'></i> Sign Out
+    <% end %>
+
+  </div>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
