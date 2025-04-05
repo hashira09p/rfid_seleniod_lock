@@ -13,8 +13,8 @@ class Admin::Devise::SessionsController < Devise::SessionsController
   def create
     user_admin = User.admin.find_by(email: params[:admin_user][:email])
     if user_admin
+      flash[:notice] = "Welcome, #{user_admin.firstname}"
       super
-      flash[:alert] = "Welcome, #{user_admin.firstname}"
     elsif user_admin.nil?
       flash[:alert] = 'Invalid Account or account is not an admin.'
       redirect_to new_admin_user_session_path
