@@ -5,7 +5,7 @@
 </p>
 
 <%= form_with(model: @card, method: :post, local: true) do |form| %>
-  <input type="hidden" id="rfid-uid-input" name="card[uid]" />
+  <%= form.hidden_field :uid, id: "rfid-uid-input" %>
 
   <%= form.label :status %>
   <%= form.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
