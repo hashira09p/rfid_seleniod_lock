@@ -1,6 +1,6 @@
 class Room < ApplicationRecord
-  has_many :schedules
-  has_many :time_tracks
+  has_many :schedules,  dependent: :destroy
+  has_many :time_tracks, dependent: :destroy
 
   enum room_status: {Unavailable: 0, Available: 1}
 
