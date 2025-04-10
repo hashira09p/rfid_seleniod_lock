@@ -1,37 +1,83 @@
-<div class="container my-5">
-  <h2 class="mb-4">Add New Professor</h2>
+<style>
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+    }
+    .form-container {
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        background-color: white;
+    }
+    .btn-save {
+        background-color: #0a0a8f;
+        color: white;
+        min-width: 100px;
+    }
+    .btn-reset {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        min-width: 100px;
+    }
+    .dropdown-toggle::after {
+        float: right;
+        margin-top: 8px;
+    }
+</style>
 
-  <%= form_with model: @user, url: home_index_path, method: :post, local: true, class: "row g-3" do |form| %>
+<div class="container py-4 bg-light">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Professor", home_index_path, class: "text-decoration-none text-secondary" %></li>
+      <li class="breadcrumb-item active text-dark fw-bold">New Professor</li>
+    </ol>
+  </nav>
 
-    <div class="col-md-4">
-      <%= form.label :firstname, "First Name" %>
-      <%= form.text_field :firstname, class: "form-control", required: true %>
-    </div>
+  <div class="form-container p-4 mt-3">
+    <h2 class="mb-1 fw-bold">Add Professor</h2>
+    <p class="text-secondary mb-4">This page allows you to add a new professor to the system</p>
 
-    <div class="col-md-4">
-      <%= form.label :middlename, "Middle Name" %>
-      <%= form.text_field :middlename, class: "form-control" %>
-    </div>
+    <%= form_with model: @user, url: home_index_path, method: :post, local: true do |form| %>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <%= form.label :firstname, "First Name", class: "form-label" %>
+          <%= form.text_field :firstname, class: "form-control", placeholder: "Enter first name", required: true %>
+        </div>
 
-    <div class="col-md-4">
-      <%= form.label :lastname, "Last Name" %>
-      <%= form.text_field :lastname, class: "form-control", required: true %>
-    </div>
+        <div class="col-md-4 mb-3">
+          <%= form.label :middlename, "Middle Name", class: "form-label" %>
+          <%= form.text_field :middlename, class: "form-control", placeholder: "Enter middle name" %>
+        </div>
 
-    <div class="col-md-6">
-      <%= form.label :academic_college, "Academic College" %>
-      <%= form.select :academic_college, User.academic_colleges.keys.map { |key| [key, key] }, { prompt: "Select Academic College" }, class: "form-select", required: true %>
-    </div>
+        <div class="col-md-4 mb-3">
+          <%= form.label :lastname, "Last Name", class: "form-label" %>
+          <%= form.text_field :lastname, class: "form-control", placeholder: "Enter last name", required: true %>
+        </div>
+      </div>
 
-    <div class="col-md-6">
-      <%= form.label :email, "Email" %>
-      <%= form.email_field :email, class: "form-control", required: true %>
-    </div>
+      <div class="mb-3">
+        <%= form.label :email, "Email", class: "form-label" %>
+        <%= form.email_field :email, class: "form-control", placeholder: "Enter email", required: true %>
+      </div>
 
-    <div class="col-12 d-flex justify-content-between">
-      <%= link_to "Back", home_index_path, class: "btn btn-secondary" %>
-      <%= form.submit "Create Professor", class: "btn btn-primary" %>
-    </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= form.label :academic_college, "Academic College", class: "form-label" %>
+          <%= form.select :academic_college, User.academic_colleges.keys.map { |key| [key, key] },
+                          { prompt: "Select Academic College" },
+                          class: "form-select", required: true %>
+        </div>
 
-  <% end %>
+        <div class="col-md-6 mb-3">
+          <%= form.label :status, "Status", class: "form-label" %>
+          <%= form.select :status, ["Active", "On Leave", "Retired", "Inactive"],
+                          { prompt: "Select Status" },
+                          class: "form-select" %>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <%= link_to "Back", home_index_path, class: "btn btn-reset me-2" %>
+        <%= form.submit "Create Professor", class: "btn btn-save" %>
+      </div>
+    <% end %>
+  </div>
 </div>
