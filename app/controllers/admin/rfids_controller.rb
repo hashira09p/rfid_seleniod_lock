@@ -41,6 +41,7 @@ class Admin::RfidsController < AdminApplicationController
     active_session = TimeTrack.find_by(card_id: card.id, room_id: room_id, time_out: nil)
 
     if active_session.nil?
+      # No active session, proceed to time in
       TimeTrack.create!(
         card_id: card.id,
         user_id: card.user_id,
@@ -54,9 +55,21 @@ class Admin::RfidsController < AdminApplicationController
         user: card.user.firstname,
         time: time_now.strftime('%I:%M %p')
       }, status: :ok
+
+    elsif active_session.card_id == card.id
+      # 🔁 Recover from power loss — allow re-entry by completing the unlock step
+      active_session.update!(time_out: time_now, status: 1)
+
+      render json: {
+        message: "Recovered session",
+        lock: true,
+        user: card.user.firstname,
+        time: time_now.strftime('%I:%M %p')
+      }, status: :ok
+
     else
       render json: {
-        message: "Room already in use by this card",
+        message: "Room already in use by another card",
         access: false
       }, status: :forbidden
     end
