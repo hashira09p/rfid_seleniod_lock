@@ -1,15 +1,15 @@
 <%= stylesheet_link_tag "header.css", "data-turbo-track": "reload" %>
 
-<nav class="navbar navbar-expand-lg navbar-dark px-3 w-100">
-  <div class="container-fluid">
-
-    <div class="d-flex align-items-center">
-      <i class='bx bx-menu' id="sidebar-toggle"></i>
-      <%= link_to admin_root_path, class: "navbar-brand d-flex align-items-center text-decoration-none" do %>
-        <img src="/assets/TUP_Logo.png" alt="TUP Logo" height="30" class="me-2">
-        <span class="text-white">Technological University of the Philippines</span>
-      <% end %>
+<header id="main-header">
+  <nav class="navbar navbar-expand-lg navbar-dark px-3 w-100">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <i class='bx bx-menu' id="sidebar-toggle"></i>
+        <%= link_to admin_root_path, class: "navbar-brand d-flex align-items-center text-decoration-none" do %>
+          <img src="/assets/TUP_Logo.png" alt="TUP Logo" height="30" class="me-2">
+          <span class="text-white">Technological University of the Philippines</span>
+        <% end %>
+      </div>
     </div>
-
-  </div>
-</nav>
+  </nav>
+</header>

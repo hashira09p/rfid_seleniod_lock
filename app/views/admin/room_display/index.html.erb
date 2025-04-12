@@ -5,8 +5,14 @@
   </div>
 <% end %>
 
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-primary" onclick="toggleFullscreen()">
+    <i class='bx bx-fullscreen'></i>
+  </button>
+</div>
+
 <div class="container my-5">
-  <h2 class="text-center mb-4">Room Display</h2>
+  <h2 id="room-heading" class="text-center mb-4">ROOM STATUS DISPLAY</h2>
 
   <div class="container">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -40,3 +46,26 @@
     </div>
   </div>
 </div>
+
+<!-- Inline CSS to center the heading in fullscreen mode -->
+<style>
+    .fullscreen-heading {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;  /* Ensure it appears above other elements */
+    }
+</style>
+
+<script>
+    // Listen for fullscreen state changes and adjust the heading style.
+    document.addEventListener('fullscreenchange', () => {
+        const roomHeading = document.getElementById('room-heading');
+        if (document.fullscreenElement) {
+            roomHeading.classList.add('fullscreen-heading');
+        } else {
+            roomHeading.classList.remove('fullscreen-heading');
+        }
+    });
+</script>
