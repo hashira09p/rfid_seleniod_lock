@@ -1,40 +1,40 @@
 document.addEventListener('turbo:load', function() {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.querySelector('.sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const mainContent = document.getElementById('main-content');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
 
-    // Function to check window width and update sidebar state
-    function checkWindowSize() {
-        if (window.innerWidth < 992) {
-            sidebar.classList.remove('sidebar-collapsed');
-            mainContent.classList.remove('content-expanded');
-        }
+    if (!sidebar || !sidebarToggle || !mainContent || !sidebarOverlay) {
+        console.error('One or more required elements not found');
+        return;
     }
 
-    // Initial check on page load
-    checkWindowSize();
+    console.log('Sidebar:', sidebar);
+    console.log('Toggle:', sidebarToggle);
+    console.log('Main content:', mainContent);
+    console.log('Overlay:', sidebarOverlay);
 
-    // Toggle sidebar on button click
-    sidebarToggle.addEventListener('click', function() {
+    // Toggle sidebar function
+    sidebarToggle.addEventListener('click', function(e) {
+        console.log('Toggle clicked');
+
         if (window.innerWidth >= 992) {
-            // For desktop: collapse/expand sidebar
             sidebar.classList.toggle('sidebar-collapsed');
             mainContent.classList.toggle('content-expanded');
+            console.log('Desktop toggle - sidebar collapsed:', sidebar.classList.contains('sidebar-collapsed'));
         } else {
-            // For mobile: show/hide sidebar with overlay
             sidebar.classList.toggle('sidebar-mobile-active');
             sidebarOverlay.classList.toggle('active');
+            console.log('Mobile toggle - sidebar active:', sidebar.classList.contains('sidebar-mobile-active'));
         }
     });
 
-    // Hide sidebar when clicking overlay (mobile only)
+    // Close sidebar when clicking overlay
     sidebarOverlay.addEventListener('click', function() {
         sidebar.classList.remove('sidebar-mobile-active');
         sidebarOverlay.classList.remove('active');
     });
 
-    // Update on window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth >= 992) {
             sidebarOverlay.classList.remove('active');
