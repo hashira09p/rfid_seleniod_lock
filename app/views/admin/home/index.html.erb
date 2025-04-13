@@ -108,6 +108,10 @@
 
 </div>
 
+<div class="pagination">
+  <%= paginate @users %>
+</div>
+
 <script>
     document.addEventListener('turbo:load', function() {
         document.querySelectorAll('.toggle-switch').forEach(toggle => {

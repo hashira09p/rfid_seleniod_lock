@@ -3,7 +3,7 @@ class Admin::HomeController < AdminApplicationController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    @users = User.order(:firstname)
+    @users = User.order(:firstname).page(params[:page]).per(10)
 
     # filtering
     if params[:fullname].present?
