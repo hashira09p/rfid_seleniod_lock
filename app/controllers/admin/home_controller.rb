@@ -50,7 +50,7 @@ class Admin::HomeController < AdminApplicationController
   def update
     if @user.update(user_params)
       flash[:notice] = "Professor updated successfully!"
-      redirect_to home_index_path
+      redirect_to edit_home_path(@user)
     else
       flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
       render :edit

@@ -99,7 +99,9 @@
 }
 
 .btn-save:hover {
-    background-color: #09097a;
+    background-color: white;
+    color: #06441BFF;
+    border: 1px solid #06441BFF;
     transform: translateY(-1px);
 }
 
