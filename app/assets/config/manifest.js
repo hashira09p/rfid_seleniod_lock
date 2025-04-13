@@ -6,3 +6,4 @@
 //= link sidebar.css
 //= link table.css
 //= link add_form.css
+//= link pagination.css
