@@ -77,3 +77,5 @@ end
 gem "kaminari"
 gem 'prawn'
 gem 'prawn-table'
+gem 'attr_encrypted'
+gem 'dotenv-rails', groups: [:development, :test]

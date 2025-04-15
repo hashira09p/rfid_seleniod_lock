@@ -66,6 +66,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    attr_encrypted (4.2.0)
+      encryptor (~> 3.0.0)
     bcrypt (3.1.20)
     bigdecimal (3.1.9)
     bindex (0.8.1)
@@ -86,6 +88,11 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.1.8)
+    dotenv-rails (3.1.8)
+      dotenv (= 3.1.8)
+      railties (>= 6.1)
+    encryptor (3.0.0)
     erubi (1.13.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -251,10 +258,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  attr_encrypted
   bootsnap
   cssbundling-rails
   debug
   devise
+  dotenv-rails
   jbuilder
   jsbundling-rails
   kaminari
