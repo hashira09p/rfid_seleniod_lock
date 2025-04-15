@@ -76,3 +76,4 @@ end
 
 gem "kaminari"
 gem 'prawn'
+gem 'prawn-table'
