@@ -4,6 +4,17 @@ class Admin::TimeTrackController < AdminApplicationController
   before_action :set_time_track, only: [:edit, :update, :destroy]
 
   def index
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to time_track_index_path and return
+      end
+    end
+
     # Fetch initial data
     @rooms = Room.pluck(:room_number).uniq
     @professors = User.pluck(:firstname, :middlename, :lastname, :id)
