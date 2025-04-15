@@ -40,6 +40,15 @@ class Admin::TimeTrackController < AdminApplicationController
     # Sort by room number and created_at
     @time_tracks = @time_tracks.joins(:room)
                                .order("rooms.room_number ASC, time_tracks.created_at ASC")
+
+    # PDF Generator
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = TimeTrackPdf.new(@time_tracks, params[:start_date], params[:end_date])
+        send_data pdf.render, filename: "time_tracks.pdf", type: "application/pdf", disposition: "inline"
+      end
+    end
   end
 
   def edit
