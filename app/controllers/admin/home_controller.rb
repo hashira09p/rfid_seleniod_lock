@@ -3,13 +3,11 @@ class Admin::HomeController < AdminApplicationController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    @users = User.order(:firstname).page(params[:page]).per(10)
+    users_query = User.order(:firstname)
 
-    # filtering
     if params[:fullname].present?
       search_query = params[:fullname].strip.downcase
-
-      @users = @users.where(
+      users_query = users_query.where(
         'LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query OR ' \
           'LOWER(CONCAT(firstname, " ", middlename, " ", lastname)) LIKE :query OR ' \
           'LOWER(CONCAT(firstname, " ", lastname)) LIKE :query',
@@ -17,8 +15,23 @@ class Admin::HomeController < AdminApplicationController
       )
     end
 
-    @users = @users.where(academic_college: params[:academic_college]) if params[:academic_college].present?
-    @users = @users.where(role: params[:role]) if params[:role].present?
+    users_query = users_query.where(academic_college: params[:academic_college]) if params[:academic_college].present?
+    users_query = users_query.where(role: params[:role]) if params[:role].present?
+
+    # Assign the filtered query to the instance variable paginated for HTML
+    @users = users_query.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html  # Render HTML using paginated @users
+      format.pdf do
+        # Use the full filtered dataset (users_query) for PDF
+        pdf = ProfessorPdf.new(users_query)
+        send_data pdf.render,
+                  filename: "professors.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def new
@@ -28,6 +41,7 @@ class Admin::HomeController < AdminApplicationController
   def create
     @user = User.new(user_params)
     @user.role = "professor"
+    @user.status = "active"
 
     surname = @user.lastname&.upcase || "DEFAULT"
     generated_password = "#{surname}123!"
