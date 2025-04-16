@@ -6,20 +6,34 @@ class Admin::SchedulesController < AdminApplicationController
     @days = Schedule.pluck(:day).uniq
     @users = User.pluck(:firstname, :middlename, :lastname, :id)
     @rooms = Room.pluck(:room_number, :id)
-
     @school_years = Schedule.distinct.pluck(:school_year).compact.sort
 
-    @schedules = Schedule.includes(:user, :room)
-                         .joins(:room)
-                         .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
-                                      TIME_FORMAT(start_time, '%p') DESC,
-                                      TIME_FORMAT(start_time, '%h:%i %p') DESC"))
+    # Build the base filtered query.
+    filtered_schedules = Schedule.includes(:user, :room)
+                                 .joins(:room)
+                                 .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
+                                                TIME_FORMAT(start_time, '%p') DESC,
+                                                TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 
-    # Apply filters if present
-    @schedules = @schedules.where(day: params[:day]) if params[:day].present?
-    @schedules = @schedules.where(user_id: params[:professor_id]) if params[:professor_id].present?
-    @schedules = @schedules.where(room_id: params[:room_id]) if params[:room_id].present?
-    @schedules = @schedules.where(school_year: params[:school_year]) if params[:school_year].present?
+    # Apply filters if present.
+    filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?
+    filtered_schedules = filtered_schedules.where(user_id: params[:professor_id]) if params[:professor_id].present?
+    filtered_schedules = filtered_schedules.where(room_id: params[:room_id]) if params[:room_id].present?
+    filtered_schedules = filtered_schedules.where(school_year: params[:school_year]) if params[:school_year].present?
+
+    # For HTML, paginate the filtered query (e.g., 10 per page).
+    @schedules = filtered_schedules.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html  # renders index.html.erb using @schedules (paginated)
+      format.pdf do
+        pdf = SchedulePdf.new(filtered_schedules)  # full filtered set (no pagination)
+        send_data pdf.render,
+                  filename: "schedules.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def new
