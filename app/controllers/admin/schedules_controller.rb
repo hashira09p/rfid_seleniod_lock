@@ -3,6 +3,17 @@ class Admin::SchedulesController < AdminApplicationController
   before_action :set_schedule, only: [:edit, :update, :destroy]
 
   def index
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to schedules_path and return
+      end
+    end
+
     @days = Schedule.pluck(:day).uniq
     @users = User.pluck(:firstname, :middlename, :lastname, :id)
     @rooms = Room.pluck(:room_number, :id)
