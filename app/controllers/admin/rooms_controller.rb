@@ -3,11 +3,25 @@ class Admin::RoomsController < AdminApplicationController
   before_action :set_room, only: [:edit, :update, :destroy]
 
   def index
-    @rooms = Room.order(:room_number)
+    # Build the base, filtered query.
+    rooms_query = Room.order(:room_number)
+    rooms_query = rooms_query.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
+    rooms_query = rooms_query.where(room_status: params[:room_status]) if params[:room_status].present?
 
-    # Filtering by room number
-    @rooms = @rooms.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
-    @rooms = @rooms.where(room_status: params[:room_status]) if params[:room_status].present?
+    # For HTML, paginate the results.
+    @rooms = rooms_query.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html  # renders your index.html.erb for HTML requests
+      format.pdf do
+        # Pass the full, unpaginated filtered set to the PDF generator.
+        pdf = RoomPdf.new(rooms_query)
+        send_data pdf.render,
+                  filename: "rooms.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def new
