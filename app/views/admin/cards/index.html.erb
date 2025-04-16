@@ -35,6 +35,7 @@
 
   <div class="d-flex justify-content-end mb-2">
     <%= link_to "Add Card", new_card_path, class: "btn btn-success" %>
+    <%= link_to "Download PDF", cards_path(request.query_parameters.merge(format: :pdf)), class: "btn btn-danger ms-2", target: "_blank", rel: "noopener" %>
   </div>
 
   <div class="table-responsive">
@@ -42,9 +43,9 @@
       <thead class="table-dark">
       <tr>
         <th>#</th>
-        <th>UID</th>
-        <th>User</th>
-        <th>UID Type</th>
+        <th>Card Number</th>
+        <th>Name</th>
+        <th>Card Type</th>
         <th>Registered Date</th>
         <th>Status</th>
         <th>Actions</th>

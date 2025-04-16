@@ -4,8 +4,23 @@ class Admin::CardsController < AdminApplicationController
   before_action :set_card, only: [:edit, :destroy, :update]
 
   def index
-    @cards = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
-    @cards = filter_cards(@cards)
+    # Build the base query and then filter it.
+    cards_query = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
+    filtered_cards = filter_cards(cards_query)
+
+    # For HTML, paginate the results; for PDF, use the full filtered set.
+    @cards = filtered_cards.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = CardPdf.new(filtered_cards)
+        send_data pdf.render,
+                  filename: "cards.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def new
