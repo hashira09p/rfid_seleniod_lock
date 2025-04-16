@@ -3,6 +3,17 @@ class Admin::HomeController < AdminApplicationController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to home_index_path and return
+      end
+    end
+
     users_query = User.order(:firstname)
 
     if params[:fullname].present?
