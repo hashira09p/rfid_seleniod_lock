@@ -4,6 +4,17 @@ class Admin::CardsController < AdminApplicationController
   before_action :set_card, only: [:edit, :destroy, :update]
 
   def index
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to cards_path and return
+      end
+    end
+
     # Build the base query and then filter it.
     cards_query = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
     filtered_cards = filter_cards(cards_query)
