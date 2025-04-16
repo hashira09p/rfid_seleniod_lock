@@ -7,6 +7,7 @@ class Admin::RoomsController < AdminApplicationController
 
     # Filtering by room number
     @rooms = @rooms.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
+    @rooms = @rooms.where(room_status: params[:room_status]) if params[:room_status].present?
   end
 
   def new
