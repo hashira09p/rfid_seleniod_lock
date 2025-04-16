@@ -46,9 +46,9 @@
   </div>
 
   <div class="user-actions-section">
-    <button type="button" class="user-action-link edit-profile-link">
+    <%= link_to edit_admin_user_registration_path, class: "user-action-link edit-profile-link #{'active' if current_page?(edit_admin_user_registration_path)}" do %>
       <i class='bx bx-user-circle'></i> Edit Profile
-    </button>
+    <% end %>
 
     <%= button_to destroy_admin_user_session_path, method: :delete, class: "user-action-link sign-out-link" do %>
       <i class='bx bx-log-out'></i> Sign Out
