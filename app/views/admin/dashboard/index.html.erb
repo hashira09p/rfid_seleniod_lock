@@ -287,8 +287,12 @@
                     </td>
 
                     <td>
-                      <% time_value = track.status == 0 ? track.time_in : track.time_out %>
-                      <span class="badge bg-light text-dark"><i class="bi bi-clock me-1"></i><%= time_value %></span>
+                      <% raw_time = track.status == 0 ? track.time_in : track.time_out %>
+                      <% time_value = raw_time.to_time %>
+                      <span class="badge bg-light text-dark">
+                        <i class="bi bi-clock me-1"></i>
+                        <%= time_value.strftime("%B %-d, %Y %-l:%M%P") %>
+                      </span>
                     </td>
 
                   </tr>
