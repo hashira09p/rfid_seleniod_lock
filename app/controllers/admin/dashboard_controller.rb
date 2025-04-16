@@ -35,7 +35,16 @@ class Admin::DashboardController < AdminApplicationController
                                    .per(5)
 
     today_day_number = Date.today.wday
-    day_mapping = { 0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5 }
+    day_mapping = {
+      0 => 0,  # Sunday
+      1 => 1,  # Monday
+      2 => 2,  # Tuesday
+      3 => 3,  # Wednesday
+      4 => 4,  # Thursday
+      5 => 5,  # Friday
+      6 => 6   # Saturday
+    }
+
     today_system_day = day_mapping[today_day_number]
 
     @todays_schedules = Schedule.includes(:user)
@@ -45,7 +54,7 @@ class Admin::DashboardController < AdminApplicationController
                                 .per(5)
 
     @active_rooms = Room.where(room_status: 1).includes(:schedules).order(room_number: :asc)
-    @day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    @day_names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     @room_schedules = {}
     Room.where(room_status: 1).each do |room|
