@@ -15,49 +15,53 @@ class Admin::TimeTrackController < AdminApplicationController
       end
     end
 
-    # Fetch initial data
+    # Fetch initial data for filters
     @rooms = Room.pluck(:room_number).uniq
     @professors = User.pluck(:firstname, :middlename, :lastname, :id)
-    @time_tracks = TimeTrack.includes(:room, :user)
+
+    # Build the base filtered query.
+    time_tracks = TimeTrack.includes(:room, :user)
 
     # Apply filters
     if params[:room_number].present?
-      @time_tracks = @time_tracks.joins(:room).where("rooms.room_number = ?", params[:room_number])
+      time_tracks = time_tracks.joins(:room).where("rooms.room_number = ?", params[:room_number])
     end
 
     if params[:professor_id].present?
-      @time_tracks = @time_tracks.where(user_id: params[:professor_id])
+      time_tracks = time_tracks.where(user_id: params[:professor_id])
     end
 
     if params[:status].present?
-      @time_tracks = @time_tracks.where(status: params[:status])
+      time_tracks = time_tracks.where(status: params[:status])
     end
 
     # Date filtering logic
     if params[:start_date].present? && params[:end_date].present?
-      # Filter by range when both dates are provided
-      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) BETWEEN ? AND ?", params[:start_date], params[:end_date])
+      time_tracks = time_tracks.where("DATE(time_tracks.created_at) BETWEEN ? AND ?", params[:start_date], params[:end_date])
     elsif params[:start_date].present?
-      # Filter by start date only (records from start_date onward)
-      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) = ?", params[:start_date])
+      time_tracks = time_tracks.where("DATE(time_tracks.created_at) = ?", params[:start_date])
     elsif params[:end_date].present?
-      # Filter by end date only (records on or before end_date)
-      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) <= ?", params[:end_date])
+      time_tracks = time_tracks.where("DATE(time_tracks.created_at) <= ?", params[:end_date])
     else
-      # Default to today's records if no date filters are applied
-      @time_tracks = @time_tracks.where("DATE(time_tracks.created_at) = ?", Date.current)
+      time_tracks = time_tracks.where("DATE(time_tracks.created_at) = ?", Date.current)
     end
 
     # Sort by room number and created_at
-    @time_tracks = @time_tracks.joins(:room)
-                               .order("rooms.room_number ASC, time_tracks.created_at ASC")
+    time_tracks = time_tracks.joins(:room)
+                             .order("rooms.room_number ASC, time_tracks.created_at ASC")
 
-    # PDF Generator
+    # For HTML, paginate the filtered query (e.g., 10 per page)
+    @time_tracks = time_tracks.page(params[:page]).per(10)
+
     respond_to do |format|
-      format.html
+      format.html  # renders index.html.erb using paginated @time_tracks
       format.pdf do
-        pdf = TimeTrackPdf.new(@time_tracks, params[:start_date], params[:end_date])
-        send_data pdf.render, filename: "time_tracks.pdf", type: "application/pdf", disposition: "inline"
+        # Pass the full filtered query to the PDF generator
+        pdf = TimeTrackPdf.new(time_tracks, params[:start_date], params[:end_date])
+        send_data pdf.render,
+                  filename: "time_tracks.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
       end
     end
   end
