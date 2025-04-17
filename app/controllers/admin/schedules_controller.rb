@@ -15,8 +15,8 @@ class Admin::SchedulesController < AdminApplicationController
     end
 
     @days = Schedule.pluck(:day).uniq
-    @users = User.pluck(:firstname, :middlename, :lastname, :id)
-    @rooms = Room.pluck(:room_number, :id)
+    @users = User.all # Fetch all users as objects
+    @rooms = Room.all # Fetch all rooms as objects
     @school_years = Schedule.distinct.pluck(:school_year).compact.sort
 
     # Build the base filtered query.

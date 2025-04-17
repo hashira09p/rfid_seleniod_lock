@@ -8,3 +8,4 @@
 //= link add_form.css
 //= link pagination.css
 //= link dashboard.css
+//= link schedule_additional.css
