@@ -16,8 +16,8 @@ class Admin::TimeTrackController < AdminApplicationController
     end
 
     # Fetch initial data for filters
-    @rooms = Room.pluck(:room_number).uniq
-    @professors = User.pluck(:firstname, :middlename, :lastname, :id)
+    @rooms = Room.all
+    @professors = User.where(role: "professor")
 
     # Build the base filtered query.
     time_tracks = TimeTrack.includes(:room, :user)

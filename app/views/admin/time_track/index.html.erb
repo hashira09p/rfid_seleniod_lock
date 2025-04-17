@@ -4,63 +4,50 @@
   </div>
 
   <!-- Filter Form -->
-  <%= form_with url: time_track_index_path, method: :get, local: true, class: "mb-4" do %>
-    <div class="row g-3">
+    <%= form_with url: time_track_index_path, method: :get, local: true, class: "mb-4" do |f| %>
+      <div class="row g-3">
+        <!-- Room Number -->
+        <div class="col-md-2">
+          <%= f.label :room_number, "Room Number", class: "form-label" %>
+          <%= f.select :room_number, options_for_select(@rooms.map { |room| [room.room_number, room.room_number] }, params[:room_number]), { include_blank: "Select Room" }, { class: "form-select" } %>
+        </div>
 
-      <!-- Room number -->
-      <div class="col-md-2">
-        <%= label_tag :room_number, "Room Number", class: "form-label" %>
-        <%= select_tag :room_number, options_for_select(@rooms, params[:room_number]),
-                       include_blank: "Select Room", class: "form-select" %>
-      </div>
+        <!-- Professor Name -->
+        <div class="col-md-3">
+          <%= f.label :professor_id, "Professor Name", class: "form-label" %>
+          <%= f.select :professor_id, options_for_select(@professors.map { |professor| ["#{professor.firstname} #{professor.middlename} #{professor.lastname}", professor.id] }, params[:professor_id]), { include_blank: "Select Professor" }, { class: "form-select" } %>
+        </div>
 
-      <!-- Professor Name -->
-      <div class="col-md-3">
-        <%= label_tag :professor_id, "Professor Name", class: "form-label" %>
-        <select name="professor_id" class="form-select" style="flex: 1; min-width: 150px;">
-          <option value="">Professor</option>
-          <% @professors.each do |firstname, middlename, lastname, id| %>
-            <option value="<%= id %>" <%= 'selected' if params[:professor_id].to_s == id.to_s %>>
-              <%= "#{firstname} #{middlename} #{lastname}" %>
-            </option>
-          <% end %>
-        </select>
-      </div>
+        <!-- Status -->
+        <div class="col-md-2">
+          <%= f.label :status, "Status", class: "form-label" %>
+          <%= f.select :status, options_for_select(TimeTrack.statuses.keys, params[:status]), { include_blank: "Select Status" }, { class: "form-select" } %>
+        </div>
 
-      <!-- Status -->
-      <div class="col-md-2">
-        <%= label_tag :status, "Status", class: "form-label" %>
-        <%= select_tag :status, options_for_select(TimeTrack.statuses.keys, params[:status]),
-                       include_blank: "Select Status", class: "form-select" %>
-      </div>
+        <!-- Start Date -->
+        <div class="col-md-2">
+          <%= f.label :start_date, "Start Date", class: "form-label" %>
+          <%= f.date_field :start_date, value: params[:start_date], class: "form-control", placeholder: "Select Start Date" %>
+        </div>
 
-      <!-- Date -->
-      <div class="col-md-2">
-        <%= label_tag :start_date, "Start Date", class: "form-label" %>
-        <%= date_field_tag :start_date, params[:start_date], class: "form-control", placeholder: "Select Start Date" %>
-      </div>
+        <!-- End Date -->
+        <div class="col-md-2">
+          <%= f.label :end_date, "End Date", class: "form-label" %>
+          <%= f.date_field :end_date, value: params[:end_date], class: "form-control", placeholder: "Select End Date" %>
+        </div>
 
-      <div class="col-md-2">
-        <%= label_tag :end_date, "End Date", class: "form-label" %>
-        <%= date_field_tag :end_date, params[:end_date], class: "form-control", placeholder: "Select End Date" %>
-      </div>
+        <!-- Actions -->
+        <div class="col-md-2 d-flex align-items-end">
+          <%= f.submit "Filter", class: "btn btn-primary me-2" %>
+          <%= link_to "Reset", time_track_index_path, class: "btn btn-secondary" %>
+        </div>
 
-      <div class="col-md-2 d-flex align-items-end">
-        <%= submit_tag "Filter", class: "btn btn-primary me-2" %>
-        <%= link_to "Reset", time_track_index_path, class: "btn btn-secondary" %>
+        <!-- Download PDF -->
+        <div class="col-12 d-flex justify-content-end mb-3">
+          <%= link_to "Download PDF", time_track_index_path(encrypted_params: request.query_parameters.present? ? EncryptionHelper.encrypt(request.query_parameters.to_query) : nil, format: :pdf), class: "btn btn-danger", target: "_blank", rel: "noopener" %>
+        </div>
       </div>
-
-      <div class="d-flex justify-content-end mb-3">
-        <% if request.query_parameters.present? %>
-          <%= link_to "Download PDF", time_track_index_path(encrypted_params: EncryptionHelper.encrypt(request.query_parameters.to_query), format: :pdf),
-                      class: "btn btn-danger", target: "_blank", rel: "noopener" %>
-        <% else %>
-          <%= link_to "Download PDF", time_track_index_path(format: :pdf),
-                      class: "btn btn-danger", target: "_blank", rel: "noopener" %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
 
   <!-- Time Track Table -->
   <div class="table-responsive">
