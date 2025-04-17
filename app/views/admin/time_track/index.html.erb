@@ -1,104 +1,134 @@
-  <div class="container my-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Time Tracks</h2>
-  </div>
+<%= stylesheet_link_tag "table.css", "data-turbo-track": "reload" %>
+<%= stylesheet_link_tag "time_track_additional.css", "data-turbo-track": "reload" %>
 
-  <!-- Filter Form -->
-    <%= form_with url: time_track_index_path, method: :get, local: true, class: "mb-4" do |f| %>
-      <div class="row g-3">
-        <!-- Room Number -->
-        <div class="col-md-2">
-          <%= f.label :room_number, "Room Number", class: "form-label" %>
-          <%= f.select :room_number, options_for_select(@rooms.map { |room| [room.room_number, room.room_number] }, params[:room_number]), { include_blank: "Select Room" }, { class: "form-select" } %>
-        </div>
+<%= render 'admin/notice_and_alert' %>
 
-        <!-- Professor Name -->
-        <div class="col-md-3">
-          <%= f.label :professor_id, "Professor Name", class: "form-label" %>
-          <%= f.select :professor_id, options_for_select(@professors.map { |professor| ["#{professor.firstname} #{professor.middlename} #{professor.lastname}", professor.id] }, params[:professor_id]), { include_blank: "Select Professor" }, { class: "form-select" } %>
-        </div>
+<div class="container-fluid px-4">
+  <h2 class="mt-3">List of Daily Logs</h2>
+  <p class="text-muted">This page contains a list of Daily Logs for all rooms</p>
 
-        <!-- Status -->
-        <div class="col-md-2">
-          <%= f.label :status, "Status", class: "form-label" %>
-          <%= f.select :status, options_for_select(TimeTrack.statuses.keys, params[:status]), { include_blank: "Select Status" }, { class: "form-select" } %>
-        </div>
+  <!-- SEARCH FILTER SECTION -->
+  <div class="search-filter-container mb-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="search-box">
+          <%= form_with url: time_track_index_path, method: :get, local: true do |f| %>
+            <div class="input-group">
+              <!-- Room Number Filter -->
+              <%= f.select :room_number,
+                           options_for_select(@rooms.map { |room| [room.room_number, room.room_number] }, params[:room_number]),
+                           { include_blank: 'Room Number' },
+                           class: "form-select dropdown-menu-search" %>
 
-        <!-- Start Date -->
-        <div class="col-md-2">
-          <%= f.label :start_date, "Start Date", class: "form-label" %>
-          <%= f.date_field :start_date, value: params[:start_date], class: "form-control", placeholder: "Select Start Date" %>
-        </div>
+              <!-- Professor Filter -->
+              <%= f.select :professor_id,
+                           options_for_select(@professors.map { |professor| ["#{professor.firstname} #{professor.middlename} #{professor.lastname}", professor.id] }, params[:professor_id]),
+                           { include_blank: 'Professor' },
+                           class: "form-select dropdown-menu-search" %>
 
-        <!-- End Date -->
-        <div class="col-md-2">
-          <%= f.label :end_date, "End Date", class: "form-label" %>
-          <%= f.date_field :end_date, value: params[:end_date], class: "form-control", placeholder: "Select End Date" %>
-        </div>
+              <!-- Status Filter -->
+              <%= f.select :status,
+                           options_for_select(TimeTrack.statuses.keys, params[:status]),
+                           { include_blank: 'Status' },
+                           class: "form-select dropdown-menu-search" %>
 
-        <!-- Actions -->
-        <div class="col-md-2 d-flex align-items-end">
-          <%= f.submit "Filter", class: "btn btn-primary me-2" %>
-          <%= link_to "Reset", time_track_index_path, class: "btn btn-secondary" %>
-        </div>
+              <!-- Start Date and End Date Filters -->
+                <div class="d-flex gap-2">
+                  <div class="form-floating" style="width:150px">
+                    <%= f.date_field :start_date,
+                                     value: params[:start_date],
+                                     id: "startDate",
+                                     class: "form-control",
+                                     placeholder: "Start Date" %>
+                    <%= f.label :start_date, "Start Date", for: "startDate" %>
+                  </div>
 
-        <!-- Download PDF -->
-        <div class="col-12 d-flex justify-content-end mb-3">
-          <%= link_to "Download PDF", time_track_index_path(encrypted_params: request.query_parameters.present? ? EncryptionHelper.encrypt(request.query_parameters.to_query) : nil, format: :pdf), class: "btn btn-danger", target: "_blank", rel: "noopener" %>
+                  <div class="form-floating" style="width:150px">
+                    <%= f.date_field :end_date,
+                                     value: params[:end_date],
+                                     id: "endDate",
+                                     class: "form-control",
+                                     placeholder: "End Date" %>
+                    <%= f.label :end_date, "End Date", for: "endDate" %>
+                  </div>
+                </div>
+
+              <%= f.button "Search", class: "btn search-btn", type: "submit" %>
+              <%= link_to "Reset", time_track_index_path, class: "btn reset-btn" %>
+            </div>
+          <% end %>
         </div>
       </div>
-    <% end %>
+    </div>
+  </div>
 
-  <!-- Time Track Table -->
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead class="thead-dark">
+  <div class="d-flex justify-content-end mb-3">
+    <% if request.query_parameters.present? %>
+      <%= link_to "Download PDF", time_track_index_path(encrypted_params: EncryptionHelper.encrypt(request.query_parameters.to_query), format: :pdf),
+                  class: "btn btn-danger ms-2", target: "_blank", rel: "noopener" %>
+    <% else %>
+      <%= link_to "Download PDF", time_track_index_path(format: :pdf),
+                  class: "btn btn-danger ms-2", target: "_blank", rel: "noopener" %>
+    <% end %>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+    <table class="table table-bordered responsive-table">
+      <thead>
       <tr>
-        <th>#</th>
-        <th>Room Number</th>
-        <th>Professor Name</th>
-        <th>Date</th>
-        <th>Check-in Time</th>
-        <th>Check-out Time</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th scope="col">#</th>
+        <th scope="col">Room Number</th>
+        <th scope="col">Professor Name</th>
+        <th scope="col">Date</th>
+        <th scope="col">Check-in Time</th>
+        <th scope="col">Check-out Time</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
       </tr>
       </thead>
       <tbody>
-      <% row_index = 1 %>
-      <% @time_tracks.each do |track| %>
+      <% if @time_tracks.blank? %>
         <tr>
-          <td><%= row_index %></td>
-          <td><%= track.room.room_number || "No Room Assigned" %></td>
-          <td><%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %></td>
-          <td><%= track.created_at.strftime("%B %d, %Y") %></td>
-          <td>
-            <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
-          </td>
-          <td>
-            <%= track.time_out.present? ? (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) : "N/A" %>
-          </td>
-          <td><%= track.status %></td>
-          <td>
-            <div class="d-inline-flex gap-2">
-              <%= link_to edit_time_track_path(track), class: "btn btn-sm btn-warning", title: "Edit" do %>
-                <i class="bi bi-pencil"></i>
-              <% end %>
-
-              <%= button_to time_track_path(track), method: :delete, class: "btn btn-sm btn-danger",
-                            data: { turbo_confirm: 'Are you sure you want to delete this time record?' } do %>
-                <i class="bi bi-trash"></i>
-              <% end %>
-            </div>
-          </td>
+          <td colspan="8" class="text-center text-muted">No Matching Time Tracks Found</td>
         </tr>
-        <% row_index += 1 %>
+      <% else %>
+        <% @time_tracks.each_with_index do |track, index| %>
+          <tr>
+            <td data-label="#"><%= index + 1 %></td>
+            <td data-label="Room Number"><%= track.room.room_number || "No Room Assigned" %></td>
+            <td data-label="Professor Name">
+              <%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %>
+            </td>
+            <td data-label="Date"><%= track.created_at.strftime("%B %d, %Y") %></td>
+            <td data-label="Check-in Time">
+              <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
+            </td>
+            <td data-label="Check-out Time">
+              <%= track.time_out.present? ? (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) : "N/A" %>
+            </td>
+            <td data-label="Status"><%= track.status %></td>
+            <td data-label="Actions">
+              <div class="action-buttons">
+                <%= link_to edit_time_track_path(track), class: "action-btn edit-btn", title: "Edit" do %>
+                  <i class='bx bx-edit-alt'></i>
+                <% end %>
+
+                <%= button_to time_track_path(track), method: :delete,
+                              class: "action-btn delete-btn", title: "Delete",
+                              data: { turbo_confirm: 'Are you sure you want to delete this time record?' } do %>
+                  <i class='bx bx-trash'></i>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
       </tbody>
     </table>
   </div>
-</div>
 
-<div class="pagination">
-  <%= paginate @time_tracks %>
+  <div class="pagination">
+    <%= paginate @time_tracks %>
+  </div>
 </div>
