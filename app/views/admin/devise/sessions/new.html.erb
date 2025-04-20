@@ -7,10 +7,6 @@
   </a>
 </nav>
 
-<div class="trippy-bg"></div>
-<div class="trippy-bg" style="animation-delay: 0.25s;"></div>
-<div class="trippy-bg" style="animation-delay: 0.5s;"></div>
-
 <div class="container d-flex flex-column align-items-center justify-content-center">
   <div class="login-card text-center">
     <%= image_tag "TUP_Logo.png", alt: "TUP Logo", height: "60", class: "mb-3 logo-pulse" %>
@@ -18,19 +14,19 @@
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { id: "loginForm" }) do |f| %>
       <div class="mb-3 text-start">
-        <%= f.label :email, class: "form-label chaotic-label" %>
+        <%= f.label :email, class: "form-label" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control custom" %>
       </div>
 
       <div class="mb-3 text-start">
-        <%= f.label :password, class: "form-label chaotic-label" %>
+        <%= f.label :password, class: "form-label" %>
         <%= f.password_field :password, autocomplete: "current-password", class: "form-control custom" %>
       </div>
 
       <% if devise_mapping.rememberable? %>
         <div class="remember-me text-start">
           <%= f.check_box :remember_me, id: "remember-me" %>
-          <%= f.label :remember_me, for: "remember-me", class: "chaotic-label" %>
+          <%= f.label :remember_me, for: "remember-me" %>
         </div>
       <% end %>
 
@@ -49,76 +45,23 @@
 <script>
     document.addEventListener('turbo:load', function() {
         const inputs = document.querySelectorAll('input');
-        const loginCard = document.querySelector('.login-card');
+
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.add('input-animation');
+            });
+
+            input.addEventListener('blur', function() {
+                this.classList.remove('input-animation');
+            });
+        });
+
         const emailInput = document.querySelector('input[type="email"]');
         const passwordInput = document.querySelector('input[type="password"]');
         const loginButton = document.getElementById('loginButton');
         const loginForm = document.getElementById('loginForm');
         const messageContainer = document.getElementById('messageContainer');
         const logo = document.querySelector('.logo-pulse');
-        const labels = document.querySelectorAll('.form-label');
-
-        loginCard.classList.add('spinning');
-        loginCard.style.animationDuration = '0.3s';
-
-        function startRandomFlips() {
-            setInterval(() => {
-                if (Math.random() > 0.5) {
-                    const numInputsToFlip = Math.floor(Math.random() * 3) + 1;
-                    for (let i = 0; i < numInputsToFlip; i++) {
-                        const randomInput = inputs[Math.floor(Math.random() * inputs.length)];
-                        randomInput.classList.add('flip-input');
-                        setTimeout(() => {
-                            randomInput.classList.remove('flip-input');
-                        }, 2000);
-                    }
-                }
-            }, 1500);
-        }
-
-        startRandomFlips();
-
-        function reverseTextRandomly() {
-            setInterval(() => {
-                if (Math.random() > 0.5) {
-                    emailInput.classList.toggle('reversed-text');
-                    passwordInput.classList.toggle('reversed-text');
-
-                    setTimeout(() => {
-                        emailInput.classList.toggle('reversed-text');
-                        passwordInput.classList.toggle('reversed-text');
-                    }, 1000);
-                }
-            }, 2000);
-        }
-
-        reverseTextRandomly();
-
-        inputs.forEach(input => {
-            input.addEventListener('mouseover', function() {
-                const randomX = Math.random() * 40 - 20;
-                const randomY = Math.random() * 40 - 20;
-                const randomRotate = Math.random() * 40 - 20;
-                const randomScale = 0.7 + Math.random() * 0.6;
-                this.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotate}deg) scale(${randomScale})`;
-            });
-
-            input.addEventListener('mouseout', function() {
-                setTimeout(() => {
-                    this.style.transform = 'translate(0, 0)';
-                }, 300);
-            });
-
-            input.addEventListener('focus', function() {
-                this.classList.add('input-animation');
-                loginCard.style.animationDuration = '0.1s';
-            });
-
-            input.addEventListener('blur', function() {
-                this.classList.remove('input-animation');
-                loginCard.style.animationDuration = '0.3s';
-            });
-        });
 
         function toggleLoginButton() {
             if (emailInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
@@ -134,35 +77,9 @@
         passwordInput.addEventListener('input', toggleLoginButton);
         toggleLoginButton();
 
-        loginButton.addEventListener('mouseover', function() {
-            if (!this.disabled) {
-                const randomX = Math.random() * 100 - 50;
-                const randomY = Math.random() * 100 - 50;
-                const randomRotate = Math.random() * 360;
-                const randomScale = 0.5 + Math.random() * 1.5;
-                this.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotate}deg) scale(${randomScale})`;
-            }
-        });
-
-        loginButton.addEventListener('mouseout', function() {
-            this.style.transform = 'translate(0, 0)';
-        });
-
-        labels.forEach(label => {
-            label.addEventListener('mouseover', function() {
-                this.style.animationDuration = '0.1s';
-            });
-
-            label.addEventListener('mouseout', function() {
-                this.style.animationDuration = '0.5s';
-            });
-        });
-
         if (loginForm && loginButton) {
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-
-                loginCard.classList.remove('spinning');
 
                 loginButton.value = 'Logging in...';
                 loginButton.disabled = true;
@@ -187,51 +104,12 @@
 
                             setTimeout(() => {
                                 loginForm.submit();
-                            }, 1000);
-                        }, 300);
-                    }, 700);
-                }, 1000);
+                            }, 1500);
+                        }, 500);
+                    }, 1000);
+                }, 2000);
             });
         }
-
-        setInterval(() => {
-            const speeds = ['0.1s', '0.2s', '0.3s', '0.5s'];
-            const randomSpeed = speeds[Math.floor(Math.random() * speeds.length)];
-            loginCard.style.animationDuration = randomSpeed;
-
-            if (Math.random() > 0.3) {
-                loginCard.style.animationDirection = 'reverse';
-            } else {
-                loginCard.style.animationDirection = 'normal';
-            }
-
-            if (Math.random() > 0.7) {
-                const originalDuration = loginCard.style.animationDuration;
-                loginCard.style.animationDuration = '0.05s';
-                setTimeout(() => {
-                    loginCard.style.animationDuration = originalDuration;
-                }, 500);
-            }
-        }, 800);
-
-        setInterval(() => {
-            if (Math.random() > 0.5) {
-                inputs.forEach(input => {
-                    input.classList.add('input-animation');
-                });
-
-                const originalDuration = loginCard.style.animationDuration;
-                loginCard.style.animationDuration = '0.05s';
-
-                setTimeout(() => {
-                    loginCard.style.animationDuration = originalDuration;
-                    inputs.forEach(input => {
-                        if (!input.matches(':focus')) {
-                            input.classList.remove('input-animation');
-                        }
-                    });
-                }, 1000);
-            }
-        }, 2000);
     });
+
 </script>
