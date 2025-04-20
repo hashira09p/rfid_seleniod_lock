@@ -3,25 +3,23 @@
 
 <%= render 'admin/notice_and_alert' %>
 
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 py-3">
 
-  <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="fw-bold">DASHBOARD</h2>
-      <p class="text-muted">Overview of system statistics and activities</p>
-    </div>
-    <div class="d-flex align-items-center">
-      <span class="badge bg-primary p-2 me-2"><i class="bi bi-calendar3"></i> <%= @semester %></span>
-      <span class="badge bg-secondary p-2"><i class="bi bi-mortarboard"></i> <%= @school_year %></span>
+      <h4 class="fw-bold" style="color: #06441b;">Dashboard</h4>
+      <div class="d-flex align-items-center">
+        <div class="badge bg-primary-soft me-2" style="color: #06441b;"><i class="bi bi-calendar3"></i> <%= @semester %></div>
+        <div class="badge bg-secondary-soft" style="color: #06441b;"><i class="bi bi-mortarboard"></i> <%= @school_year %></div>
+      </div>
     </div>
   </div>
 
-  <!-- Stats Cards Row -->
   <div class="row g-3 mb-4">
 
     <!-- Users Summary -->
     <div class="col-12 col-sm-6 col-lg-3">
-      <div class="card_border_box card dashboard-card h-100 shadow-sm position-relative overflow-hidden zoom-effect">
+      <div class="card h-100 border-hover-primary" style="color: #06441b;">
         <div class="card-body p-3">
 
           <div class="d-flex justify-content-between mb-2">
@@ -40,8 +38,7 @@
             <div class="d-flex justify-content-between align-items-center mb-1 small">
               <span><i class="bi bi-check-circle text-success"></i> Active</span>
               <div>
-                <span class="badge bg-success counter" data-target="<%= @active_users %>">0</span>
-                <small class="text-muted">(<span class="percentage"><%= @total_users > 0 ? (@active_users.to_f / @total_users * 100).round : 0 %></span>%)</small>
+                <small class="text-muted"><span><%= @active_users %> (<%= @total_users > 0 ? (@active_users.to_f / @total_users * 100).round : 0 %>%)</span></small>
               </div>
             </div>
 
@@ -52,19 +49,19 @@
             <div class="d-flex justify-content-between align-items-center small mt-2">
               <span><i class="bi bi-x-circle text-danger"></i> Inactive</span>
               <div>
-                <span class="badge bg-danger counter" data-target="<%= @inactive_users %>">0</span>
-                <small class="text-muted">(<span class="percentage"><%= @total_users > 0 ? (@inactive_users.to_f / @total_users * 100).round : 0 %></span>%)</small>
+                <small class="text-muted"><span><%= @inactive_users %> (<%= @total_users > 0 ? (@inactive_users.to_f / @total_users * 100).round : 0 %>%)</span></small>
               </div>
             </div>
 
           </div>
+
         </div>
       </div>
     </div>
 
     <!-- Cards Summary -->
     <div class="col-12 col-sm-6 col-lg-3">
-      <div class="card_border_box card dashboard-card h-100 shadow-sm position-relative overflow-hidden zoom-effect">
+      <div class="card h-100 border-hover-success">
         <div class="card-body p-3">
 
           <div class="d-flex justify-content-between mb-2">
@@ -83,8 +80,7 @@
             <div class="d-flex justify-content-between align-items-center mb-1 small">
               <span><i class="bi bi-check-circle text-success"></i> Active</span>
               <div>
-                <span class="badge bg-success counter" data-target="<%= @active_cards %>">0</span>
-                <small class="text-muted">(<span class="percentage"><%= @total_cards > 0 ? (@active_cards.to_f / @total_cards * 100).round : 0 %></span>%)</small>
+                <small class="text-muted"><span><%= @active_cards %> (<%= @total_cards > 0 ? (@active_cards.to_f / @total_cards * 100).round : 0 %>%)</span></small>
               </div>
             </div>
 
@@ -95,8 +91,7 @@
             <div class="d-flex justify-content-between align-items-center small mt-2">
               <span><i class="bi bi-x-circle text-danger"></i> Inactive</span>
               <div>
-                <span class="badge bg-danger counter" data-target="<%= @inactive_cards %>">0</span>
-                <small class="text-muted">(<span class="percentage"><%= @total_cards > 0 ? (@inactive_cards.to_f / @total_cards * 100).round : 0 %></span>%)</small>
+                <small class="text-muted"><span><%= @inactive_cards %> (<%= @total_cards > 0 ? (@inactive_cards.to_f / @total_cards * 100).round : 0 %>%)</span></small>
               </div>
             </div>
           </div>
@@ -107,7 +102,7 @@
 
     <!-- Schedules Summary -->
     <div class="col-12 col-sm-6 col-lg-3">
-      <div class="card_border_box card dashboard-card h-100 shadow-sm position-relative overflow-hidden zoom-effect">
+      <div class="card h-100 border-hover-info">
         <div class="card-body p-3">
 
           <div class="d-flex justify-content-between mb-2">
@@ -144,13 +139,14 @@
             </div>
 
           </div>
+
         </div>
       </div>
     </div>
 
     <!-- Rooms Summary -->
     <div class="col-12 col-sm-6 col-lg-3">
-      <div class="card_border_box card dashboard-card h-100 shadow-sm position-relative overflow-hidden zoom-effect">
+      <div class="card h-100 border-hover-danger">
         <div class="card-body p-3">
 
           <div class="d-flex justify-content-between mb-2">
@@ -220,20 +216,20 @@
 
     <!-- Time Tracking Activity -->
     <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-      <div class="card shadow h-100">
+      <div class="card card-hover-lift">
 
-        <div class="recent_header card-header d-flex justify-content-between align-items-center py-2">
-          <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history"></i> Recent Time Tracking Activity</h6>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="mb-0 fw-bold" style="color: #06441b;"><i class="bi bi-clock-history me-2"></i>Recent Activity</h6>
           <% if @recent_time_tracks.present? && @recent_time_tracks.total_count > 0 %>
-            <span class="badge bg-light text-dark"><%= @recent_time_tracks.total_count %> entries</span>
+            <span class="badge bg-light" style="color: #06441b;"><%= @recent_time_tracks.total_count %> entries</span>
           <% end %>
         </div>
 
-        <div class="card-body p-3">
+        <div class="card-body p-0">
           <% if @recent_time_tracks.present? && @recent_time_tracks.any? %>
 
             <div class="table-responsive">
-              <table class="table table-hover table-striped mb-0">
+              <table class="table table-hover mb-0">
 
                 <thead class="table-light">
                 <tr>
@@ -269,12 +265,11 @@
 
                     <td>
                       <% if track.room.present? %>
-                        <span>Room <%= track.room.room_number %></span>
+                        Room <%= track.room.room_number %>
                       <% else %>
-                        <span>Unknown Room</span>
+                        Unknown Room
                       <% end %>
                     </td>
-
                     <td>
                       <% if track.status == 0 %>
                         <span class="badge bg-success"><i class="bi bi-box-arrow-in-right me-1"></i>Time In</span>
@@ -286,10 +281,7 @@
                     <td>
                       <% raw_time = track.status == 0 ? track.time_in : track.time_out %>
                       <% time_value = raw_time.to_time %>
-                      <span class="badge bg-light text-dark">
-                        <i class="bi bi-clock me-1"></i>
-                        <%= time_value.strftime("%B %-d, %Y %-l:%M%P") %>
-                      </span>
+                      <%= time_value.strftime("%b %-d, %Y %-l:%M%P") %>
                     </td>
 
                   </tr>
@@ -298,16 +290,14 @@
               </table>
             </div>
 
-            <div class="d-flex justify-content-center">
-              <div class="pagination">
-                <%= paginate @recent_time_tracks, param_name: :time_track_page %>
-              </div>
+            <div class="p-2">
+              <%= paginate @recent_time_tracks, param_name: :time_track_page %>
             </div>
 
           <% else %>
             <div class="text-center py-4 text-muted">
               <i class="bi bi-clock-history fs-1"></i>
-              <p class="mt-2">No recent activity found</p>
+              <p>No recent activity found</p>
             </div>
           <% end %>
 
@@ -317,27 +307,25 @@
 
     <!-- Today's Room Usage -->
     <div class="col-12 col-lg-6">
-      <div class="card shadow h-100">
-
-        <div class="recent_header card-header d-flex justify-content-between align-items-center py-2">
-          <h6 class="mb-0 fw-bold"><i class="bi bi-door-open"></i> Today's Room Usage</h6>
-          <% current_day = Time.current.strftime("%A, %l:%M %p") %>
-          <span class="badge bg-light text-dark"><i class="bi bi-calendar2-day me-1"></i><%= current_day %></span>
+      <div class="card card-hover-lift">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="mb-0 fw-bold" style="color: #06441b;"><i class="bi bi-door-open me-2"></i>Today's Room Usage</h6>
+          <span class="badge bg-light" style="color: #06441b;"><i class="bi bi-calendar2-day me-1"></i><%= Time.current.strftime("%A, %l:%M %p") %></span>
         </div>
 
-        <div class="card-body p-3">
+        <div class="card-body p-0">
           <% if @todays_schedules.present? && @todays_schedules.any? %>
 
             <div class="table-responsive">
-              <table class="table table-hover table-striped mb-0">
+              <table class="table table-hover mb-0">
 
                 <thead class="table-light">
-                <tr>
-                  <th>Room</th>
-                  <th>Subject</th>
-                  <th>Professor</th>
-                  <th>Time</th>
-                </tr>
+                  <tr>
+                    <th>Room</th>
+                    <th>Subject</th>
+                    <th>Professor</th>
+                    <th>Time</th>
+                  </tr>
                 </thead>
 
                 <tbody>
@@ -346,33 +334,24 @@
                     <td>
                       <% room = Room.find_by(id: schedule.room_id) %>
                       <% if room.present? %>
-                          <span><i class="bi bi-door-closed me-1"></i>Room <%= room.room_number %>
-                          </span>
+                        Room <%= room.room_number %>
                       <% else %>
-                          <span><i class="bi bi-door-closed me-1"></i>Room <%= schedule.room_id %>
-                          </span>
+                        Room <%= schedule.room_id %>
                       <% end %>
                     </td>
 
-                    <td class="fw-bold"><%= schedule.subject %></td>
+                    <td><%= schedule.subject %></td>
 
                     <td>
-                      <div class="d-flex align-items-center">
-                        <div>
-                          <% if schedule.user.present? %>
-                            <%= schedule.user.firstname %> <%= schedule.user.lastname %>
-                          <% else %>
-                            Unknown Professor
-                          <% end %>
-                        </div>
-                      </div>
+                      <% if schedule.user.present? %>
+                        <%= schedule.user.firstname %> <%= schedule.user.lastname %>
+                      <% else %>
+                        Unknown Professor
+                      <% end %>
                     </td>
 
                     <td>
-                        <span class="badge bg-light text-dark">
-                          <i class="bi bi-clock me-1"></i>
-                          <%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
-                        </span>
+                      <%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
                     </td>
 
                   </tr>
@@ -381,16 +360,14 @@
               </table>
             </div>
 
-            <div class="p-3 d-flex justify-content-center">
-              <div class="pagination">
-                <%= paginate @todays_schedules, param_name: :schedule_page %>
-              </div>
+            <div class="p-2">
+              <%= paginate @todays_schedules, param_name: :schedule_page %>
             </div>
 
           <% else %>
             <div class="text-center py-4 text-muted">
               <i class="bi bi-calendar-x fs-1"></i>
-              <p class="mt-2">No schedules for today</p>
+              <p>No schedules for today</p>
             </div>
           <% end %>
 
@@ -400,18 +377,16 @@
   </div>
 
   <!-- Room Schedules -->
-  <div class="card shadow mb-4">
+  <div class="card card-hover-lift mb-4">
 
-    <div class="card-header d-flex justify-content-between align-items-center py-2">
-      <h6 class="mb-0 fw-bold"><i class="bi bi-calendar"></i> Room Schedules - School Year <%= @school_year %></h6>
-      <div class="d-flex">
-        <select class="form-select form-select-sm bg-light" id="roomFilterDropdown">
-          <option value="all">All Rooms</option>
-          <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each do |room_number, _| %>
-            <option value="<%= room_number %>">Room <%= room_number %></option>
-          <% end %>
-        </select>
-      </div>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h6 class="mb-0 fw-bold" style="color: #06441b;"><i class="bi bi-calendar me-2"></i>Room Schedules - School Year <%= @school_year %></h6>
+      <select class="form-select form-select-sm custom-select" id="roomFilterDropdown" style="width: auto;">
+        <option value="all">All Rooms</option>
+        <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each do |room_number, _| %>
+          <option value="<%= room_number %>">Room <%= room_number %></option>
+        <% end %>
+      </select>
     </div>
 
     <div class="card-body p-0">
@@ -420,10 +395,11 @@
           <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each_with_index do |(room_number, schedules), index| %>
             <div class="accordion-item room-schedule-item" data-room="<%= room_number %>">
               <h2 class="accordion-header" id="heading<%= room_number %>">
-                <button class="accordion-button <%= index == 0 ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= room_number %>" aria-expanded="<%= index == 0 ? 'true' : 'false' %>" aria-controls="collapse<%= room_number %>">
+                <button class="accordion-button custom-accordion-button <%= index == 0 ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= room_number %>" aria-expanded="<%= index == 0 ? 'true' : 'false' %>" aria-controls="collapse<%= room_number %>">
                   <div class="d-flex align-items-center w-100">
-                    <span class="me-2"><i class="bi bi-door-closed"></i> Room <%= room_number %></span>
-                    <span class="badge bg-primary ms-auto"><%= schedules.count %> schedules</span>
+                    <i class="bi bi-door-closed me-2"></i>
+                    <span>Room <%= room_number %></span>
+                    <span class="badge bg-info text-white ms-2" style="background-color: #06441b !important"><%= schedules.count %> schedules</span>
                   </div>
                 </button>
               </h2>
@@ -434,48 +410,47 @@
 
                     <table class="table table-bordered mb-0">
 
-                      <thead class="table-dark">
-                      <tr>
-                        <th style="width: 14.28%">Monday</th>
-                        <th style="width: 14.28%">Tuesday</th>
-                        <th style="width: 14.28%">Wednesday</th>
-                        <th style="width: 14.28%">Thursday</th>
-                        <th style="width: 14.28%">Friday</th>
-                        <th style="width: 14.28%">Saturday</th>
-                        <th style="width: 14.28%">Sunday</th>
-                      </tr>
+                      <thead class="table-light">
+                        <tr>
+                          <th>Monday</th>
+                          <th>Tuesday</th>
+                          <th>Wednesday</th>
+                          <th>Thursday</th>
+                          <th>Friday</th>
+                          <th>Saturday</th>
+                          <th>Sunday</th>
+                        </tr>
                       </thead>
 
                       <tbody>
-                      <tr>
-                        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
-                          <td class="p-2">
-                            <div class="d-flex flex-column gap-2">
-                              <% schedules_for_day = schedules.select { |s| s.day == day }.sort_by { |s| s.start_time.seconds_since_midnight } %>
-                              <% if schedules_for_day.any? %>
-                                <% schedules_for_day.each do |schedule| %>
-                                  <div class="card schedule-card bg-light border:#06441b">
-                                    <div class="card-body p-2">
-                                      <h6 class="card-title mb-1 fw-bold"><%= schedule.subject %></h6>
-                                      <p class="card-text text-muted mb-1 small">
-                                        <i class="bi bi-person-fill me-1"></i> <%= schedule.user.firstname %> <%= schedule.user.lastname %>
-                                      </p>
-
-                                      <p class="card-text small fw-bold">
-                                        <i class="bi bi-clock-fill me-1"></i> <%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
-                                      </p>
+                        <tr>
+                          <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+                            <td class="p-2">
+                              <div class="d-flex flex-column gap-2">
+                                <% schedules_for_day = schedules.select { |s| s.day == day }.sort_by { |s| s.start_time.seconds_since_midnight } %>
+                                <% if schedules_for_day.any? %>
+                                  <% schedules_for_day.each do |schedule| %>
+                                    <div class="schedule-item">
+                                      <div class="schedule-content">
+                                        <p class="mb-1 fw-bold"><%= schedule.subject %></p>
+                                        <p class="text-muted mb-1 small">
+                                          <i class="bi bi-person-fill me-1"></i><%= schedule.user.firstname %> <%= schedule.user.lastname %>
+                                        </p>
+                                        <p class="time-badge">
+                                          <i class="bi bi-clock-fill me-1"></i><%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
+                                        </p>
+                                      </div>
                                     </div>
+                                  <% end %>
+                                <% else %>
+                                  <div class="text-center text-muted py-2">
+                                    No Schedule
                                   </div>
                                 <% end %>
-                              <% else %>
-                                <div class="text-center text-muted py-3">
-                                  <i class="bi bi-x-circle"></i> No Schedule
-                                </div>
-                              <% end %>
-                            </div>
-                          </td>
-                        <% end %>
-                      </tr>
+                              </div>
+                            </td>
+                          <% end %>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -485,9 +460,9 @@
           <% end %>
         </div>
       <% else %>
-        <div class="text-center py-5 text-muted">
+        <div class="text-center py-4 text-muted">
           <i class="bi bi-calendar-x fs-1"></i>
-          <p class="mt-3">No active room schedules available</p>
+          <p>No active room schedules available</p>
         </div>
       <% end %>
     </div>
