@@ -247,37 +247,6 @@ body {
     color: var(--inactive-red);
 }
 
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.action-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 18px;
-    transition: all 0.2s;
-}
-
-.action-btn.edit-btn {
-    color: #0d6efd;
-}
-
-.action-btn.delete-btn {
-    color: #dc3545;
-}
-
-.action-btn:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
 .status-toggle {
     position: relative;
     display: inline-block;
