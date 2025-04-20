@@ -54,7 +54,7 @@ class Admin::RoomsController < AdminApplicationController
 
   def update
     if @room.update(set_params)
-      redirect_to rooms_path, notice: 'Room was successfully updated.'
+      redirect_to edit_room_path@room, notice: 'Room was successfully updated.'
     else
       render :edit, alert: 'Room failed to be updated.'
     end
