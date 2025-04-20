@@ -1,12 +1,12 @@
 class Admin::DashboardController < AdminApplicationController
   def index
     @total_users = User.count
-    @active_users = User.where(status: 0).count
-    @inactive_users = User.where(status: 1).count
+    @active_users = User.where(status: 1).count
+    @inactive_users = User.where(status: 0).count
 
     @total_cards = Card.count
-    @active_cards = Card.where(status: 0).count
-    @inactive_cards = Card.where(status: 1).count
+    @active_cards = Card.where(status: 1).count
+    @inactive_cards = Card.where(status: 0).count
 
     @total_rooms = Room.count
     @available_rooms = Room.where(room_status: 1).count
