@@ -13,20 +13,24 @@
         <div class="search-box">
           <%= form_with url: rooms_path, method: :get, local: true do |f| %>
             <div class="input-group">
-              <span class="input-group-text bg-white">
+              <div class="input-group-connected">
+              <span class="input-group-text">
                 <i class='bx bx-search'></i>
               </span>
-              <%= f.text_field :room_number,
-                               class: "form-control",
-                               placeholder: "Room Number",
-                               value: params[:room_number] %>
+                <%= f.text_field :room_number,
+                                 class: "form-control",
+                                 placeholder: "Room Number",
+                                 value: params[:room_number] %>
+              </div>
 
               <%= f.select :room_status, Room.room_statuses.keys.map { |status| [status.capitalize, status] },
                            { include_blank: "Select Status" },
-                           { class: "form-select dropdown-menu-search"} %>
+                           { class: "form-select" } %>
 
-              <%= f.button "Search", class: "btn search-btn", type: "submit" %>
-              <%= link_to "Reset", rooms_path, class: "btn reset-btn ms-2" %>
+              <div class="button-group">
+                <%= f.button "Search", class: "btn search-btn", type: "submit" %>
+                <%= link_to "Reset", rooms_path, class: "btn reset-btn" %>
+              </div>
             </div>
           <% end %>
         </div>

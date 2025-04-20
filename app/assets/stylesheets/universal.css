@@ -70,71 +70,104 @@ body {
     margin-bottom: 20px;
 }
 
-/* ========== SEARCH BOX ========== */
+/* ========== SEARCH BOX STYLES ========== */
 .search-filter-container {
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    padding: 15px;
-    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 25px;
 }
 
 .search-box .input-group {
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
+    gap: 10px;
 }
 
-.search-box .input-group-text {
+.search-box .input-group-connected {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.search-box .input-group-connected .input-group-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
     background-color: #fff;
-    border-right: none;
+    border: none;
 }
 
-.search-box .form-control {
-    border-left: none;
-    border-right: none;
+.search-box .input-group-connected .form-control {
+    border: none;
+    height: 38px;
+    padding: 0.5rem 0.75rem;
+    flex: 1;
 }
 
-.search-box .form-control:focus {
+.search-box .input-group-connected .form-control:focus {
     box-shadow: none;
-    border-color: var(--border-color);
+    outline: none;
 }
 
-.dropdown-menu-search {
-    max-width: 200px;
-    border-left: 1px solid var(--border-color);
-    border-right: none;
+.search-box .form-select {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    height: 38px;
+    background-color: #fff;
+    flex: 1;
 }
 
-.dropdown-menu-search:focus {
-    box-shadow: none;
-    border-color: var(--border-color);
+.search-box .date-field {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    height: 38px;
+    flex: 1;
 }
 
-/* ========== BUTTONS ========== */
-/* Search button */
-.search-filter-container .input-group .search-btn {
+.search-box .search-btn {
     background-color: var(--primary-color);
     color: white;
     border: 1px solid var(--primary-color);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem;
+    height: 38px;
+    min-width: 100px;
+    transition: background-color 0.2s;
 }
 
-.search-filter-container .input-group .search-btn:hover {
+.search-box .search-btn:hover {
     background-color: var(--primary-color-dark);
-    color: white;
 }
 
-/* Reset button */
-.search-filter-container .input-group .reset-btn {
+.search-box .reset-btn {
     background-color: #fff;
     color: var(--text-color);
     border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem;
+    height: 38px;
+    min-width: 100px;
+    transition: background-color 0.2s;
 }
 
-.search-filter-container .input-group .reset-btn:hover {
+.search-box .reset-btn:hover {
     background-color: #f1f1f1;
 }
 
+.search-box .button-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* ========== BUTTONS ========== */
 /* Add professor button */
 .add-professor-btn {
     background-color: var(--primary-color);
@@ -156,34 +189,182 @@ body {
     color: white;
 }
 
-/* ========== RESPONSIVE STYLES ========== */
-@media (max-width: 991.98px) {
-    /* Styles */
+/* ========== TABLE STYLES ========== */
+.table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
-@media (max-width: 767.98px) {
-    .dropdown-menu-search {
-        max-width: none;
-        width: 100%;
-        margin: 5px 0;
-        border-radius: 4px;
-        border: 1px solid var(--border-color);
-    }
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+.responsive-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.responsive-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.responsive-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background-color: var(--active-bg);
+    color: var(--active-green);
+}
+
+.status-badge.inactive {
+    background-color: var(--inactive-bg);
+    color: var(--inactive-red);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+.action-btn.edit-btn {
+    color: #0d6efd;
+}
+
+.action-btn.delete-btn {
+    color: #dc3545;
+}
+
+.action-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.status-toggle {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+}
+
+.toggle-switch {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--active-green);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(16px);
+}
+
+/* ========== RESPONSIVE STYLES ========== */
+@media (max-width: 1199.98px) {
     .search-box .input-group {
         flex-wrap: wrap;
     }
 
-    .search-box .form-control,
-    .search-box .input-group-text,
-    .search-filter-container .input-group .search-btn {
-        border-radius: 4px;
-        margin: 5px 0;
+    .search-box .form-select,
+    .search-box .input-group-connected,
+    .search-box .date-field {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .search-box .form-select,
+    .search-box .input-group-connected,
+    .search-box .date-field {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .search-box .input-group {
+        gap: 15px;
     }
 
-    .search-filter-container .input-group .search-btn,
-    .search-filter-container .input-group .reset-btn {
+    .search-box .form-select,
+    .search-box .input-group-connected,
+    .search-box .date-field {
+        flex: 0 0 100%;
         width: 100%;
+    }
+
+    .search-box .button-group {
+        flex: 0 0 100%;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .search-box .search-btn,
+    .search-box .reset-btn {
+        flex: 1;
     }
 
     .main-content {
@@ -193,6 +374,40 @@ body {
     .main-content h2 {
         font-size: 20px;
     }
+
+    .responsive-table thead {
+        display: none;
+    }
+
+    .responsive-table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    .responsive-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .responsive-table td:last-child {
+        border-bottom: none;
+    }
+
+    .responsive-table td::before {
+        content: attr(data-label);
+        font-weight: 500;
+        margin-right: 10px;
+        text-align: left;
+    }
+
+    .action-buttons {
+        justify-content: flex-end;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -200,13 +415,24 @@ body {
         font-size: 12px;
     }
 
-    .search-filter-container .row {
+    .search-filter-container {
+        padding: 15px;
+    }
+
+    .search-box .button-group {
         flex-direction: column;
     }
 
-    .search-box .form-control,
-    .search-box .input-group-text {
-        border-radius: 4px !important;
+    .search-box .search-btn {
+        margin-bottom: 10px;
+    }
+
+    .search-box .input-group {
+        gap: 10px;
+    }
+
+    .search-filter-container .row {
+        flex-direction: column;
     }
 
     .filter-section {
@@ -222,10 +448,6 @@ body {
     .add-professor-btn {
         width: 100%;
         justify-content: center;
-    }
-
-    .search-filter-container {
-        padding: 10px;
     }
 
     .container-fluid {

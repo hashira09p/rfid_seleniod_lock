@@ -13,26 +13,34 @@
         <div class="search-box">
           <%= form_with url: cards_path, method: :get, local: true do |f| %>
             <div class="input-group">
-              <span class="input-group-text bg-white">
+              <div class="input-group-connected">
+              <span class="input-group-text">
                 <i class='bx bx-search'></i>
               </span>
-              <%= f.text_field :uid,
-                               class: "form-control",
-                               placeholder: "Card Number",
-                               value: params[:uid] %>
+                <%= f.text_field :uid,
+                                 class: "form-control",
+                                 placeholder: "Card Number",
+                                 value: params[:uid] %>
+              </div>
 
-              <%= f.text_field :fullname,
-                               class: "form-control",
-                               placeholder: "Name",
-                               value: params[:fullname],
-                               style: "border-left: 2px solid #ccc;" %>
+              <div class="input-group-connected">
+              <span class="input-group-text">
+                <i class='bx bx-user'></i>
+              </span>
+                <%= f.text_field :fullname,
+                                 class: "form-control",
+                                 placeholder: "Name",
+                                 value: params[:fullname] %>
+              </div>
 
               <%= f.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
-                              { include_blank: "Select Status" },
-                              { class: "form-select dropdown-menu-search"} %>
+                           { include_blank: "Select Status" },
+                           { class: "form-select" } %>
 
-              <%= f.button "Search", class: "btn search-btn", type: "submit" %>
-              <%= link_to "Reset", cards_path, class: "btn reset-btn ms-2" %>
+              <div class="button-group">
+                <%= f.button "Search", class: "btn search-btn", type: "submit" %>
+                <%= link_to "Reset", cards_path, class: "btn reset-btn" %>
+              </div>
             </div>
           <% end %>
         </div>
