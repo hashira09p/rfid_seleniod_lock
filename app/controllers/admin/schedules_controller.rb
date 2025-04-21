@@ -68,7 +68,7 @@ class Admin::SchedulesController < AdminApplicationController
 
   def update
     if @schedule.update(set_params)
-      redirect_to schedules_path, notice: 'Schedule was successfully updated.'
+      redirect_to edit_schedule_path@schedule, notice: 'Schedule was successfully updated.'
     else
       redirect_to edit_schedule_path, alert: 'Failed to update schedule.'
     end
