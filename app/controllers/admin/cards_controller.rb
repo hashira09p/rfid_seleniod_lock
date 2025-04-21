@@ -61,7 +61,7 @@ class Admin::CardsController < AdminApplicationController
   def update
     if @card.update(set_params)
       flash[:notice] = "Card successfully updated."
-      redirect_to cards_path
+      redirect_to edit_card_path@card
     else
       flash[:alert] = "Error updating card."
       render :edit, status: :unprocessable_entity
