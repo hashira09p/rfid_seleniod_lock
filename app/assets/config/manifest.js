@@ -10,3 +10,4 @@
 //= link dashboard.css
 //= link schedule_additional.css
 //= link time_track_additional.css
+//= link room_display.css

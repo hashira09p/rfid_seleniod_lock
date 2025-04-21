@@ -1,73 +1,145 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">Room <%= @room.room_number %> Schedule</h2>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3 mb-0">Room <%= @room.room_number %></h2>
+    <a href="<%= room_display_index_path %>" data-turbo="false" class="btn btn-outline-secondary btn-sm">
+      <i class='bx bx-arrow-back me-1'></i> Back to All Rooms
+    </a>
+  </div>
 
-  <div class="card p-4">
-    <h4>📌 Today's Schedule</h4>
-    <% if @todays_schedules.any? %>
-      <ul class="list-group mb-3">
-        <% @todays_schedules.each do |schedule| %>
-          <li class="list-group-item">
-            <strong><%= schedule.subject %></strong>
-            (<%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %>)
-            <br>
-            <strong>Professor:</strong> <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-muted">No schedules for today.</p>
-    <% end %>
+  <div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-header bg-white py-3 border-bottom">
+      <h3 class="h5 mb-0">📌 Today's Schedule</h3>
+    </div>
+    <div class="card-body">
+      <% if @todays_schedules.any? %>
+        <div class="list-group list-group-flush">
+          <% @todays_schedules.each do |schedule| %>
+            <div class="list-group-item border-0 px-0 py-3">
+              <div class="d-flex align-items-center">
+                <div class="schedule-time rounded-3 text-center p-2 me-3">
+                  <div class="small"><%= schedule.start_time.strftime("%I:%M %p") %></div>
+                  <div class="small text-muted">to</div>
+                  <div class="small"><%= schedule.end_time.strftime("%I:%M %p") %></div>
+                </div>
+                <div>
+                  <h4 class="h6 mb-1"><%= schedule.subject %></h4>
+                  <p class="text-muted mb-0">
+                    <i class='bx bx-user me-1'></i>
+                    <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted mb-0">No schedules for today.</p>
+      <% end %>
+    </div>
+  </div>
 
-    <h4 class="mt-4">📅 Overall Schedule</h4>
-    <% if @schedules.any? %>
-      <ul class="list-group mb-3">
-        <% @schedules.each do |schedule| %>
-          <li class="list-group-item">
-            <strong><%= schedule.subject %></strong>
-            (<%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %>)
-            - <%= Date::DAYNAMES[schedule.day.to_i] if schedule.day.present? %>
-            <br>
-            <strong>Professor:</strong> <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-muted">No schedules available.</p>
-    <% end %>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-header bg-white py-3 border-bottom">
+          <h3 class="h5 mb-0">📅 Weekly Schedule</h3>
+        </div>
+        <div class="card-body">
+          <% if @schedules.any? %>
+            <div class="list-group list-group-flush">
+              <% @schedules.each do |schedule| %>
+                <div class="list-group-item border-0 px-0 py-3">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h4 class="h6 mb-0"><%= schedule.subject %></h4>
+                    <span class="badge bg-light text-dark">
+                      <%= Date::DAYNAMES[schedule.day.to_i] if schedule.day.present? %>
+                    </span>
+                  </div>
+                  <p class="small text-muted mb-1">
+                    <i class='bx bx-time me-1'></i>
+                    <%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %>
+                  </p>
+                  <p class="small text-muted mb-0">
+                    <i class='bx bx-user me-1'></i>
+                    <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
+                  </p>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-muted mb-0">No regular schedules available.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-    <h4 class="mt-4">✅ Available Time Slots</h4>
-    <% if @available_slots.any? %>
-      <ul class="list-group">
-        <% @available_slots.each do |slot| %>
-          <li class="list-group-item"><%= slot %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-muted">No available slots today.</p>
-    <% end %>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-header bg-white py-3 border-bottom">
+          <h3 class="h5 mb-0">✅ Available Time Slots</h3>
+        </div>
+        <div class="card-body">
+          <% if @available_slots.any? %>
+            <div class="list-group list-group-flush">
+              <% @available_slots.each do |slot| %>
+                <div class="list-group-item d-flex align-items-center border-0 px-0 py-2">
+                  <div class="me-2 text-success">
+                    <i class='bx bx-check-circle'></i>
+                  </div>
+                  <div><%= slot %></div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-muted mb-0">No available slots today.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <h4 class="mt-5">🕒 Room Time Logs - <%= Time.now.strftime("%B %d, %Y") %> </h4>
-    <div class="card">
-      <div class="card-body">
-        <% if @today_time_tracks.any? %>
-          <table class="table table-bordered text-center">
-            <thead class="table-dark">
+  <div class="card shadow-sm border-0 rounded-3 mt-4">
+    <div class="card-header bg-white py-3 border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="h5 mb-0">🕒 Room Time Logs</h3>
+        <span class="text-muted small"><%= Time.now.strftime("%B %d, %Y") %></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <% if @today_time_tracks.any? %>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="table-light">
             <tr>
-              <th>#</th>
-              <th>Professor</th>
-              <th>Time In</th>
-              <th>Time Out</th>
-              <th>Status</th>
+              <th class="fw-medium">#</th>
+              <th class="fw-medium">Professor</th>
+              <th class="fw-medium">Time In</th>
+              <th class="fw-medium">Time Out</th>
+              <th class="fw-medium">Status</th>
             </tr>
             </thead>
             <tbody>
             <% @today_time_tracks.each_with_index do |track, index| %>
               <tr>
                 <td><%= index + 1 %></td>
-                <td><%= track.user&.firstname %> <%= track.user&.lastname %></td>
-                <td><%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %></td>
                 <td>
-                  <%= track.time_out.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "<span class='text-danger fw-bold'>Not yet logged out</span>".html_safe %>
+                  <%= track.user&.firstname %> <%= track.user&.lastname %>
+                </td>
+                <td>
+                  <% if track.time_in.present? %>
+                    <i class='bx bx-log-in-circle me-1 text-primary'></i>
+                    <%= Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in %>
+                  <% else %>
+                    <span class="text-muted">N/A</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if track.time_out.present? %>
+                    <i class='bx bx-log-out-circle me-1 text-info'></i>
+                    <%= Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out %>
+                  <% else %>
+                    <span class="text-danger fw-medium">Not yet logged out</span>
+                  <% end %>
                 </td>
                 <td>
                   <% if track.time_in? %>
@@ -80,15 +152,29 @@
             <% end %>
             </tbody>
           </table>
-        <% else %>
-          <p class="text-muted text-center">No time logs recorded today.</p>
-        <% end %>
-      </div>
-
-      <div class="pagination">
-        <%= paginate @today_time_tracks %>
-      </div>
+        </div>
+        <div class="pagination mt-3">
+          <%= paginate @today_time_tracks %>
+        </div>
+      <% else %>
+        <p class="text-muted text-center mb-0">No time logs recorded today.</p>
+      <% end %>
     </div>
   </div>
 </div>
 
+<style>
+    .schedule-time {
+        background-color: #f8f9fa;
+        min-width: 85px;
+    }
+
+    .table th {
+        font-size: 0.875rem;
+    }
+
+    .badge {
+        font-weight: 500;
+        padding: 0.4em 0.7em;
+    }
+</style>
