@@ -161,13 +161,13 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         const searchInput = document.getElementById('room-search');
         const roomCards = document.querySelectorAll('.room-card');
         const roomRows = document.querySelectorAll('.room-row');
 
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
 
             roomCards.forEach(card => {
@@ -194,14 +194,14 @@
         const galleryModeBtn = document.getElementById('galleryMode');
         const listModeBtn = document.getElementById('listMode');
 
-        galleryModeBtn.addEventListener('change', function() {
+        galleryModeBtn.addEventListener('change', function () {
             if (this.checked) {
                 galleryView.classList.remove('d-none');
                 listView.classList.add('d-none');
             }
         });
 
-        listModeBtn.addEventListener('change', function() {
+        listModeBtn.addEventListener('change', function () {
             if (this.checked) {
                 listView.classList.remove('d-none');
                 galleryView.classList.add('d-none');
@@ -243,19 +243,19 @@
             });
         }
 
-        filterAll.addEventListener('change', function() {
+        filterAll.addEventListener('change', function () {
             if (this.checked) applyFilters('all');
         });
 
-        filterVacant.addEventListener('change', function() {
+        filterVacant.addEventListener('change', function () {
             if (this.checked) applyFilters('vacant');
         });
 
-        filterOccupied.addEventListener('change', function() {
+        filterOccupied.addEventListener('change', function () {
             if (this.checked) applyFilters('occupied');
         });
 
-        filterUnavailable.addEventListener('change', function() {
+        filterUnavailable.addEventListener('change', function () {
             if (this.checked) applyFilters('unavailable');
         });
     });
@@ -280,4 +280,61 @@
             });
         }
     }
+
+    setInterval(() => {
+        fetch("/room_statuses")
+            .then(res => res.json())
+            .then(data => {
+                document.querySelectorAll('.room-card').forEach(card => {
+                    const roomId = card.getAttribute('data-room-id');
+                    const newStatus = data[roomId];
+
+                    if (!newStatus) return;
+
+                    const statusText = card.querySelector('.room-status');
+                    const indicator = card.querySelector('.status-indicator');
+
+                    let cardBody = card.querySelector('.card-body');
+                    if (!cardBody) return;
+
+                    let newStatusHTML = '';
+                    let newCardClass = 'card h-100 shadow-sm room-card';
+
+                    if (newStatus === 'unavailable') {
+                        newStatusHTML = `
+                            <p class="room-status text-secondary mb-0">
+                                <span class="status-indicator inactive"></span>
+                                    Unavailable
+                                </p>`;
+                        newCardClass += ' bg-light';
+                    } else if (newStatus === 'time_in') {
+                        newStatusHTML = `
+                            <p class="room-status text-danger mb-0">
+                                <span class="status-indicator occupied"></span>
+                                    Occupied
+                            </p>`;
+                        newCardClass += ' occupied-card';
+                    } else {
+                        newStatusHTML = `
+                            <p class="room-status text-success mb-0">
+                                <span class="status-indicator vacant"></span>
+                                    Vacant
+                            </p>`;
+                        newCardClass += ' vacant-card';
+                    }
+
+                    // Update card class
+                    card.className = newCardClass;
+
+                    // Replace just the .room-status element
+                    let wrap = card.querySelector('.room-status-wrap');
+                    if (wrap) {
+                        wrap.innerHTML = newStatusHTML;
+                    }
+                });
+
+            })
+            .catch(err => console.error("Failed to update room statuses:", err));
+    }, 5000);
+
 </script>

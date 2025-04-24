@@ -19,7 +19,14 @@ class Admin::RoomDisplayController < AdminApplicationController
   end
 
   def room_statuses
-    render json: { "1": "time_in", "2": "time_out", "3": "vacant" }
+    rooms = Room.all.includes(:time_tracks)
+    statuses = {}
+
+    rooms.each do |room|
+      statuses[room.id] = room.current_status
+    end
+
+    render json: statuses
   end
 
   private

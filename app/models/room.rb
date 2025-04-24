@@ -17,18 +17,15 @@ class Room < ApplicationRecord
   end
 
   def current_status
-    return "unavailable" if room_status == "Unavailable"
+    return "unavailable" if Unavailable?
 
     latest_track = time_tracks.order(updated_at: :desc).first
 
     if latest_track.nil?
-      Rails.logger.info "Room ##{id} → status: time_out (no record)"
-      "time_out"
+      "vacant"
     elsif latest_track.time_out.present?
-      Rails.logger.info "Room ##{id} → status: time_out (recorded time_out)"
-      "time_out"
+      "vacant"
     else
-      Rails.logger.info "Room ##{id} → status: time_in (ongoing)"
       "time_in"
     end
   end
