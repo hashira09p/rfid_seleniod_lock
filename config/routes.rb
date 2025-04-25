@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         shared: 'admin/devise/shared',
         unlocks: 'admin/devise/unlocks'
       }, as: :admin
-      resources :home do
+      resources :professor do
         member do
           patch :toggle_status
         end
@@ -39,6 +39,6 @@ Rails.application.routes.draw do
         sessions: 'professor/users/sessions'
       }, as: :professor
     end
-    root 'professor/home#index', as: :professor_root
+    root 'professor/professor#index', as: :professor_root
   end
 end

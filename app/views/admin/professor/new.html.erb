@@ -4,7 +4,7 @@
   <div class="py-2 fade-in">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><%= link_to "Professor", home_index_path, class: "text-decoration-none text-secondary" %></li>
+        <li class="breadcrumb-item"><%= link_to "Professor", professor_index_path, class: "text-decoration-none text-secondary" %></li>
         <li class="breadcrumb-item active text-dark fw-bold">New Professor</li>
       </ol>
     </nav>
@@ -15,7 +15,7 @@
         <p class="text-secondary mb-0">This page allows you to add a new professor to the system <span class="required-badge form-span">Some fields required</span></p>
       </div>
 
-      <%= form_with model: @user, url: home_index_path, method: :post, local: true, data: { turbo: false }, html: { novalidate: true, class: "needs-validation" } do |form| %>
+      <%= form_with model: @user, url: professor_index_path, method: :post, local: true, data: { turbo: false }, html: { novalidate: true, class: "needs-validation" } do |form| %>
         <div class="form-section-title">Personal Information</div>
         <div class="row g-3">
           <div class="col-md-4 mb-3">
@@ -67,7 +67,7 @@
 
         <div class="form-footer">
           <div class="btn-group-responsive">
-            <%= link_to home_index_path, class: "btn btn-reset me-md-2" do %>
+            <%= link_to professor_index_path, class: "btn btn-reset me-md-2" do %>
               <i class="bi bi-arrow-left"></i> Back to List
             <% end %>
           </div>

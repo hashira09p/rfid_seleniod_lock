@@ -1,4 +1,4 @@
-class Admin::HomeController < AdminApplicationController
+class Admin::ProfessorController < AdminApplicationController
   before_action :authenticate_admin_user!, except: [:create]
   before_action :set_user, only: [:edit, :update, :destroy]
 
@@ -10,7 +10,7 @@ class Admin::HomeController < AdminApplicationController
       rescue => e
         Rails.logger.error "Error decrypting parameters: #{e.message}"
         flash[:error] = "Invalid parameters."
-        redirect_to home_index_path and return
+        redirect_to professor_index_path and return
       end
     end
 
@@ -62,10 +62,10 @@ class Admin::HomeController < AdminApplicationController
 
     if @user.save
       flash[:notice] = "Professor #{@user.firstname} #{@user.lastname} created successfully!"
-      redirect_to home_index_path
+      redirect_to professor_index_path
     else
       flash[:alert] = "Failed to create professor: #{@user.errors.full_messages.join(', ')}"
-      redirect_to home_index_path
+      redirect_to professor_index_path
     end
   end
 
@@ -75,7 +75,7 @@ class Admin::HomeController < AdminApplicationController
   def update
     if @user.update(user_params)
       flash[:notice] = "Professor updated successfully!"
-      redirect_to edit_home_path(@user)
+      redirect_to edit_professor_path(@user)
     else
       flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
       render :edit
@@ -88,7 +88,7 @@ class Admin::HomeController < AdminApplicationController
     else
       flash[:alert] = @user.errors.full_messages.to_sentence
     end
-    redirect_to home_index_path
+    redirect_to professor_index_path
   end
 
   def toggle_status
@@ -104,7 +104,7 @@ class Admin::HomeController < AdminApplicationController
     end
 
     flash[:notice] = "#{@user.firstname}'s status and associated cards have been updated to #{new_status.capitalize}."
-    redirect_to home_index_path
+    redirect_to professor_index_path
   end
 
   private
