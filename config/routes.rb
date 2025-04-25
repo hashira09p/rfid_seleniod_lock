@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       resources :time_track
       resources :dashboard
     end
-    root 'admin/home#index', as: :admin_root
+    root 'admin/dashboard#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
   end
 
