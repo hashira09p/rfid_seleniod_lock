@@ -17,7 +17,7 @@ class Admin::RfidsController < AdminApplicationController
     return render json: { message: "Card not registered" }, status: :unauthorized unless card
 
     if card.status == "Inactive"
-      return render json: { message: "Card inactive" }, status: :forbidden
+      return render json: { message: "Card inactive" }, status: :conflict
     end
 
     if card.status == "Active"
