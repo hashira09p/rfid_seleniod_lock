@@ -279,9 +279,12 @@
                     </td>
 
                     <td>
-                      <% raw_time = track.status == 0 ? track.time_in : track.time_out %>
-                      <% time_value = raw_time.to_time %>
-                      <%= time_value.strftime("%b %-d, %Y %-l:%M%P") %>
+                      <% raw_time = (track.status == 0 ? track.time_in : track.time_out) %>
+                      <% if raw_time.present? %>
+                        <%= raw_time.to_time.strftime("%b %-d, %Y %-l:%M%P") %>
+                      <% else %>
+                        N/A
+                      <% end %>
                     </td>
 
                   </tr>
