@@ -144,7 +144,8 @@
           <div class="col-md-6 mb-3">
             <%= form.label :role, "Role", class: "form-label" %>
             <div class="input-group">
-              <%= form.text_field :role, class: "form-control bg-light", readonly: true, value: @user.role.humanize, style: "cursor: not-allowed;" %>
+              <%= form.hidden_field :role, value: @user.role %>
+              <input type="text" class="form-control bg-light" value="<%= @user.role.humanize %>" readonly style="cursor: not-allowed;" />
             </div>
             <span class="field-hint">Role cannot be edited</span>
           </div>
