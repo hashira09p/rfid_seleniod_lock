@@ -82,3 +82,4 @@ gem 'prawn-table'
 gem 'attr_encrypted'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'sendgrid-ruby'
+gem 'http'
