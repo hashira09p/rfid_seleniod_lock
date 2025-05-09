@@ -11,3 +11,4 @@
 //= link schedule_additional.css
 //= link time_track_additional.css
 //= link room_display.css
+//= link edit_profile.css
