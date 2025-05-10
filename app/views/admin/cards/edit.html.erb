@@ -12,7 +12,13 @@
           <div class="me-2">
             <i class="bi bi-credit-card text-success" style="font-size: 1.8rem;"></i>
           </div>
-          <h5 class="mb-0 fw-bold text-success">Card Details</h5>
+          <h5 class="mb-0 fw-bold text-success"><%= @card.uid_type.capitalize %> Details</h5>
+
+          <%# if @card.card? %>
+<!--            <h5 class="mb-0 fw-bold text-success">Card Details</h5>-->
+          <%# else %>
+<!--            <h5 class="mb-0 fw-bold text-success">Tag Details</h5>-->
+          <%# end %>
         </div>
       </div>
 
@@ -25,7 +31,7 @@
               </div>
             </div>
             <div class="col">
-              <h5 class="fw-bold mb-1">RFID Card #<%= @card.uid %></h5>
+              <h5 class="fw-bold mb-1">RFID <%= @card.uid_type.capitalize %> #<%= @card.uid %></h5>
               <p class="text-muted mb-0 d-flex align-items-center">
                 <i class="bi bi-person me-2"></i>
                 <%= if @card.user&.firstname.present?
@@ -45,7 +51,7 @@
                 <div class="card-icon position-absolute top-0 end-0 mt-2 me-2 text-success">
                   <i class="bi bi-hash"></i>
                 </div>
-                <span class="text-muted d-block mb-1 small text-uppercase">UID</span>
+                <span class="text-muted d-block mb-1 small text-uppercase"><%= @card.uid_type.capitalize %> Number</span>
                 <div class="fw-bold"><%= @card.uid %></div>
               </div>
             </div>
@@ -55,7 +61,7 @@
                 <div class="card-icon position-absolute top-0 end-0 mt-2 me-2 text-success">
                   <i class="bi bi-tag"></i>
                 </div>
-                <span class="text-muted d-block mb-1 small text-uppercase">UID Type</span>
+                <span class="text-muted d-block mb-1 small text-uppercase">RFID Type</span>
                 <div class="fw-bold"><%= @card.uid_type.to_s.humanize %></div>
               </div>
             </div>
@@ -93,16 +99,16 @@
 
     <nav aria-label="breadcrumb" class="mt-3">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><%= link_to "Cards", cards_path, class: "text-decoration-none text-secondary" %></li>
-        <li class="breadcrumb-item active text-dark fw-bold">Edit Card</li>
+        <li class="breadcrumb-item"><%= link_to "Cards/Tags", cards_path, class: "text-decoration-none text-secondary" %></li>
+        <li class="breadcrumb-item active text-dark fw-bold">Edit <%= @card.uid_type.capitalize %></li>
       </ol>
     </nav>
 
     <!-- Edit Form Container -->
     <div class="form-container p-4 p-md-5 mt-3">
       <div class="form-header">
-        <h2 class="mb-1 fw-bold">Edit RFID Card</h2>
-        <p class="text-secondary mb-0">Update the information for this RFID card <span class="required-badge form-span">Some fields required</span></p>
+        <h2 class="mb-1 fw-bold">Edit RFID <%= @card.uid_type.capitalize %></h2>
+        <p class="text-secondary mb-0">Update the information for this RFID <%= @card.uid_type %> <span class="required-badge form-span">Some fields required</span></p>
       </div>
 
       <% if @card.errors.any? %>
@@ -119,16 +125,16 @@
       <%= form_with(model: @card, method: :put, local: true, html: { novalidate: true, class: "needs-validation" }) do |form| %>
         <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
 
-        <div class="form-section-title mt-2">Card Information</div>
+        <div class="form-section-title mt-2"><%= @card.uid_type.capitalize %> Information</div>
 
         <div class="row g-3">
           <div class="col-md-6 mb-3">
-            <%= form.label :uid_type, "UID Type", class: "form-label required-label" %>
+            <%= form.label :uid_type, "RFID Type", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :uid_type, Card.uid_types.keys.map { |type| [type.capitalize, type] },
-                              { include_blank: "Select UID Type" },
+                              { include_blank: "Select RFID Type" },
                               { class: "form-select", required: true } %>
-              <div class="invalid-feedback">UID type is required</div>
+              <div class="invalid-feedback">RFID type is required</div>
             </div>
           </div>
         </div>
@@ -140,7 +146,7 @@
             <input type="text" class="form-control bg-light" readonly
                    value="<%= "#{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} (#{@card.user.email})" %>"
                    style="cursor: not-allowed;">
-            <span class="field-hint">To reassign this card, please deactivate it and register a new one</span>
+            <span class="field-hint">To reassign this <%= @card.uid_type %>, please deactivate it and register a new one</span>
           </div>
         <% end %>
 
@@ -155,7 +161,7 @@
               <i class="bi bi-x-circle"></i> Reset Form
             </button>
             <%= form.button type: "submit", class: "btn btn-save" do %>
-              <i class="bi bi-save"></i> Update Card
+              <i class="bi bi-save"></i> Update <%= @card.uid_type.capitalize %>
             <% end %>
           </div>
         </div>

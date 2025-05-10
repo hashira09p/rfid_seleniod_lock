@@ -5,19 +5,19 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><%= link_to "Cards", cards_path, class: "text-decoration-none text-secondary" %></li>
-        <li class="breadcrumb-item active text-dark fw-bold">New RFID Card</li>
+        <li class="breadcrumb-item active text-dark fw-bold">New RFID Card/Tag</li>
       </ol>
     </nav>
 
     <div class="form-container p-4 p-md-5 mt-3">
       <div class="form-header">
-        <h2 class="mb-1 fw-bold">Register a New RFID Card</h2>
-        <p class="text-secondary mb-0">This page allows you to register a new RFID card in the system <span class="required-badge form-span">Some fields required</span></p>
+        <h2 class="mb-1 fw-bold">Register a New RFID Card/Tag</h2>
+        <p class="text-secondary mb-0">This page allows you to register a new RFID card/tag in the system <span class="required-badge form-span">Some fields required</span></p>
       </div>
 
       <div class="mb-3">
-        <div class="form-section-title">RFID Scan</div>
-        <p>Scanned RFID UID:
+        <div class="form-section-title">RFID Number</div>
+        <p>Scanned RFID number:
           <turbo-frame id="rfid-uid-placeholder" class="fw-bold">Waiting for scan...</turbo-frame>
           <%= turbo_stream_from "rfid_scans" %>
         </p>
@@ -40,12 +40,12 @@
           </div>
 
           <div class="col-md-6 mb-3">
-            <%= form.label :uid_type, "UID Type", class: "form-label required-label" %>
+            <%= form.label :uid_type, "RFID Type", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :uid_type, Card.uid_types.keys.map { |type| [type.capitalize, type] },
-                              { include_blank: "Select UID Type" },
+                              { include_blank: "Select RFID Type" },
                               { class: "form-select", required: true } %>
-              <div class="invalid-feedback">UID type is required</div>
+              <div class="invalid-feedback">RFID type is required</div>
             </div>
           </div>
         </div>
