@@ -104,7 +104,7 @@
       <%= form_with model: @user, url: professor_path(@user), method: :patch, local: true, data: { turbo: false }, html: { novalidate: true, class: "needs-validation" } do |form| %>
         <div class="row g-3">
           <div class="col-md-4 mb-3">
-            <%= form.label :firstname, "First Name", class: "form-label" %>
+            <%= form.label :firstname, "First Name", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.text_field :firstname, class: "form-control", required: true, value: @user.firstname %>
               <div class="invalid-feedback">First name is required</div>
@@ -119,7 +119,7 @@
           </div>
 
           <div class="col-md-4 mb-3">
-            <%= form.label :lastname, "Last Name", class: "form-label" %>
+            <%= form.label :lastname, "Last Name", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.text_field :lastname, class: "form-control", required: true, value: @user.lastname %>
               <div class="invalid-feedback">Last name is required</div>
@@ -128,7 +128,7 @@
         </div>
 
         <div class="mb-3">
-          <%= form.label :email, "Email", class: "form-label" %>
+          <%= form.label :email, "Email Address", class: "form-label required-label" %>
           <div class="input-group">
             <%= form.email_field :email, class: "form-control bg-light", readonly: true, value: @user.email, style: "cursor: not-allowed;" %>
           </div>
@@ -137,7 +137,7 @@
 
         <div class="row g-3">
           <div class="col-md-6 mb-3">
-            <%= form.label :academic_college, "Academic College", class: "form-label" %>
+            <%= form.label :academic_college, "Academic College", class: "form-label required-label" %>
             <%= form.select :academic_college,
                             User.academic_colleges.keys.map { |key| [key, key] },
                             { include_blank: "Select Academic College", selected: @user.academic_college },

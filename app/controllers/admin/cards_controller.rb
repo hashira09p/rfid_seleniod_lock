@@ -65,10 +65,10 @@ class Admin::CardsController < AdminApplicationController
   def update
     if @card.update(set_params)
       flash[:notice] = "Card successfully updated."
-      redirect_to edit_card_path@card
+      redirect_to edit_card_path
     else
-      flash[:alert] = "Error updating card."
-      render :edit, status: :unprocessable_entity
+      flash[:alert] = "Failed to update room: #{@card.errors.full_messages.join(', ')}"
+      redirect_to edit_card_path, status: :unprocessable_entity
     end
   end
 
@@ -105,10 +105,10 @@ class Admin::CardsController < AdminApplicationController
 
     if @card.user.active?
     @card.update(status: new_status)
-    flash[:notice] = "Card #{@card.uid} have been updated to #{new_status.capitalize}."
+    flash[:notice] = "Card #{@card.uid} status has been updated to #{new_status.capitalize}."
     redirect_to cards_path
     else
-      flash[:alert] = "Card status update denied: Professor #{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} is currently inactive."
+      flash[:alert] = "Card #{@card.uid} status update denied: Professor #{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} is currently inactive."
       redirect_to cards_path
     end
   end
