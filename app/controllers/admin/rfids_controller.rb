@@ -22,12 +22,20 @@ class Admin::RfidsController < AdminApplicationController
 
     if card.status == "Active"
       ActiveRecord::Base.transaction do
-        if room_status == "Lock"
-          handle_lock(card, room_id, room_number)
-        elsif room_status == "Unlock"
-          handle_unlock(card, room_id, room_number)
+        if room_number.room_status == "Available"
+          if room_status == "Lock"
+            handle_lock(card, room_id, room_number)
+          elsif room_status == "Unlock"
+            handle_unlock(card, room_id, room_number)
+          else
+            render json: { message: "Invalid room status" }, status: :unprocessable_entity
+          end
         else
-          render json: { message: "Invalid room status" }, status: :unprocessable_entity
+          Rails.logger.info "❌ RFID TAP RECEIVED → UID=#{rfid_uid}, ROOM=#{room_id}, STATUS=#{room_status}, AT=#{Time.current}"
+          Rails.logger.info "❌ Room Inactive"
+          render json: {
+            message: "Room is currently unavailable.",
+          }, status: :locked
         end
       end
     end
