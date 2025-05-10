@@ -43,20 +43,25 @@ class Admin::RoomsController < AdminApplicationController
     @room = Room.new(set_params)
 
     if @room.save
-      redirect_to rooms_path, notice: 'Room was successfully created.'
+      redirect_to rooms_path, notice: "Room successfully created."
     else
-      redirect_to new_room_p ath, alert: 'Room was failed to be created.'
+      redirect_to new_room_path, alert: "Failed to create room: #{@room.errors.full_messages.to_sentence}"
     end
   end
 
   def edit
+    if @room.Unavailable?
+      redirect_to rooms_path, alert: "Editing is disabled for unavailable rooms."
+    end
   end
 
   def update
     if @room.update(set_params)
-      redirect_to edit_room_path@room, notice: 'Room was successfully updated.'
+      flash[:notice] = "Room successfully updated."
+      redirect_to edit_room_path
     else
-      render :edit, alert: 'Room failed to be updated.'
+      flash[:alert] = "Failed to update room: #{@room.errors.full_messages.join(', ')}"
+      redirect_to edit_room_path, status: :unprocessable_entity
     end
   end
 
@@ -66,6 +71,24 @@ class Admin::RoomsController < AdminApplicationController
     else
       redirect_to rooms_path, alert: 'Room failed to be deleted.'
     end
+  end
+
+  def toggle_status
+    @room = Room.find(params[:id])
+    raw_status = params[:room_status].to_s.strip
+
+    unless Room.room_statuses.key?(raw_status)
+      flash[:alert] = "Invalid room status value: #{raw_status.inspect}"
+      redirect_to rooms_path and return
+    end
+
+    if @room.update(room_status: raw_status)
+      flash[:notice] = "Room #{@room.room_number} has been updated to #{raw_status}."
+    else
+      flash[:alert] = "Failed to update room status."
+    end
+
+    redirect_to rooms_path
   end
 
   private

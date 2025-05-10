@@ -59,10 +59,10 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Room Number</th>
-        <th scope="col">Status</th>
         <th scope="col">Lock Status</th>
         <th scope="col">Registered Date</th>
         <th scope="col">Last Modified</th>
+        <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -76,11 +76,6 @@
           <tr>
             <td data-label="#"><%= index + 1 %></td>
             <td data-label="Room Number"><%= room.room_number %></td>
-            <td data-label="Status">
-                <span class="status-badge <%= room.room_status == 'Available' ? 'active' : 'unavailable' %>">
-                  <%= room.room_status %>
-                </span>
-            </td>
 
             <% if room.room_status == "Available" %>
               <%
@@ -88,7 +83,9 @@
               %>
               <td data-label="Lock Status">
                 <% if latest_status.nil? %>
-                  <span class="text-muted">No Data</span>
+                  <span class="status-badge <%= latest_status == "time_in" ? 'inactive' : 'active' %>">
+                    <%= latest_status == "time_in" ? 'Occupied' : 'Vacant' %>
+                  </span>
                 <% elsif latest_status == "time_in"  %>
                   <span class="status-badge <%= latest_status == "time_in" ? 'inactive' : 'active' %>">
                     <%= latest_status == "time_in" ? 'Occupied' : 'Vacant' %>
@@ -109,19 +106,51 @@
 
             <td data-label="Registered Date"><%= room.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Last Modified"><%= room.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
-            <td data-label="Actions">
-              <div class="action-buttons">
-                <%= link_to edit_room_path(room), class: "action-btn edit-btn", title: "Edit" do %>
-                  <i class='bx bx-edit-alt'></i>
-                <% end %>
 
-                <%= button_to room_path(room), method: :delete,
-                              class: "action-btn delete-btn", title: "Delete",
-                              data: { turbo_confirm: "Are you sure you want to delete this room?\n\nWarning: This action will permanently delete all associated schedules and time-in and time-out records.", turbo_method: 'delete' } do %>
-                  <i class='bx bx-trash'></i>
-                <% end %>
+            <td data-label="Status">
+              <div class="status-container">
+                <span class="status-badge <%= room.Available? ? 'active' : 'unavailable' %>">
+                  <%= room.room_status %>
+                </span>
+                <label class="status-toggle">
+                  <%= form_with url: toggle_status_room_path(room), method: :patch, data: { turbo: false } do |f| %>
+                    <%= f.check_box :room_status, { checked: room.Available?, class: "toggle-switch",
+                                               onchange: "this.form.submit();" }, "Available", "Unavailable" %>
+                    <span class="toggle-slider"></span>
+                  <% end %>
+                </label>
               </div>
             </td>
+
+            <% if room.Available? %>
+              <td data-label="Actions">
+                <div class="action-buttons">
+                  <%= link_to edit_room_path(room), class: "action-btn edit-btn", title: "Edit" do %>
+                    <i class='bx bx-edit-alt'></i>
+                  <% end %>
+
+                  <%= button_to room_path(room), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this room?\n\nWarning: This action will permanently delete all associated schedules and time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% else %>
+              <td data-label="Actions">
+                <div class="action-buttons">
+                  <button class="action-btn edit-inactive-btn disabled text-muted" title="Editing disabled for unavailable rooms" disabled>
+                    <i class='bx bx-edit-alt'></i>
+                  </button>
+
+                  <%= button_to room_path(room), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this room?\n\nWarning: This action will permanently delete all associated schedules and time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       <% end %>

@@ -1,5 +1,7 @@
 <%= stylesheet_link_tag "add_form.css", "data-turbo-track": "reload" %>
 
+<%= render 'admin/notice_and_alert' %>
+
 <div class="page-container">
   <div class="py-2 fade-in">
     <% if notice %>
@@ -28,8 +30,8 @@
           <div class="col-md-6 mb-3">
             <%= form.label :room_number, "Room Number", class: "form-label required-label" %>
             <div class="input-group">
-              <%= form.number_field :room_number, class: "form-control", placeholder: "Enter room number", required: true,
-                                    data: { bs_toggle: "tooltip" }, title: "Room's identifying number" %>
+              <%= form.number_field :room_number, class: "form-control", placeholder: "Enter room number", required: true, min: 1,
+                                    data: { bs_toggle: "tooltip" }, title: "The room number value must be positive and greater than 0" %>
               <div class="invalid-feedback">Room number is required</div>
             </div>
             <span class="field-hint">The unique identifying number for this room</span>

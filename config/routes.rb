@@ -12,14 +12,21 @@ Rails.application.routes.draw do
         shared: 'admin/devise/shared',
         unlocks: 'admin/devise/unlocks'
       }, as: :admin
+
       resources :professor do
         member do
           patch :toggle_status
         end
       end
+
+      resources :rooms do
+        member do
+          patch :toggle_status
+        end
+      end
+
       resources :users
       resources :schedules
-      resources :rooms
       resources :room_display
       get "room_statuses", to: "room_display#room_statuses"
       resources :time_track
