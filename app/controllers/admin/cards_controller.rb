@@ -103,10 +103,14 @@ class Admin::CardsController < AdminApplicationController
     @card = Card.find(params[:id])
     new_status = params[:status] == 'Active' ? 'Active' : 'Inactive'
 
+    if @card.user.active?
     @card.update(status: new_status)
-
     flash[:notice] = "Card #{@card.uid} have been updated to #{new_status.capitalize}."
     redirect_to cards_path
+    else
+      flash[:alert] = "Card status update denied: Professor #{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} is currently inactive."
+      redirect_to cards_path
+    end
   end
 
   private
