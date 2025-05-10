@@ -56,7 +56,11 @@ class Admin::CardsController < AdminApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    if @card.Inactive?
+      redirect_to cards_path, alert: "Editing is disabled for inactive cards."
+    end
+  end
 
   def update
     if @card.update(set_params)
@@ -93,6 +97,16 @@ class Admin::CardsController < AdminApplicationController
     else
       render json: { success: true, uid: scanned_card_id }
     end
+  end
+
+  def toggle_status
+    @card = Card.find(params[:id])
+    new_status = params[:status] == 'Active' ? 'Active' : 'Inactive'
+
+    @card.update(status: new_status)
+
+    flash[:notice] = "Card #{@card.uid} have been updated to #{new_status.capitalize}."
+    redirect_to cards_path
   end
 
   private

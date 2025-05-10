@@ -123,16 +123,6 @@
 
         <div class="row g-3">
           <div class="col-md-6 mb-3">
-            <%= form.label :status, "Card Status", class: "form-label required-label" %>
-            <div class="input-group">
-              <%= form.select :status, Card.statuses.keys.map { |status| [status.capitalize, status] },
-                              { include_blank: "Select Status" },
-                              { class: "form-select", required: true, data: { bs_toggle: "tooltip" }, title: "Current status of the card" } %>
-              <div class="invalid-feedback">Card status is required</div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
             <%= form.label :uid_type, "UID Type", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :uid_type, Card.uid_types.keys.map { |type| [type.capitalize, type] },

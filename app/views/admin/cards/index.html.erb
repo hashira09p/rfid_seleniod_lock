@@ -99,24 +99,48 @@
             <td data-label="Last Modified"><%= card.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Status">
               <div class="status-container">
-                <span class="status-badge <%= card.status == 'Active' ? 'active' : 'inactive' %>">
-                  <%= card.status %>
+                <span class="status-badge <%= card.Active? ? 'active' : 'inactive' %>">
+                  <%= card.Active? ? 'Active' : 'Inactive' %>
                 </span>
+                <label class="status-toggle">
+                  <%= form_with url: toggle_status_card_path(card), method: :patch, data: { turbo: false } do |f| %>
+                    <%= f.check_box :status, { checked: card.Active?, class: "toggle-switch",
+                                               onchange: "this.form.submit();" }, "Active", "Inactive" %>
+                    <span class="toggle-slider"></span>
+                  <% end %>
+                </label>
               </div>
             </td>
-            <td data-label="Action">
-              <div class="action-buttons">
-                <%= link_to edit_card_path(card), class: "action-btn edit-btn", title: "Edit" do %>
-                  <i class='bx bx-edit-alt'></i>
-                <% end %>
 
-                <%= button_to card_path(card), method: :delete,
-                              class: "action-btn delete-btn", title: "Delete",
-                              data: { turbo_confirm: "Are you sure you want to delete this card?\n\nWarning: This action will permanently delete all associated time-in and time-out records.", turbo_method: 'delete' } do %>
-                  <i class='bx bx-trash'></i>
-                <% end %>
-              </div>
-            </td>
+            <% if card.Active? %>
+              <td data-label="Action">
+                <div class="action-buttons">
+                  <%= link_to edit_card_path(card), class: "action-btn edit-btn", title: "Edit" do %>
+                    <i class='bx bx-edit-alt'></i>
+                  <% end %>
+
+                  <%= button_to card_path(card), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this card?\n\nWarning: This action will permanently delete all associated time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% else %>
+              <td data-label="Action">
+                <div class="action-buttons">
+                  <button class="action-btn edit-inactive-btn disabled text-muted" title="Editing disabled for inactive cards" disabled>
+                    <i class='bx bx-edit-alt'></i>
+                  </button>
+
+                  <%= button_to card_path(card), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this card?\n\nWarning: This action will permanently delete all associated time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       <% end %>

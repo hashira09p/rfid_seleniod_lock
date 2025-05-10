@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  # Accessible for both admin domain
   constraints(AdminDomainConstraint.new) do
     scope module: 'admin' do
       devise_for :users, controllers: {
@@ -14,7 +16,7 @@ Rails.application.routes.draw do
         member do
           patch :toggle_status
         end
-    end
+      end
       resources :users
       resources :schedules
       resources :rooms
@@ -27,12 +29,18 @@ Rails.application.routes.draw do
     post 'registrations', to: 'admin/cards#registrations'
   end
 
+  # Accessible for both admin and professor domain
   scope module: 'admin' do
     resources :rfids
-    resources :cards
+    resources :cards do
+      member do
+        patch :toggle_status
+      end
+    end
   end
   post 'card_scan', to: 'admin/cards#card_scan'
 
+  # Accessible for both professor domain
   constraints(ProfessorDomainConstraint.new) do
     scope module: 'professor' do
       devise_for :users, controllers: {
