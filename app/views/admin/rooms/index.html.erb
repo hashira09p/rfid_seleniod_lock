@@ -60,6 +60,7 @@
         <th scope="col">#</th>
         <th scope="col">Room Number</th>
         <th scope="col">Status</th>
+        <th scope="col">Lock Status</th>
         <th scope="col">Registered Date</th>
         <th scope="col">Last Modified</th>
         <th scope="col">Actions</th>
@@ -76,10 +77,36 @@
             <td data-label="#"><%= index + 1 %></td>
             <td data-label="Room Number"><%= room.room_number %></td>
             <td data-label="Status">
-              <span class="badge <%= room.room_status == 'Available' ? 'bg-success' : 'bg-danger' %>">
-                <%= room.room_status %>
-              </span>
+                <span class="status-badge <%= room.room_status == 'Available' ? 'active' : 'unavailable' %>">
+                  <%= room.room_status %>
+                </span>
             </td>
+
+            <% if room.room_status == "Available" %>
+              <%
+                latest_status = room.time_tracks.order(created_at: :desc).limit(1).pluck(:status).first
+              %>
+              <td data-label="Lock Status">
+                <% if latest_status.nil? %>
+                  <span class="text-muted">No Data</span>
+                <% elsif latest_status == "time_in"  %>
+                  <span class="status-badge <%= latest_status == "time_in" ? 'inactive' : 'active' %>">
+                    <%= latest_status == "time_in" ? 'Occupied' : 'Vacant' %>
+                  </span>
+                <% elsif latest_status == "time_out"  %>
+                  <span class="status-badge <%= latest_status == "time_in" ? 'inactive' : 'active' %>">
+                    <%= latest_status == "time_in" ? 'Occupied' : 'Vacant' %>
+                  </span>
+                <% end %>
+              </td>
+            <% else %>
+              <td>
+                <span class="status-badge <%= room.room_status == 'Available' ? 'active' : 'unavailable' %>">
+                  <%= room.room_status %>
+                </span>
+              </td>
+            <% end %>
+
             <td data-label="Registered Date"><%= room.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Last Modified"><%= room.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Actions">

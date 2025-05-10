@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_31_075342) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_09_021943) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -26,6 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_31_075342) do
     t.integer "room_status", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "relay_state"
+    t.string "ip_address"
   end
 
   create_table "schedules", charset: "utf8mb4", force: :cascade do |t|

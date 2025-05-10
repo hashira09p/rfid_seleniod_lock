@@ -56,9 +56,7 @@
                   <i class="bi bi-tag"></i>
                 </div>
                 <span class="text-muted d-block mb-1 small text-uppercase">UID Type</span>
-                <div class="fw-bold">
-                  <span class="badge bg-success text-white rounded-pill px-3"><%= @card.uid_type.to_s.humanize %></span>
-                </div>
+                <div class="fw-bold"><%= @card.uid_type.to_s.humanize %></div>
               </div>
             </div>
 
@@ -69,8 +67,11 @@
                 </div>
                 <span class="text-muted d-block mb-1 small text-uppercase">Status</span>
                 <div class="fw-bold">
-                  <% status_color = @card.status == "active" ? "success" : (@card.status == "inactive" ? "warning" : "secondary") %>
-                  <span class="badge bg-<%= status_color %> text-white rounded-pill px-3"><%= @card.status.to_s.humanize %></span>
+                  <% if @card.status == "Active" %>
+                    <span class="badge bg-success text-white rounded-pill px-3"><%= @card.status.to_s.humanize %></span>
+                  <% else %>
+                    <span class="badge bg-danger text-white rounded-pill px-3"><%= @card.status.to_s.humanize %></span>
+                  <% end %>
                 </div>
               </div>
             </div>

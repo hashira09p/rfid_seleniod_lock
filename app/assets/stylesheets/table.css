@@ -53,12 +53,17 @@
 
 .status-badge.active {
     background-color: var(--active-bg);
-    color: var(--active-green);
+    color: var(--active-green); /*0f5132*/
 }
 
 .status-badge.inactive {
     background-color: var(--inactive-bg);
-    color: var(--inactive-red);
+    color: var(--inactive-red); /*842029*/
+}
+
+.status-badge.unavailable {
+    background-color: var(--unavailable-bg);
+    color: var(--unavailable-gray); /*853333FF*/
 }
 
 /* Toggle switch */

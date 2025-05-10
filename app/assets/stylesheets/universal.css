@@ -19,6 +19,8 @@
     --active-bg: #d1e7dd;
     --inactive-red: #842029;
     --inactive-bg: #f8d7da;
+    --unavailable-bg: #e3e0e0;
+    --unavailable-gray: #534e4e;
     --header-height: 60px;
 }
 
