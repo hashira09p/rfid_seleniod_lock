@@ -72,6 +72,7 @@
         <th scope="col">Name</th>
         <th scope="col">Card Type</th>
         <th scope="col">Registered Date</th>
+        <th scope="col">Last Modified</th>
         <th scope="col">Status</th>
         <th scope="col">Action</th>
       </tr>
@@ -95,6 +96,7 @@
             </td>
             <td data-label="Card Type"><%= card.uid_type.humanize %></td>
             <td data-label="Registered Date"><%= card.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
+            <td data-label="Last Modified"><%= card.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Status">
               <div class="status-container">
                 <span class="status-badge <%= card.status == 'Active' ? 'active' : 'inactive' %>">

@@ -61,6 +61,7 @@
         <th scope="col">Room Number</th>
         <th scope="col">Status</th>
         <th scope="col">Registered Date</th>
+        <th scope="col">Last Modified</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -79,7 +80,8 @@
                 <%= room.room_status %>
               </span>
             </td>
-            <td data-label="Registered Date"><%= room.created_at.strftime('%B %d, %Y %I:%M %p') %></td>
+            <td data-label="Registered Date"><%= room.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
+            <td data-label="Last Modified"><%= room.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Actions">
               <div class="action-buttons">
                 <%= link_to edit_room_path(room), class: "action-btn edit-btn", title: "Edit" do %>

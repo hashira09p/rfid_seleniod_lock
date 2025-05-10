@@ -75,6 +75,8 @@
         <th scope="col">End Time</th>
         <th scope="col">Room Number</th>
         <th scope="col">School Year</th>
+        <th scope="col">Registered Date</th>
+        <th scope="col">Last Modified</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -101,6 +103,8 @@
             <td data-label="End Time"><%= schedule.end_time.strftime('%I:%M %p') %></td>
             <td data-label="Room Number"><%= schedule.room&.room_number || 'No Room' %></td>
             <td data-label="School Year"><%= schedule.school_year || 'No School Year' %></td>
+            <td data-label="Registered Date"><%= schedule.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
+            <td data-label="Last Modified"><%= schedule.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Actions">
               <div class="action-buttons">
                 <%= link_to edit_schedule_path(schedule), class: "action-btn edit-btn", title: "Edit" do %>
