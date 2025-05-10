@@ -70,6 +70,9 @@ class Admin::ProfessorController < AdminApplicationController
   end
 
   def edit;
+    if @user.inactive?
+      redirect_to professor_index_path, alert: "Editing is disabled for inactive professors."
+    end
   end
 
   def update

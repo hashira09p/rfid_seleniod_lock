@@ -141,6 +141,13 @@ input:checked + .toggle-slider:before {
     background-color: #dc3545;
 }
 
+.edit-inactive-btn {
+    cursor: not-allowed;
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    color: #a9a9a9;
+}
+
 .action-btn i {
     font-size: 16px;
 }

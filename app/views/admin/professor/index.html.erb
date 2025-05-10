@@ -17,7 +17,7 @@
               <span class="input-group-text">
                 <i class='bx bx-search'></i>
               </span>
-                <%= f.text_field :fullname, value: params[:fullname], class: "form-control", placeholder: "Search" %>
+                <%= f.text_field :fullname, value: params[:fullname], class: "form-control", placeholder: "Professor  Name" %>
               </div>
 
               <%= f.select :academic_college,
@@ -61,7 +61,7 @@
       <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
+        <th scope="col">Professor Name</th>
         <th scope="col">Academic College</th>
         <th scope="col">Role</th>
         <th scope="col">Email</th>
@@ -100,19 +100,36 @@
                 </label>
               </div>
             </td>
-            <td data-label="Action">
-              <div class="action-buttons">
-                <%= link_to edit_professor_path(user), class: "action-btn edit-btn", title: "Edit" do %>
-                  <i class='bx bx-edit-alt'></i>
-                <% end %>
 
-                <%= button_to professor_path(user), method: :delete,
-                              class: "action-btn delete-btn", title: "Delete",
-                              data: { turbo_confirm: "Are you sure you want to delete this user?\n\nWarning: This action will permanently delete all associated cards, schedules, and time-in and time-out records.", turbo_method: 'delete' } do %>
-                  <i class='bx bx-trash'></i>
-                <% end %>
-              </div>
-            </td>
+            <% if user.active? %>
+              <td data-label="Action">
+                  <div class="action-buttons">
+                    <%= link_to edit_professor_path(user), class: "action-btn edit-btn", title: "Edit" do %>
+                      <i class='bx bx-edit-alt'></i>
+                    <% end %>
+
+                  <%= button_to professor_path(user), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this professor?\n\nWarning: This action will permanently delete all associated cards, schedules, and time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% else %>
+              <td data-label="Action">
+                <div class="action-buttons">
+                  <button class="action-btn edit-inactive-btn disabled text-muted" title="Editing disabled for inactive users" disabled>
+                    <i class='bx bx-edit-alt'></i>
+                  </button>
+
+                  <%= button_to professor_path(user), method: :delete,
+                                class: "action-btn delete-btn", title: "Delete",
+                                data: { turbo_confirm: "Are you sure you want to delete this professor?\n\nWarning: This action will permanently delete all associated cards, schedules, and time-in and time-out records.", turbo_method: 'delete' } do %>
+                    <i class='bx bx-trash'></i>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       <% end %>

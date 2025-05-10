@@ -98,7 +98,7 @@
     <div class="form-container p-4 p-md-5 mt-3">
       <div class="form-header">
         <h2 class="mb-1 fw-bold">Edit Professor Details</h2>
-        <p class="text-secondary mb-0">This page consist of list a professor, Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+        <p class="text-secondary mb-0">Update the information for this professor <span class="required-badge form-span">Some fields required</span></p>
       </div>
 
       <%= form_with model: @user, url: professor_path(@user), method: :patch, local: true, data: { turbo: false }, html: { novalidate: true, class: "needs-validation" } do |form| %>
