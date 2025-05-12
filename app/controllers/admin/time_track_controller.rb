@@ -51,8 +51,7 @@ class Admin::TimeTrackController < AdminApplicationController
     end
 
     # Sort by room number and created_at
-    time_tracks = time_tracks.joins(:room)
-                             .order("rooms.room_number ASC, time_tracks.created_at ASC")
+    time_tracks = time_tracks.joins(:room).order(time_in: :desc)
 
     # For HTML, paginate the filtered query (e.g., 10 per page)
     @time_tracks = time_tracks.page(params[:page]).per(10)

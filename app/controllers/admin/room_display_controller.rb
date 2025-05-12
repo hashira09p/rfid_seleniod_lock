@@ -13,7 +13,7 @@ class Admin::RoomDisplayController < AdminApplicationController
     @available_slots = calculate_available_time(@todays_schedules)
     @today_time_tracks = @room.time_tracks
                               .where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
-                              .order(created_at: :asc)
+                              .order(time_in: :desc)
                               .page(params[:page])
                               .per(10)
   end

@@ -30,7 +30,7 @@ class Admin::DashboardController < AdminApplicationController
     @total_schedules = Schedule.where(school_year: @school_year).count
 
     @recent_time_tracks = TimeTrack.includes(:user, :room, :card)
-                                   .order(created_at: :desc)
+                                   .order(time_in: :desc)
                                    .page(params[:time_track_page])
                                    .per(5)
 
