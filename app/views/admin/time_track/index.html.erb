@@ -82,7 +82,6 @@
         <th scope="col">#</th>
         <th scope="col">Room Number</th>
         <th scope="col">Professor Name</th>
-        <th scope="col">Date</th>
         <th scope="col">Check-in Time</th>
         <th scope="col">Check-out Time</th>
         <th scope="col">Status</th>
@@ -102,13 +101,12 @@
             <td data-label="Professor Name">
               <%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %>
             </td>
-            <td data-label="Date"><%= track.created_at.strftime("%B %d, %Y") %></td>
             <td data-label="Check-in Time">
-              <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
+              <%= track.time_in.present? ? (Time.parse(track.time_in).strftime('%B %d, %Y %I:%M %p') rescue track.time_in) : "N/A" %>
             </td>
             <td data-label="Check-out Time">
               <%= track.time_out.present? ?
-                    (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) :
+                    (Time.parse(track.time_out).strftime('%B %d, %Y %I:%M %p') rescue track.time_out) :
                     content_tag(:span, "Unfinished Session", style: "color: red;") %>
             </td>
             <td>

@@ -52,7 +52,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-1">
                     <h4 class="h6 mb-0"><%= schedule.subject %></h4>
                     <span class="badge bg-light text-dark">
-                      <%= Date::DAYNAMES[schedule.day.to_i] if schedule.day.present? %>
+                      <%= schedule.day %>
                     </span>
                   </div>
                   <p class="small text-muted mb-1">
