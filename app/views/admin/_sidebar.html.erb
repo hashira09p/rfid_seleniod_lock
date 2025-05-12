@@ -36,7 +36,7 @@
     <h6 class="text-muted fw-bold mt-5">Reports</h6>
     <ul class="nav flex-column">
       <%= link_to time_track_index_path, class: "nav-menu-link #{'active' if current_page?(time_track_index_path)}" do %>
-        <i class='bx bx-time me-2'></i> Daily Logs
+        <i class='bx bx-time me-2'></i> Daily Logs using RFID
       <% end %>
 
       <%= link_to room_display_index_path, data: { turbo: false }, class: "nav-menu-link #{'active' if current_page?(room_display_index_path)}" do %>
