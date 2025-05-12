@@ -23,14 +23,16 @@
               </div>
 
               <!-- Room Number Filter -->
-              <%= f.select :room_number,
-                           options_for_select(@rooms.map { |room| [room.room_number, room.room_number] }, params[:room_number]),
-                           { include_blank: 'Room Number' },
-                           class: "form-select dropdown-menu-search" %>
+              <div class="input-group-connected">
+              <span class="input-group-text">
+                <i class='bx bx-door-open'></i>
+              </span>
+                <%= f.text_field :room_number, class: "form-control", placeholder: "Room Number", value: params[:room_number] %>
+              </div>
 
               <!-- Status Filter -->
               <%= f.select :status,
-                           options_for_select(TimeTrack.statuses.keys, params[:status]),
+                           options_for_select([["Ongoing", "time_in"], ["Timed Out", "time_out"]], params[:status]),
                            { include_blank: 'Status' },
                            class: "form-select dropdown-menu-search" %>
 

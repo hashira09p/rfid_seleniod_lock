@@ -24,7 +24,7 @@ class Admin::TimeTrackController < AdminApplicationController
 
     # Apply filters
     if params[:room_number].present?
-      time_tracks = time_tracks.joins(:room).where("rooms.room_number = ?", params[:room_number])
+      time_tracks = time_tracks.joins(:room).where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
     end
 
     if params[:professor_name].present?
