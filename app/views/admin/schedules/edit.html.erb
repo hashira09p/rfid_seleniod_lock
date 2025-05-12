@@ -163,10 +163,9 @@
             <%= form.label :room_id, "Room", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :room_id,
-                              Room.left_joins(:schedules).distinct.order(:room_number).map { |room|
-                                status = @room_statuses[room.id] || "vacant"
-                                ["Room #{room.room_number}", room.id, { disabled: status == "unavailable" }]
-                              },
+                              Room.left_joins(:schedules).distinct.order(:room_number)
+                                  .select { |room| @room_statuses[room.id] != "unavailable" }
+                                  .map { |room| ["Room #{room.room_number}", room.id] },
                               { include_blank: "Select Room" },
                               { class: "form-select", id: "room-select", required: true } %>
               <div class="invalid-feedback">Room selection is required</div>
@@ -202,7 +201,8 @@
           <%= form.label :user_id, "Professor", class: "form-label required-label" %>
           <div class="input-group">
             <%= form.select :user_id,
-                            User.left_joins(:schedules).distinct.map { |user| ["#{user.firstname} #{user.middlename} #{user.lastname}", user.id] },
+                            User.where(status: "active").order(:firstname)
+                                .map { |user| ["#{user.firstname} #{user.middlename} #{user.lastname}", user.id] },
                             { include_blank: "Select Professor" },
                             { class: "form-select", id: "user-select", required: true } %>
             <div class="invalid-feedback">Professor selection is required</div>

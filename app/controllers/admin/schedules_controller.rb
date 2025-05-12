@@ -22,9 +22,10 @@ class Admin::SchedulesController < AdminApplicationController
     # Build the base filtered query.
     filtered_schedules = Schedule.includes(:user, :room)
                                  .joins(:room)
+                                 .where(rooms: { room_status: Room.room_statuses[:Available] }) # <- This line filters only active rooms
                                  .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
-                                                TIME_FORMAT(start_time, '%p') DESC,
-                                                TIME_FORMAT(start_time, '%h:%i %p') DESC"))
+                                              TIME_FORMAT(start_time, '%p') DESC,
+                                              TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 
     # Apply filters if present.
     filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?

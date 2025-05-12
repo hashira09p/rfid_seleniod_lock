@@ -24,13 +24,16 @@
 
               <!-- Day Filter -->
               <%= f.select :day,
-                           options_for_select(@days.map { |day| [day.humanize, day] }, params[:day]),
+                           options_for_select(Schedule.days.keys.map { |day| [day.humanize, day] }, params[:day]),
                            { include_blank: 'Day' },
                            class: "form-select dropdown-menu-search" %>
 
               <!-- Room Number Filter -->
               <%= f.select :room_id,
-                           options_for_select(@rooms.map { |room| [room.room_number, room.id] }, params[:room_id]),
+                           options_for_select(
+                             Room.Available.order(:room_number).map { |room| [room.room_number, room.id] },
+                             params[:room_id]
+                           ),
                            { include_blank: 'Room Number' },
                            class: "form-select dropdown-menu-search" %>
 
@@ -89,9 +92,14 @@
           <td colspan="13" class="text-center text-muted">No Matching Schedules Found</td>
         </tr>
       <% else %>
-        <% @schedules.each_with_index do |schedule, index| %>
+        <% row_number = 1 %>
+        <% @schedules.each do |schedule| %>
+          <% next if schedule.room&.Unavailable? %>
+
           <tr>
-            <td data-label="#"><%= index + 1 %></td>
+            <td data-label="#"><%= row_number %></td>
+            <% row_number += 1 %>
+
             <td data-label="Description"><%= schedule.description.humanize %></td>
             <td data-label="Professor Name">
               <% if schedule.user.present? %>
@@ -108,9 +116,9 @@
             <td data-label="School Year"><%= schedule.school_year || 'No School Year' %></td>
 
             <% if schedule.first_sem? %>
-              <td data-label="School Year">1st Sem</td>
+              <td data-label="Semester">1st Sem</td>
             <% else %>
-              <td data-label="School Year">2nd Sem</td>
+              <td data-label="Semester">2nd Sem</td>
             <% end %>
 
             <td data-label="Registered Date"><%= schedule.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
