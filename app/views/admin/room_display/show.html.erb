@@ -138,14 +138,14 @@
                     <i class='bx bx-log-out-circle me-1 text-info'></i>
                     <%= Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out %>
                   <% else %>
-                    <span class="text-danger fw-medium">Not yet logged out</span>
+                    <span class="text-danger fw-medium">Unfinished Session</span>
                   <% end %>
                 </td>
                 <td>
                   <% if track.time_in? %>
                     <span class="badge bg-warning text-dark">Ongoing</span>
                   <% else %>
-                    <span class="badge bg-success">Completed</span>
+                    <span class="badge bg-success">Timed Out</span>
                   <% end %>
                 </td>
               </tr>

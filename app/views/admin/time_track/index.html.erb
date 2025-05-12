@@ -19,7 +19,7 @@
               <span class="input-group-text">
                 <i class='bx bx-search'></i>
               </span>
-                <%= f.text_field :professor_name, value: params[:professor_name], class: "form-control", placeholder: "Name" %>
+                <%= f.text_field :professor_name, value: params[:professor_name], class: "form-control", placeholder: "Prof. Name" %>
               </div>
 
               <!-- Room Number Filter -->
@@ -107,9 +107,17 @@
               <%= track.time_in.present? ? (Time.parse(track.time_in).strftime("%I:%M %p") rescue track.time_in) : "N/A" %>
             </td>
             <td data-label="Check-out Time">
-              <%= track.time_out.present? ? (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) : "N/A" %>
+              <%= track.time_out.present? ?
+                    (Time.parse(track.time_out).strftime("%I:%M %p") rescue track.time_out) :
+                    content_tag(:span, "Unfinished Session", style: "color: red;") %>
             </td>
-            <td data-label="Status"><%= track.status %></td>
+            <td>
+              <% if track.time_in? %>
+                <span class="badge bg-warning text-dark"><i class="bi bi-box-arrow-in-right me-1"></i>Ongoing</span>
+              <% else %>
+                <span class="badge bg-success"><i class="bi bi-box-arrow-right me-1"></i>Timed Out</span>
+              <% end %>
+            </td>
             <td data-label="Actions">
               <div class="action-buttons">
                 <%= link_to edit_time_track_path(track), class: "action-btn edit-btn", title: "Edit" do %>
