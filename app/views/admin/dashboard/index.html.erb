@@ -435,6 +435,9 @@
                                   <% schedules_for_day.each do |schedule| %>
                                     <div class="schedule-item">
                                       <div class="schedule-content">
+                                          <span class="badge bg-secondary mb-2 text-uppercase">
+                                            <%= schedule.year_level.humanize %>
+                                          </span>
                                         <p class="mb-1 fw-bold"><%= schedule.subject %></p>
                                         <p class="text-muted mb-1 small">
                                           <i class="bi bi-person-fill me-1"></i><%= schedule.user.firstname %> <%= schedule.user.lastname %>

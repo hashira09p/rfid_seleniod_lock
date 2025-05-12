@@ -106,7 +106,7 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def set_params
-    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year, :semester)
+    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year, :semester, :year_level)
   end
 
   def fetch_room_statuses

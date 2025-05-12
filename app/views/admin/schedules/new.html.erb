@@ -81,7 +81,7 @@
         </div>
 
         <div class="row g-3">
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <%= form.label :room_id, "Room", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :room_id,
@@ -95,7 +95,7 @@
             <span class="field-hint">Rooms marked as unavailable cannot be selected</span>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <%= form.label :school_year, "School Year", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :school_year,
@@ -106,7 +106,7 @@
             </div>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <%= form.label :semester, "Semester", class: "form-label required-label" %>
             <div class="input-group">
               <%= form.select :semester,
@@ -114,6 +114,17 @@
                               { include_blank: "Select Semester" },
                               { class: "form-select", required: true } %>
               <div class="invalid-feedback">School year is required</div>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <%= form.label :year_level, "Year Level", class: "form-label required-label" %>
+            <div class="input-group">
+              <%= form.select :year_level,
+                              Schedule.year_levels.keys.map { |w| [w.titleize, w] },
+                              { include_blank: "Select Year Level" },
+                              { class: "form-select", required: true } %>
+              <div class="invalid-feedback">Year Level is required</div>
             </div>
           </div>
         </div>
