@@ -53,6 +53,7 @@ class Admin::ProfessorController < AdminApplicationController
     @user = User.new(user_params)
     @user.role = "professor"
     @user.status = "active"
+    @user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
 
     surname = @user.lastname&.upcase || "DEFAULT"
     generated_password = "#{surname}123!"
