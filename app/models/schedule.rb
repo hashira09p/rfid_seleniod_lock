@@ -12,4 +12,28 @@ class Schedule < ApplicationRecord
   validates :room_id, presence: true, numericality: { only_integer: true }
   validates :semester, presence: true
 
+  validate :no_overlapping_schedule
+
+  private
+
+  def no_overlapping_schedule
+    return if start_time.blank? || end_time.blank? || day.blank? || room_id.blank?
+
+    overlapping = Schedule.where(day: day, room_id: room_id, semester: semester, school_year: school_year)
+                          .where.not(id: id)
+                          .select do |other|
+      # Convert both times to seconds since midnight for comparison
+      my_start = start_time.seconds_since_midnight
+      my_end = end_time.seconds_since_midnight
+      other_start = other.start_time.seconds_since_midnight
+      other_end = other.end_time.seconds_since_midnight
+
+      my_start < other_end && my_end > other_start
+    end
+
+    if overlapping.any?
+      errors.add(:base, "Schedule overlaps with another schedule in the same room, day, and time.")
+    end
+  end
+
 end

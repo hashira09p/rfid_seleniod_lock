@@ -64,9 +64,13 @@ class Admin::SchedulesController < AdminApplicationController
     @schedule = Schedule.new(set_params)
 
     if @schedule.save
-      redirect_to schedules_path, notice: 'Schedule was successfully created.'
+      flash[:notice] = "Schedule was successfully created."
+      redirect_to schedules_path
     else
-      redirect_to new_schedule_path, alert: "Failed to create room: #{@schedule.errors.full_messages.to_sentence}"
+      flash[:alert] = "Failed to create schedule: #{@schedule.errors.full_messages.to_sentence}"
+      @users = User.all
+      @room_statuses = fetch_room_statuses
+      redirect_to new_schedule_path
     end
   end
 
@@ -76,9 +80,13 @@ class Admin::SchedulesController < AdminApplicationController
 
   def update
     if @schedule.update(set_params)
-      redirect_to edit_schedule_path, notice: 'Schedule was successfully updated.'
+      flash[:notice] = "Schedule was successfully updated."
+      redirect_to edit_schedule_path
     else
-      redirect_to edit_schedule_path, alert: 'Failed to update schedule.'
+      flash[:alert] = "Failed to update schedule: #{@schedule.errors.full_messages.to_sentence}"
+      @room_statuses = fetch_room_statuses
+      redirect_to edit_schedule_path
+      @room_statuses = fetch_room_statuses
     end
   end
 
