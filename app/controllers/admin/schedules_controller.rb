@@ -28,9 +28,16 @@ class Admin::SchedulesController < AdminApplicationController
 
     # Apply filters if present.
     filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?
-    filtered_schedules = filtered_schedules.where(user_id: params[:professor_id]) if params[:professor_id].present?
     filtered_schedules = filtered_schedules.where(room_id: params[:room_id]) if params[:room_id].present?
     filtered_schedules = filtered_schedules.where(school_year: params[:school_year]) if params[:school_year].present?
+
+    if params[:professor_name].present?
+      professor_query = params[:professor_name].downcase.strip
+      filtered_schedules = filtered_schedules.joins(:user).where(
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, ' ', users.lastname)) LIKE :query",
+        query: "%#{professor_query}%"
+      )
+    end
 
     # For HTML, paginate the filtered query (e.g., 10 per page).
     @schedules = filtered_schedules.page(params[:page]).per(10)

@@ -14,16 +14,18 @@
         <div class="search-box">
           <%= form_with url: time_track_index_path, method: :get, local: true do |f| %>
             <div class="input-group">
+              <!-- Professor Filter -->
+              <div class="input-group-connected">
+              <span class="input-group-text">
+                <i class='bx bx-search'></i>
+              </span>
+                <%= f.text_field :professor_name, value: params[:professor_name], class: "form-control", placeholder: "Name" %>
+              </div>
+
               <!-- Room Number Filter -->
               <%= f.select :room_number,
                            options_for_select(@rooms.map { |room| [room.room_number, room.room_number] }, params[:room_number]),
                            { include_blank: 'Room Number' },
-                           class: "form-select dropdown-menu-search" %>
-
-              <!-- Professor Filter -->
-              <%= f.select :professor_id,
-                           options_for_select(@professors.map { |professor| ["#{professor.firstname} #{professor.middlename} #{professor.lastname}", professor.id] }, params[:professor_id]),
-                           { include_blank: 'Professor' },
                            class: "form-select dropdown-menu-search" %>
 
               <!-- Status Filter -->

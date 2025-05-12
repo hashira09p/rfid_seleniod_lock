@@ -27,8 +27,12 @@ class Admin::TimeTrackController < AdminApplicationController
       time_tracks = time_tracks.joins(:room).where("rooms.room_number = ?", params[:room_number])
     end
 
-    if params[:professor_id].present?
-      time_tracks = time_tracks.where(user_id: params[:professor_id])
+    if params[:professor_name].present?
+      prof_query = params[:professor_name].downcase.strip
+      time_tracks = time_tracks.joins(:user).where(
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, ' ', users.lastname)) LIKE :query",
+        query: "%#{prof_query}%"
+      )
     end
 
     if params[:status].present?
