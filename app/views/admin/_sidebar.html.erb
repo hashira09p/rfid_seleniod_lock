@@ -12,7 +12,7 @@
     <div class="sidebar-menu">
       <h6 class="text-muted fw-bold">Overview</h6>
       <ul class="nav flex-column">
-        <%= link_to admin_root_path, class: "nav-menu-link #{'active' if current_page?(admin_root_path)}" do %>
+        <%= link_to admin_root_path, class: "nav-menu-link #{'active' if current_page?(admin_root_path) || current_page?(dashboard_index_path) }" do %>
           <i class='bx bx-grid-alt me-2'></i> Dashboard
         <% end %>
 
@@ -42,6 +42,10 @@
         <%= link_to room_display_index_path, data: { turbo: false }, class: "nav-menu-link #{'active' if current_page?(room_display_index_path)}" do %>
           <i class='bx bx-desktop me-2'></i> Room Display
         <% end %>
+
+        <%= link_to history_index_path, class: "nav-menu-link #{'active' if current_page?(history_index_path) || current_page?(history_professor_path) || current_page?(history_card_path) || current_page?(history_room_path) || current_page?(history_schedule_path)}" do %>
+          <i class='bx bx-archive me-2'></i> Record History
+      <% end %>
       </ul>
     </div>
 

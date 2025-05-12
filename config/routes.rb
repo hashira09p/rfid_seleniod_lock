@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # Accessible for both admin domain
   constraints(AdminDomainConstraint.new) do
     scope module: 'admin' do
@@ -31,6 +30,12 @@ Rails.application.routes.draw do
       get "room_statuses", to: "room_display#room_statuses"
       resources :time_track
       resources :dashboard
+
+      get 'history/index'
+      get 'history/professor'
+      get 'history/card'
+      get 'history/room'
+      get 'history/schedule'
     end
     root 'admin/dashboard#index', as: :admin_root
     post 'registrations', to: 'admin/cards#registrations'
