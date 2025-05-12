@@ -75,6 +75,7 @@
         <th scope="col">End Time</th>
         <th scope="col">Room Number</th>
         <th scope="col">School Year</th>
+        <th scope="col">Semester</th>
         <th scope="col">Registered Date</th>
         <th scope="col">Last Modified</th>
         <th scope="col">Actions</th>
@@ -83,7 +84,7 @@
       <tbody>
       <% if @schedules.blank? %>
         <tr>
-          <td colspan="10" class="text-center text-muted">No Matching Schedules Found</td>
+          <td colspan="13" class="text-center text-muted">No Matching Schedules Found</td>
         </tr>
       <% else %>
         <% @schedules.each_with_index do |schedule, index| %>
@@ -103,6 +104,13 @@
             <td data-label="End Time"><%= schedule.end_time.strftime('%I:%M %p') %></td>
             <td data-label="Room Number"><%= schedule.room&.room_number || 'No Room' %></td>
             <td data-label="School Year"><%= schedule.school_year || 'No School Year' %></td>
+
+            <% if schedule.first_sem? %>
+              <td data-label="School Year">1st Sem</td>
+            <% else %>
+              <td data-label="School Year">2nd Sem</td>
+            <% end %>
+
             <td data-label="Registered Date"><%= schedule.created_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Last Modified"><%= schedule.updated_at.in_time_zone('Asia/Manila').strftime('%B %d, %Y %I:%M %p') %></td>
             <td data-label="Actions">

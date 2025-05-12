@@ -55,10 +55,11 @@ class Admin::SchedulesController < AdminApplicationController
 
   def create
     @schedule = Schedule.new(set_params)
+
     if @schedule.save
       redirect_to schedules_path, notice: 'Schedule was successfully created.'
     else
-      redirect_to schedules_path, alert: 'Failed to create schedule.'
+      redirect_to new_schedule_path, alert: "Failed to create room: #{@schedule.errors.full_messages.to_sentence}"
     end
   end
 
@@ -68,7 +69,7 @@ class Admin::SchedulesController < AdminApplicationController
 
   def update
     if @schedule.update(set_params)
-      redirect_to edit_schedule_path@schedule, notice: 'Schedule was successfully updated.'
+      redirect_to edit_schedule_path, notice: 'Schedule was successfully updated.'
     else
       redirect_to edit_schedule_path, alert: 'Failed to update schedule.'
     end
@@ -89,7 +90,7 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def set_params
-    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year)
+    params.require(:schedule).permit(:user_id, :description, :subject, :day, :start_time, :end_time, :room_id, :school_year, :semester)
   end
 
   def fetch_room_statuses
