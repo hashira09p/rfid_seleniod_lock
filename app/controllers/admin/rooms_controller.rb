@@ -15,7 +15,7 @@ class Admin::RoomsController < AdminApplicationController
     end
 
     # Build the base, filtered query.
-    rooms_query = Room.order(:room_number)
+    rooms_query = Room.where(remarks: nil).order(:room_number)
     rooms_query = rooms_query.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
     rooms_query = rooms_query.where(room_status: params[:room_status]) if params[:room_status].present?
 
@@ -52,6 +52,8 @@ class Admin::RoomsController < AdminApplicationController
   def edit
     if @room.Unavailable?
       redirect_to rooms_path, alert: "Editing is disabled for unavailable rooms."
+    elsif @room.remarks.present?
+      redirect_to history_room_path, alert: "Editing is disabled for archived rooms."
     end
   end
 
@@ -66,15 +68,33 @@ class Admin::RoomsController < AdminApplicationController
   end
 
   def destroy
-    if @room.destroy
-      redirect_to rooms_path, notice: 'Room was successfully deleted.'
-    else
-      redirect_to rooms_path, alert: 'Room failed to be deleted.'
+    if @room.remarks.nil?
+      ActiveRecord::Base.transaction do
+        @room.update!(remarks: 'archived', deleted_at: Time.now, room_status: 0)
+        @room.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)
+        @room.schedules.update_all(remarks: 'archived', deleted_at: Time.now)
+      end
+      flash[:notice] = 'Room and all associated records have been archived.'
+      redirect_to rooms_path
+    elsif @room.archived?
+      if @room.destroy
+        flash[:notice] = 'Archived room permanently deleted.'
+        redirect_to history_room_path
+      else
+        flash[:alert] = "Failed to delete the room: #{@room.errors.full_messages.join(', ')}"
+        redirect_to history_room_path
+      end
     end
   end
 
   def toggle_status
     @room = Room.find(params[:id])
+
+    if @room.remarks.present?
+      redirect_to history_room_path, alert: "Cannot change status of an archived room."
+      return
+    end
+
     raw_status = params[:room_status].to_s.strip
 
     unless Room.room_statuses.key?(raw_status)

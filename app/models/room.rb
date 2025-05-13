@@ -2,6 +2,8 @@ class Room < ApplicationRecord
   has_many :schedules,  dependent: :destroy
   has_many :time_tracks, dependent: :destroy
 
+  before_destroy :destroy_archived_associations
+
   enum room_status: {Unavailable: 0, Available: 1}
   enum remarks: { archived: 0, restored: 1 }
 
@@ -29,5 +31,10 @@ class Room < ApplicationRecord
     else
       "time_in"
     end
+  end
+
+  def destroy_archived_associations
+    schedules.where(remarks: 'archived').destroy_all
+    time_tracks.where(remarks: 'archived').destroy_all
   end
 end

@@ -77,6 +77,36 @@ class Admin::HistoryController < AdminApplicationController
   end
 
   def room
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to rooms_path and return
+      end
+    end
+
+    # Build the base, filtered query.
+    rooms_query = Room.where(remarks: 'archived').order(:room_number)
+    rooms_query = rooms_query.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
+    rooms_query = rooms_query.where(room_status: params[:room_status]) if params[:room_status].present?
+
+    # For HTML, paginate the results.
+    @rooms = rooms_query.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html  # renders your index.html.erb for HTML requests
+      format.pdf do
+        # Pass the full, unpaginated filtered set to the PDF generator.
+        pdf = RoomHistoryPdf.new(rooms_query)
+        send_data pdf.render,
+                  filename: "rooms.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def schedule
