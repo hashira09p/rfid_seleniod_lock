@@ -416,6 +416,7 @@
 
     <div class="card-body p-0">
       <% if @room_schedules.any? %>
+        <div style="max-height: 500px; overflow-y: auto;">
         <div class="accordion" id="roomSchedulesAccordion">
           <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each_with_index do |(room_number, schedules), index| %>
             <div class="accordion-item room-schedule-item" data-room="<%= room_number %>" data-search-content="Room <%= room_number %> <%= schedules.map(&:subject).join(' ') %> <%= schedules.map { |s| s.user&.firstname.to_s + ' ' + s.user&.lastname.to_s }.join(' ') %>">
@@ -504,6 +505,7 @@
       <% end %>
     </div>
   </div>
+</div>
 </div>
 
 
