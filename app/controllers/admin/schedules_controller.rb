@@ -104,15 +104,24 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def destroy
-    if @schedule.remarks.present?
-      redirect_to schedules_path, alert: 'Archived schedules cannot be deleted.'
-      return
-    end
+    if @schedule.remarks.nil?
+      ActiveRecord::Base.transaction do
+        @schedule.update!(
+          remarks: 'archived',
+          deleted_at: Time.current
+        )
+      end
+      flash[:notice] = 'Schedule has been archived.'
+      redirect_to schedules_path
 
-    if @schedule.destroy
-      redirect_to schedules_path, notice: 'Schedule was successfully deleted.'
-    else
-      redirect_to schedules_path, alert: 'Failed to delete schedule.'
+    elsif @schedule.archived?
+      if @schedule.destroy
+        flash[:notice] = 'Archived schedule permanently deleted.'
+        redirect_to history_schedule_path
+      else
+        flash[:alert] = "Failed to delete the schedule: #{@schedule.errors.full_messages.join(', ')}"
+        redirect_to history_schedule_path
+      end
     end
   end
 
