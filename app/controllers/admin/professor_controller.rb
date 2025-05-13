@@ -14,7 +14,7 @@ class Admin::ProfessorController < AdminApplicationController
       end
     end
 
-    users_query = User.order(:firstname)
+    users_query = User.where(remarks: nil).order(:firstname)
 
     if params[:fullname].present?
       search_query = params[:fullname].strip.downcase
@@ -73,6 +73,8 @@ class Admin::ProfessorController < AdminApplicationController
   def edit;
     if @user.inactive?
       redirect_to professor_index_path, alert: "Editing is disabled for inactive professors."
+    elsif @user.remarks.present?
+      redirect_to history_professor_path, alert: "Editing is disabled for archived professors."
     end
   end
 
@@ -87,18 +89,35 @@ class Admin::ProfessorController < AdminApplicationController
   end
 
   def destroy
-    if @user.destroy
-      flash[:notice] = 'Account successfully deleted.'
-    else
-      flash[:alert] = @user.errors.full_messages.to_sentence
+    if @user.remarks.nil?
+      ActiveRecord::Base.transaction do
+        @user.update!(remarks: 'archived', deleted_at: Time.now, status: 0)
+        @user.cards.update_all(remarks: 'archived', deleted_at: Time.now, status: 0)
+        @user.schedules.update_all(remarks: 'archived', deleted_at: Time.now)
+        @user.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)
+      end
+      flash[:notice] = 'Professor and all associated records have been archived.'
+      redirect_to professor_index_path
+    elsif @user.archived?
+      if @user.destroy
+        flash[:notice] = 'Archived professor permanently deleted.'
+        redirect_to history_professor_path
+      else
+        flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
+        redirect_to history_professor_path
+      end
     end
-    redirect_to professor_index_path
   end
 
   def toggle_status
     @user = User.find(params[:id])
-    new_status = params[:status] == 'active' ? 'active' : 'inactive'
 
+    if @user.remarks.present?
+      redirect_to history_professor_path, alert: "Cannot change status of an archived professor."
+      return
+    end
+
+    new_status = params[:status] == 'active' ? 'active' : 'inactive'
     @user.update(status: new_status)
 
     if new_status == 'active'
