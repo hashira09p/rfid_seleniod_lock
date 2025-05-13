@@ -72,7 +72,7 @@
         <% @rooms.each_with_index do |room, index| %>
           <tr>
             <td data-label="#"><%= index + 1 %></td>
-            <td data-label="Room Number"><%= room.room_number %></td>
+            <td data-label="Room Number"><%= "#{room.original_room_number}" %></td>
 
             <% if room.room_status == "Available" %>
               <%

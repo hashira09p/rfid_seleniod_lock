@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_13_000009) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_13_094431) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_13_000009) do
     t.integer "uid_type", default: 0
     t.integer "remarks"
     t.datetime "deleted_at"
+    t.string "original_uid"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
@@ -30,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_13_000009) do
     t.datetime "updated_at", null: false
     t.integer "remarks"
     t.datetime "deleted_at"
+    t.integer "original_room_number"
   end
 
   create_table "schedules", charset: "utf8mb4", force: :cascade do |t|
@@ -83,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_13_000009) do
     t.integer "status", default: 0, null: false
     t.integer "remarks"
     t.datetime "deleted_at"
+    t.string "original_email"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

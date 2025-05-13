@@ -69,8 +69,10 @@ class Admin::RoomsController < AdminApplicationController
 
   def destroy
     if @room.remarks.nil?
+      archived_room_number = @room.room_number.to_i + Time.now.to_i
+
       ActiveRecord::Base.transaction do
-        @room.update!(remarks: 'archived', deleted_at: Time.now, room_status: 0)
+        @room.update!(remarks: 'archived', deleted_at: Time.now, room_status: 0, original_room_number: @room.room_number, room_number: archived_room_number)
         @room.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)
         @room.schedules.update_all(remarks: 'archived', deleted_at: Time.now)
       end

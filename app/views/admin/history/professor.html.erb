@@ -81,7 +81,7 @@
               <td data-label="Name"><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
               <td data-label="Academic College"><%= user.academic_college %></td>
               <td data-label="Role"><%= user.role.humanize %></td>
-              <td data-label="Email"><%= user.email %></td>
+              <td data-label="Email"><%= user.original_email %></td>
               <td data-label="Status">
                 <div class="status-container">
                 <span class="status-badge <%= user.active? ? 'active' : 'inactive' %>">

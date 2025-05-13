@@ -90,8 +90,10 @@ class Admin::ProfessorController < AdminApplicationController
 
   def destroy
     if @user.remarks.nil?
+      archived_email = @user.email.sub('@', "_archived_#{Time.now.to_i}@")
+
       ActiveRecord::Base.transaction do
-        @user.update!(remarks: 'archived', deleted_at: Time.now, status: 0)
+        @user.update!(remarks: 'archived', deleted_at: Time.now, status: 0, original_email: @user.email, email: archived_email)
         @user.cards.update_all(remarks: 'archived', deleted_at: Time.now, status: 0)
         @user.schedules.update_all(remarks: 'archived', deleted_at: Time.now)
         @user.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)

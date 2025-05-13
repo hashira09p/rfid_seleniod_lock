@@ -76,8 +76,10 @@ class Admin::CardsController < AdminApplicationController
 
   def destroy
     if @card.remarks.nil?
+      archived_card_number = "#{@card.uid}_archived_#{Time.now.to_i}"
+
       ActiveRecord::Base.transaction do
-        @card.update!(remarks: 'archived', deleted_at: Time.now, status: 0)
+        @card.update!(remarks: 'archived', deleted_at: Time.now, status: 0, original_uid: @card.uid, uid: archived_card_number)
         @card.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)
       end
       flash[:notice] = 'Card and all associated records have been archived.'
