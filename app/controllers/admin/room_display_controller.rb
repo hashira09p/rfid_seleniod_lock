@@ -8,7 +8,7 @@ class Admin::RoomDisplayController < AdminApplicationController
 
   def show
     @room = Room.find(params[:id])
-    @schedules = @room.schedules.includes(:user).order(:start_time)
+    @schedules = @room.schedules.includes(:user).where(remarks: nil).order(:start_time)
 
     today_name = Time.zone.now.strftime("%A")
     @todays_schedules = @schedules.select { |s| s.day.to_s.strip.casecmp?(today_name) }
@@ -16,7 +16,7 @@ class Admin::RoomDisplayController < AdminApplicationController
     @available_slots = calculate_available_time(@todays_schedules)
 
     @today_time_tracks = @room.time_tracks
-                              .where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+                              .where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day, remarks: nil)
                               .order(time_in: :desc)
                               .page(params[:page])
                               .per(10)

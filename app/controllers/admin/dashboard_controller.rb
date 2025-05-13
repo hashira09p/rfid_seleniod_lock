@@ -19,15 +19,21 @@ class Admin::DashboardController < AdminApplicationController
     current_month = Date.today.month
     current_year = Date.today.year
 
-    if current_month >= 7  # First Semester (July to December)
+    if current_month >= 7  # July to December
       @semester = "First Semester"
       @school_year = "#{current_year}-#{current_year + 1}"
-    else  # Second Semester (January to June)
+      @semester_enum = :first_sem
+    else  # January to June
       @semester = "Second Semester"
       @school_year = "#{current_year - 1}-#{current_year}"
+      @semester_enum = :second_sem
     end
 
-    @total_schedules = Schedule.where(school_year: @school_year, remarks: nil).count
+    @total_schedules = Schedule.where(
+      school_year: @school_year,
+      semester: Schedule.semesters[@semester_enum],
+      remarks: nil
+    ).count
 
     @recent_time_tracks = TimeTrack.includes(:user, :room, :card)
                                    .where(remarks: nil)
@@ -40,7 +46,7 @@ class Admin::DashboardController < AdminApplicationController
     @todays_schedules = Schedule
                           .left_joins(:room)
                           .includes(:user, :room)
-                          .where(day: today_system_day, school_year: @school_year, remarks: nil)
+                          .where(day: today_system_day, semester: Schedule.semesters[@semester_enum], school_year: @school_year, remarks: nil)
                           .order('rooms.room_number ASC, schedules.start_time ASC')
                           .page(params[:schedule_page])
                           .per(7)
@@ -51,7 +57,7 @@ class Admin::DashboardController < AdminApplicationController
     @room_schedules = {}
     Room.where(room_status: 1).each do |room|
       schedules = Schedule.includes(:user)
-                          .where(room_id: room.id, school_year: @school_year, remarks: nil)
+                          .where(room_id: room.id, semester: Schedule.semesters[@semester_enum], school_year: @school_year, remarks: nil)
                           .order(:start_time)
 
       next if schedules.empty?
