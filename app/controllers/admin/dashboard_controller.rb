@@ -1,16 +1,16 @@
 class Admin::DashboardController < AdminApplicationController
   def index
-    @total_users = User.count
-    @active_users = User.where(status: 1).count
-    @inactive_users = User.where(status: 0).count
+    @total_users = User.where(remarks: nil).count
+    @active_users = User.where(status: 1, remarks: nil).count
+    @inactive_users = User.where(status: 0, remarks: nil).count
 
-    @total_cards = Card.count
-    @active_cards = Card.where(status: 1).count
-    @inactive_cards = Card.where(status: 0).count
+    @total_cards = Card.where(remarks: nil).count
+    @active_cards = Card.where(status: 1, remarks: nil).count
+    @inactive_cards = Card.where(status: 0, remarks: nil).count
 
-    @total_rooms = Room.count
-    @available_rooms = Room.where(room_status: 1).count
-    @unavailable_rooms = Room.where(room_status: 0).count
+    @total_rooms = Room.where(remarks: nil).count
+    @available_rooms = Room.where(room_status: 1, remarks: nil).count
+    @unavailable_rooms = Room.where(room_status: 0, remarks: nil).count
 
     room_status_counts = fetch_room_status_counts
     @vacant_rooms = room_status_counts[:vacant]
@@ -27,9 +27,10 @@ class Admin::DashboardController < AdminApplicationController
       @school_year = "#{current_year - 1}-#{current_year}"
     end
 
-    @total_schedules = Schedule.where(school_year: @school_year).count
+    @total_schedules = Schedule.where(school_year: @school_year, remarks: nil).count
 
     @recent_time_tracks = TimeTrack.includes(:user, :room, :card)
+                                   .where(remarks: nil)
                                    .order(time_in: :desc)
                                    .page(params[:time_track_page])
                                    .per(5)
@@ -39,7 +40,7 @@ class Admin::DashboardController < AdminApplicationController
     @todays_schedules = Schedule
                           .left_joins(:room)
                           .includes(:user, :room)
-                          .where(day: today_system_day, school_year: @school_year)
+                          .where(day: today_system_day, school_year: @school_year, remarks: nil)
                           .order('rooms.room_number ASC, schedules.start_time ASC')
                           .page(params[:schedule_page])
                           .per(7)
@@ -50,7 +51,7 @@ class Admin::DashboardController < AdminApplicationController
     @room_schedules = {}
     Room.where(room_status: 1).each do |room|
       schedules = Schedule.includes(:user)
-                          .where(room_id: room.id, school_year: @school_year)
+                          .where(room_id: room.id, school_year: @school_year, remarks: nil)
                           .order(:start_time)
 
       next if schedules.empty?
@@ -61,10 +62,9 @@ class Admin::DashboardController < AdminApplicationController
   private
 
   def fetch_room_status_counts
-    available_rooms = Room.where(room_status: 1).pluck(:id)
-    unavailable_count = Room.where(room_status: 0).count
-
-    occupied_room_ids = TimeTrack.where(status: 0).distinct.pluck(:room_id).compact
+    available_rooms = Room.where(room_status: 1, remarks: nil).pluck(:id)
+    unavailable_count = Room.where(room_status: 0, remarks: nil).count
+    occupied_room_ids = TimeTrack.where(status: 0, remarks: nil).distinct.pluck(:room_id).compact
     vacant_room_ids = available_rooms - occupied_room_ids
 
     {
