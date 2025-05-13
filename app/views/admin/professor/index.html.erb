@@ -79,7 +79,9 @@
       <% else %>
         <% @users.each_with_index do |user, index| %>
           <tr>
-            <td data-label="#"><%= index + 1 %></td>
+            <td data-label="#">
+              <%= (@users.current_page - 1) * @users.limit_value + index + 1 %>
+            </td>
             <td data-label="Name"><%= [user.firstname, user.middlename, user.lastname].compact.join(" ") %></td>
             <td data-label="Academic College"><%= user.academic_college %></td>
             <td data-label="Role"><%= user.role.humanize %></td>

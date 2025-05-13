@@ -14,7 +14,7 @@ class Admin::ProfessorController < AdminApplicationController
       end
     end
 
-    users_query = User.where(remarks: nil).order(:firstname)
+    users_query = User.where(remarks: nil).order(created_at: :desc)
 
     if params[:fullname].present?
       search_query = params[:fullname].strip.downcase

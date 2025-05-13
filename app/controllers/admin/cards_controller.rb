@@ -16,7 +16,7 @@ class Admin::CardsController < AdminApplicationController
     end
 
     # Build the base query and then filter it.
-    cards_query = Card.includes(:user).where(remarks: nil).order('users.firstname ASC, cards.created_at ASC')
+    cards_query = Card.includes(:user).where(remarks: nil).order(created_at: :desc)
     filtered_cards = filter_cards(cards_query)
 
     # For HTML, paginate the results; for PDF, use the full filtered set.

@@ -20,10 +20,11 @@ class Admin::SchedulesController < AdminApplicationController
     @school_years = Schedule.distinct.pluck(:school_year).compact.sort
 
     # Build the base filtered query.
-    filtered_schedules = Schedule.includes(:user, :room).where(remarks: nil)
+    filtered_schedules = Schedule.includes(:user, :room)
+                                 .where(remarks: nil)
                                  .joins(:room)
-                                 .where(rooms: { room_status: Room.room_statuses[:Available] }) # <- This line filters only active rooms
-                                 .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
+                                 .where(rooms: { room_status: Room.room_statuses[:Available] })
+                                 .order(Arel.sql("schedules.created_at DESC, day ASC, school_year ASC, rooms.room_number ASC,
                                               TIME_FORMAT(start_time, '%p') DESC,
                                               TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 

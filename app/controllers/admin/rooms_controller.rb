@@ -15,7 +15,7 @@ class Admin::RoomsController < AdminApplicationController
     end
 
     # Build the base, filtered query.
-    rooms_query = Room.where(remarks: nil).order(:room_number)
+    rooms_query = Room.where(remarks: nil).order(created_at: :desc, room_number: :asc)
     rooms_query = rooms_query.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
     rooms_query = rooms_query.where(room_status: params[:room_status]) if params[:room_status].present?
 
