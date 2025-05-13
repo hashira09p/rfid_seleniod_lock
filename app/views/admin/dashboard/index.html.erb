@@ -331,7 +331,7 @@
                       <% end %>
                     </td>
 
-                    <td><%= schedule.subject %></td>
+                    <td><%= schedule.subject.upcase %></td>
 
                     <td>
                       <% if schedule.user.present? %>
@@ -449,7 +449,7 @@
                                       <span class="badge bg-secondary mb-2 text-uppercase">
                                         <%= schedule.year_level.to_s.humanize %>
                                       </span>
-                                        <p class="mb-1 fw-bold"><%= schedule.subject %></p>
+                                        <p class="mb-1 fw-bold"><%= schedule.subject.upcase %></p>
                                         <p class="text-muted mb-1 small">
                                           <i class="bi bi-person-fill me-1"></i><%= schedule.user.present? ? "#{schedule.user.firstname} #{schedule.user.lastname}" : 'Unassigned' %>
                                         </p>

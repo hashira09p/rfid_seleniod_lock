@@ -49,7 +49,7 @@ class ScheduleHistoryPdf < Prawn::Document
         [
           index + 1,
           schedule.description.humanize,
-          schedule.subject.humanize,
+          schedule.subject.upcase,
           schedule.day.humanize,
           schedule.start_time.strftime('%I:%M %p'),
           schedule.end_time.strftime('%I:%M %p'),

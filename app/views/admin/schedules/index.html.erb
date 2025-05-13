@@ -121,7 +121,7 @@
               <td data-label="Semester">No Year Level</td>
             <% end %>
 
-            <td data-label="Subject"><%= schedule.subject.humanize %></td>
+            <td data-label="Subject"><%= schedule.subject.upcase %></td>
             <td data-label="Day"><%= schedule.day.humanize %></td>
             <td data-label="Start Time"><%= schedule.start_time.strftime('%I:%M %p') %></td>
             <td data-label="End Time"><%= schedule.end_time.strftime('%I:%M %p') %></td>

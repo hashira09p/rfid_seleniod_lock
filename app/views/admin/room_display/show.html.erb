@@ -22,7 +22,7 @@
                   <div class="small"><%= schedule.end_time.strftime("%I:%M %p") %></div>
                 </div>
                 <div>
-                  <h4 class="h6 mb-1"><%= schedule.subject %></h4>
+                  <h4 class="h6 mb-1"><%= schedule.subject.upcase %></h4>
                   <p class="text-muted mb-0">
                     <i class='bx bx-user me-1'></i>
                     <%= schedule.user&.firstname || "Unknown" %> <%= schedule.user&.lastname || "" %>
@@ -50,7 +50,7 @@
               <% @schedules.each do |schedule| %>
                 <div class="list-group-item border-0 px-0 py-3">
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h4 class="h6 mb-0"><%= schedule.subject %></h4>
+                    <h4 class="h6 mb-0"><%= schedule.subject.upcase %></h4>
                     <span class="badge bg-light text-dark">
                       <%= schedule.day %>
                     </span>
