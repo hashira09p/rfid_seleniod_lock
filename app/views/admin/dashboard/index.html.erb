@@ -323,12 +323,12 @@
               <table class="table table-hover mb-0">
 
                 <thead class="table-light">
-                  <tr>
-                    <th>Room</th>
-                    <th>Subject</th>
-                    <th>Professor</th>
-                    <th>Time</th>
-                  </tr>
+                <tr>
+                  <th>Room</th>
+                  <th>Subject</th>
+                  <th>Professor</th>
+                  <th>Time</th>
+                </tr>
                 </thead>
 
                 <tbody>
@@ -382,21 +382,43 @@
   <!-- Room Schedules -->
   <div class="card card-hover-lift mb-4">
 
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header">
       <h6 class="mb-0 fw-bold" style="color: #06441b;"><i class="bi bi-calendar me-2"></i>Room Schedules - School Year <%= @school_year %></h6>
-      <select class="form-select form-select-sm custom-select" id="roomFilterDropdown" style="width: auto;">
-        <option value="all">All Rooms</option>
-        <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each do |room_number, _| %>
-          <option value="<%= room_number %>">Room <%= room_number %></option>
-        <% end %>
-      </select>
+
+      <div class="mt-3 d-flex flex-wrap gap-2 align-items-center">
+
+        <div class="input-group me-2" style="max-width: 350px;">
+        <span class="input-group-text bg-light border-end-0">
+          <i class="bi bi-search"></i>
+        </span>
+          <input type="text" class="form-control bg-light border-start-0" id="roomSearchInput" placeholder="Search rooms or subjects...">
+        </div>
+
+        <div class="d-flex align-items-center">
+          <label for="roomFilterDropdown" class="me-2 text-nowrap">Filter by:</label>
+          <select class="form-select form-select-sm custom-select" id="roomFilterDropdown" style="min-width: 120px;">
+            <option value="all">All Rooms</option>
+            <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each do |room_number, _| %>
+              <option value="<%= room_number %>">Room <%= room_number %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <button class="btn btn-sm btn-outline-secondary" id="clearFiltersBtn">
+          <i class="bi bi-x-lg me-1"></i>Clear Filters
+        </button>
+
+        <div class="ms-auto">
+          <span class="badge bg-primary" id="roomResultsCount"></span>
+        </div>
+      </div>
     </div>
 
     <div class="card-body p-0">
       <% if @room_schedules.any? %>
         <div class="accordion" id="roomSchedulesAccordion">
           <% @room_schedules.sort_by { |room_number, _| room_number.to_i }.each_with_index do |(room_number, schedules), index| %>
-            <div class="accordion-item room-schedule-item" data-room="<%= room_number %>">
+            <div class="accordion-item room-schedule-item" data-room="<%= room_number %>" data-search-content="Room <%= room_number %> <%= schedules.map(&:subject).join(' ') %> <%= schedules.map { |s| s.user&.firstname.to_s + ' ' + s.user&.lastname.to_s }.join(' ') %>">
               <h2 class="accordion-header" id="heading<%= room_number %>">
                 <button class="accordion-button custom-accordion-button <%= index == 0 ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= room_number %>" aria-expanded="<%= index == 0 ? 'true' : 'false' %>" aria-controls="collapse<%= room_number %>">
                   <div class="d-flex align-items-center w-100">
@@ -414,49 +436,49 @@
                     <table class="table table-bordered mb-0">
 
                       <thead class="table-light">
-                        <tr>
-                          <th>Monday</th>
-                          <th>Tuesday</th>
-                          <th>Wednesday</th>
-                          <th>Thursday</th>
-                          <th>Friday</th>
-                          <th>Saturday</th>
-                          <th>Sunday</th>
-                        </tr>
+                      <tr>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr>
-                          <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
-                            <td class="p-2">
-                              <div class="d-flex flex-column gap-2">
-                                <% schedules_for_day = schedules.select { |s| s.day == day }.sort_by { |s| s.start_time.seconds_since_midnight } %>
-                                <% if schedules_for_day.any? %>
-                                  <% schedules_for_day.each do |schedule| %>
-                                    <div class="schedule-item">
-                                      <div class="schedule-content">
-                                          <span class="badge bg-secondary mb-2 text-uppercase">
-                                            <%= schedule.year_level.to_s.humanize %>
-                                          </span>
-                                        <p class="mb-1 fw-bold"><%= schedule.subject %></p>
-                                        <p class="text-muted mb-1 small">
-                                          <i class="bi bi-person-fill me-1"></i><%= schedule.user.present? ? "#{schedule.user.firstname} #{schedule.user.lastname}" : 'Unassigned' %>
-                                        </p>
-                                        <p class="time-badge">
-                                          <i class="bi bi-clock-fill me-1"></i><%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
-                                        </p>
-                                      </div>
+                      <tr>
+                        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+                          <td class="p-2">
+                            <div class="d-flex flex-column gap-2">
+                              <% schedules_for_day = schedules.select { |s| s.day == day }.sort_by { |s| s.start_time.seconds_since_midnight } %>
+                              <% if schedules_for_day.any? %>
+                                <% schedules_for_day.each do |schedule| %>
+                                  <div class="schedule-item">
+                                    <div class="schedule-content">
+                                      <span class="badge bg-secondary mb-2 text-uppercase">
+                                        <%= schedule.year_level.to_s.humanize %>
+                                      </span>
+                                      <p class="mb-1 fw-bold"><%= schedule.subject %></p>
+                                      <p class="text-muted mb-1 small">
+                                        <i class="bi bi-person-fill me-1"></i><%= schedule.user.present? ? "#{schedule.user.firstname} #{schedule.user.lastname}" : 'Unassigned' %>
+                                      </p>
+                                      <p class="time-badge">
+                                        <i class="bi bi-clock-fill me-1"></i><%= schedule.start_time.strftime('%I:%M %p') %> - <%= schedule.end_time.strftime('%I:%M %p') %>
+                                      </p>
                                     </div>
-                                  <% end %>
-                                <% else %>
-                                  <div class="text-center text-muted py-2">
-                                    No Schedule
                                   </div>
                                 <% end %>
-                              </div>
-                            </td>
-                          <% end %>
-                        </tr>
+                              <% else %>
+                                <div class="text-center text-muted py-2">
+                                  No Schedule
+                                </div>
+                              <% end %>
+                            </div>
+                          </td>
+                        <% end %>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -465,6 +487,15 @@
             </div>
           <% end %>
         </div>
+
+        <div id="noRoomResults" class="text-center py-4 text-muted" style="display: none;">
+          <i class="bi bi-search fs-1"></i>
+          <p>No matching rooms found. Please try different search criteria.</p>
+          <button class="btn btn-outline-primary btn-sm mt-2" id="resetRoomSearchBtn">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset Search
+          </button>
+        </div>
+
       <% else %>
         <div class="text-center py-4 text-muted">
           <i class="bi bi-calendar-x fs-1"></i>
@@ -511,23 +542,122 @@
         });
     }
 
-    function initRoomFilter() {
+    function initRoomFilters() {
         const roomFilter = document.getElementById('roomFilterDropdown');
-        if (!roomFilter) return;
-
+        const searchInput = document.getElementById('roomSearchInput');
+        const clearBtn = document.getElementById('clearFiltersBtn');
+        const noResultsDiv = document.getElementById('noRoomResults');
+        const resetSearchBtn = document.getElementById('resetRoomSearchBtn');
+        const resultsCount = document.getElementById('roomResultsCount');
         const roomItems = document.querySelectorAll('.room-schedule-item');
 
-        roomFilter.addEventListener('change', function() {
-            const selectedRoom = this.value;
+        // Initialize the results count on page load
+        updateResultsCount(roomItems.length);
+
+        // Add event listener for room filter dropdown
+        if (roomFilter) {
+            roomFilter.addEventListener('change', function() {
+                applyFilters();
+            });
+        }
+
+        // Add event listener for search input
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                applyFilters();
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applyFilters();
+                }
+            });
+        }
+
+        // Add event listener for clear filters button
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                resetFilters();
+            });
+        }
+
+        // Add event listener for reset search button
+        if (resetSearchBtn) {
+            resetSearchBtn.addEventListener('click', function() {
+                resetFilters();
+            });
+        }
+
+        function applyFilters() {
+            const selectedRoom = roomFilter ? roomFilter.value : 'all';
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            let visibleCount = 0;
 
             roomItems.forEach(item => {
-                if (selectedRoom === 'all' || item.dataset.room === selectedRoom) {
-                    item.style.display = 'block';
+                // Get room number and search content from data attributes
+                const roomNumber = item.getAttribute('data-room');
+                const searchContent = item.getAttribute('data-search-content').toLowerCase();
+
+                // Check if the item matches both the room filter and search term
+                const roomMatch = selectedRoom === 'all' || roomNumber === selectedRoom;
+                const searchMatch = !searchTerm || searchContent.includes(searchTerm);
+
+                // Show or hide the item based on filters
+                if (roomMatch && searchMatch) {
+                    item.style.display = '';
+                    visibleCount++;
                 } else {
                     item.style.display = 'none';
                 }
             });
-        });
+
+            // Show or hide the "no results" message
+            if (noResultsDiv) {
+                noResultsDiv.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            // Update the results count badge
+            updateResultsCount(visibleCount);
+        }
+
+        function resetFilters() {
+            // Reset filter values
+            if (roomFilter) roomFilter.value = 'all';
+            if (searchInput) searchInput.value = '';
+
+            // Show all room items
+            roomItems.forEach(item => {
+                item.style.display = '';
+            });
+
+            // Hide the "no results" message
+            if (noResultsDiv) {
+                noResultsDiv.style.display = 'none';
+            }
+
+            // Update the results count badge
+            updateResultsCount(roomItems.length);
+        }
+
+        function updateResultsCount(visibleCount) {
+            if (!resultsCount) return;
+
+            const totalItems = roomItems.length;
+
+            // Update the badge text
+            resultsCount.textContent = `${visibleCount} of ${totalItems} rooms`;
+
+            // Change badge color based on results
+            if (visibleCount === 0) {
+                resultsCount.className = 'badge bg-danger';
+            } else if (visibleCount < totalItems) {
+                resultsCount.className = 'badge bg-warning text-dark';
+            } else {
+                resultsCount.className = 'badge bg-primary';
+            }
+        }
     }
 
     function setupPaginationLinks() {
@@ -550,15 +680,21 @@
     }
 
     function initDashboard() {
+        // Initialize all dashboard components
         animateCounters();
-        initRoomFilter();
+        initRoomFilters();
         setupPaginationLinks();
+
+        // Log initialization for debugging
+        console.log('Dashboard initialized successfully');
     }
 
+    // Set up event listeners for Turbo
     document.addEventListener('DOMContentLoaded', initDashboard);
     document.addEventListener('turbo:load', initDashboard);
     document.addEventListener('turbo:render', initDashboard);
 
+    // Reset counters before rendering
     document.addEventListener('turbo:before-render', function() {
         document.querySelectorAll('.counter').forEach(counter => {
             counter.textContent = '0';
