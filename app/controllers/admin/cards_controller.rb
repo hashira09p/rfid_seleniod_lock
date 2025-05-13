@@ -16,7 +16,7 @@ class Admin::CardsController < AdminApplicationController
     end
 
     # Build the base query and then filter it.
-    cards_query = Card.includes(:user).order('users.firstname ASC, cards.created_at ASC')
+    cards_query = Card.includes(:user).where(remarks: nil).order('users.firstname ASC, cards.created_at ASC')
     filtered_cards = filter_cards(cards_query)
 
     # For HTML, paginate the results; for PDF, use the full filtered set.
@@ -59,6 +59,8 @@ class Admin::CardsController < AdminApplicationController
   def edit
     if @card.Inactive?
       redirect_to cards_path, alert: "Editing is disabled for inactive cards."
+    elsif @card.remarks.present?
+      redirect_to history_card_path, alert: "Editing is disabled for archived cards."
     end
   end
 
@@ -73,12 +75,22 @@ class Admin::CardsController < AdminApplicationController
   end
 
   def destroy
-    if @card.destroy
-      flash[:notice] = 'Card successfully deleted.'
-    else
-      flash[:alert] = @card.errors.full_messages.to_sentence
+    if @card.remarks.nil?
+      ActiveRecord::Base.transaction do
+        @card.update!(remarks: 'archived', deleted_at: Time.now, status: 0)
+        @card.time_tracks.update_all(remarks: 'archived', deleted_at: Time.now)
+      end
+      flash[:notice] = 'Card and all associated records have been archived.'
+      redirect_to card_path
+    elsif @card.archived?
+      if @card.destroy
+        flash[:notice] = 'Archived card permanently deleted.'
+        redirect_to history_card_path
+      else
+        flash[:alert] = "Failed to delete the card: #{@user.errors.full_messages.join(', ')}"
+        redirect_to history_card_path
+      end
     end
-    redirect_to cards_path
   end
 
   def card_scan
@@ -101,11 +113,17 @@ class Admin::CardsController < AdminApplicationController
 
   def toggle_status
     @card = Card.find(params[:id])
+
+    if @card.remarks.present?
+      redirect_to history_card_path, alert: "Cannot change status of an archived card."
+      return
+    end
+
     new_status = params[:status] == 'Active' ? 'Active' : 'Inactive'
 
     if @card.user.active?
-    @card.update(status: new_status)
-    flash[:notice] = "Card #{@card.uid} status has been updated to #{new_status.capitalize}."
+      @card.update(status: new_status)
+      flash[:notice] = "Card #{@card.uid} status has been updated to #{new_status.capitalize}."
     redirect_to cards_path
     else
       flash[:alert] = "Card #{@card.uid} status update denied: Professor #{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} is currently inactive."

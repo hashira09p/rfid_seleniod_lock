@@ -46,11 +46,56 @@ class Admin::HistoryController < AdminApplicationController
   end
 
   def card
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to history_card_path and return
+      end
+    end
+
+    # Build the base query and then filter it.
+    cards_query = Card.includes(:user).where(remarks: 'archived').order('users.firstname ASC, cards.created_at ASC')
+    filtered_cards = filter_cards(cards_query)
+
+    # For HTML, paginate the results; for PDF, use the full filtered set.
+    @cards = filtered_cards.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = CardHistoryPdf.new(filtered_cards)
+        send_data pdf.render,
+                  filename: "cards.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   def room
   end
 
   def schedule
+  end
+
+  private
+
+  def filter_cards(scope)
+    scope = scope.where(cards: { uid: params[:uid] }) if params[:uid].present?
+    scope = scope.where(status: params[:status]) if params[:status].present?
+
+    if params[:fullname].present?
+      q = "%#{params[:fullname].strip.downcase}%"
+      scope = scope.joins(:user).where(
+        'LOWER(users.firstname) LIKE :q OR LOWER(users.middlename) LIKE :q OR LOWER(users.lastname) LIKE :q OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.middlename, " ", users.lastname)) LIKE :q OR ' \
+          'LOWER(CONCAT(users.firstname, " ", users.lastname)) LIKE :q', q: q
+      )
+    end
+    scope
   end
 end
