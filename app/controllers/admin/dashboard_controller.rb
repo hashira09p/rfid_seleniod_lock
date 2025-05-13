@@ -42,7 +42,7 @@ class Admin::DashboardController < AdminApplicationController
                           .where(day: today_system_day, school_year: @school_year)
                           .order('rooms.room_number ASC, schedules.start_time ASC')
                           .page(params[:schedule_page])
-                          .per(5)
+                          .per(7)
 
     @active_rooms = Room.where(room_status: 1).includes(:schedules).order(room_number: :asc)
     @day_names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
