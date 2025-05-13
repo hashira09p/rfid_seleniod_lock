@@ -4,6 +4,7 @@ class TimeTrack < ApplicationRecord
   belongs_to :card
 
   enum status: { time_in: 0, time_out: 1 }
+  enum remarks: { archived: 0, restored: 1 }
 
   after_commit :update_room_status
 

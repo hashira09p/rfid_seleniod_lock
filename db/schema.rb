@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_13_000009) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -18,6 +18,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "uid_type", default: 0
+    t.integer "remarks"
+    t.datetime "deleted_at"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
@@ -26,6 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
     t.integer "room_status", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "remarks"
+    t.datetime "deleted_at"
   end
 
   create_table "schedules", charset: "utf8mb4", force: :cascade do |t|
@@ -41,6 +45,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
     t.integer "room_id"
     t.integer "semester", null: false
     t.integer "year_level"
+    t.integer "remarks"
+    t.datetime "deleted_at"
     t.index ["user_id"], name: "index_schedules_on_user_id"
   end
 
@@ -53,6 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
     t.string "time_out", default: -> { "time_format(current_timestamp(),'%I:%M %p')" }
     t.bigint "room_id"
     t.integer "card_id"
+    t.integer "remarks"
+    t.datetime "deleted_at"
     t.index ["card_id"], name: "index_time_tracks_on_card_id"
     t.index ["room_id"], name: "index_time_tracks_on_room_id"
     t.index ["user_id"], name: "index_time_tracks_on_user_id"
@@ -73,6 +81,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_131211) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0, null: false
+    t.integer "remarks"
+    t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -8,4 +8,5 @@ class User < ApplicationRecord
   enum role: { admin: 0, professor: 1 }
   enum academic_college: { CIE: 0, COE: 1, CLA: 2, COS: 3, CAFA: 4, CIT: 5 }
   enum status: { inactive: 0, active: 1 }
+  enum remarks: { archived: 0, restored: 1 }
 end

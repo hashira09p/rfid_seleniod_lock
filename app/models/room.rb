@@ -3,6 +3,7 @@ class Room < ApplicationRecord
   has_many :time_tracks, dependent: :destroy
 
   enum room_status: {Unavailable: 0, Available: 1}
+  enum remarks: { archived: 0, restored: 1 }
 
   validates :room_number, presence: true, uniqueness: true, numericality: { only_integer: true, greater_than: 0 }
   validates :room_status, presence: true
