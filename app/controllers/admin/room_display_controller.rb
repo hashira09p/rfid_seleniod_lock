@@ -1,5 +1,5 @@
 class Admin::RoomDisplayController < AdminApplicationController
-  before_action :authenticate_admin_user!, except: [:room_statuses] # Allow public access to room_statuses
+  before_action :authenticate_admin_user!, except: [:room_statuses]
 
   def index
     @rooms = Room.all.includes(:schedules).order(:room_number)
@@ -9,8 +9,12 @@ class Admin::RoomDisplayController < AdminApplicationController
   def show
     @room = Room.find(params[:id])
     @schedules = @room.schedules.includes(:user).order(:start_time)
-    @todays_schedules = @schedules.where(day: Date.today.wday) # Get schedules for today
+
+    today_name = Time.zone.now.strftime("%A")
+    @todays_schedules = @schedules.select { |s| s.day.to_s.strip.casecmp?(today_name) }
+
     @available_slots = calculate_available_time(@todays_schedules)
+
     @today_time_tracks = @room.time_tracks
                               .where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
                               .order(time_in: :desc)
@@ -21,11 +25,7 @@ class Admin::RoomDisplayController < AdminApplicationController
   def room_statuses
     rooms = Room.all.includes(:time_tracks)
     statuses = {}
-
-    rooms.each do |room|
-      statuses[room.id] = room.current_status
-    end
-
+    rooms.each { |room| statuses[room.id] = room.current_status }
     render json: statuses
   end
 
@@ -45,33 +45,39 @@ class Admin::RoomDisplayController < AdminApplicationController
   end
 
   def calculate_available_time(schedules)
-    full_day_range = (6 * 60..21 * 60).step(1).to_a # 6:00 AM to 9:00 PM in minutes
-    booked_minutes = schedules.reject { |s| s.start_time == s.end_time } # Ignore zero-duration bookings
-                              .map { |s| (s.start_time.hour * 60 + s.start_time.min..s.end_time.hour * 60 + s.end_time.min).to_a }
-                              .flatten
-                              .uniq
+    visible_start = 6 * 60
+    visible_end = 21 * 60
 
-    available_minutes = full_day_range - booked_minutes
-    format_available_slots(available_minutes)
-  end
-
-  def format_available_slots(available_minutes)
-    return [] if available_minutes.empty?
-
-    time_ranges = []
-    start_time = available_minutes.first
-    prev_time = start_time
-
-    available_minutes.each_cons(2) do |curr, next_time|
-      if next_time - curr > 1 # If there is a gap
-        time_ranges << "#{format_time(start_time)} - #{format_time(prev_time)}"
-        start_time = next_time
-      end
-      prev_time = next_time
+    # Collect all booked ranges
+    booked_ranges = schedules.reject { |s| s.start_time == s.end_time }.map do |s|
+      start_min = s.start_time.hour * 60 + s.start_time.min
+      end_min = s.end_time.hour * 60 + s.end_time.min
+      [start_min, end_min]
     end
 
-    time_ranges << "#{format_time(start_time)} - #{format_time(prev_time)}"
-    time_ranges
+    # Start with one full available range
+    available_ranges = [[visible_start, visible_end]]
+
+    # Subtract each booked range from available ranges
+    booked_ranges.each do |booked_start, booked_end|
+      updated = []
+      available_ranges.each do |avail_start, avail_end|
+        # No overlap
+        if booked_end <= avail_start || booked_start >= avail_end
+          updated << [avail_start, avail_end]
+        else
+          # Overlap logic
+          updated << [avail_start, booked_start] if booked_start > avail_start
+          updated << [booked_end, avail_end] if booked_end < avail_end
+        end
+      end
+      available_ranges = updated
+    end
+
+    # Format result
+    available_ranges
+      .select { |start_min, end_min| end_min > start_min }
+      .map { |start_min, end_min| "#{format_time(start_min)} - #{format_time(end_min)}" }
   end
 
   def format_time(minutes)
