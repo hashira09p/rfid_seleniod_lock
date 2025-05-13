@@ -107,11 +107,10 @@ class Admin::SchedulesController < AdminApplicationController
 
   def destroy
     if @schedule.remarks.nil?
+      archived_school_year = @schedule.school_year.to_i + Time.now.to_i
+
       ActiveRecord::Base.transaction do
-        @schedule.update!(
-          remarks: 'archived',
-          deleted_at: Time.current
-        )
+        @schedule.update!(remarks: 'archived', deleted_at: Time.current, original_school_year: @schedule.school_year, school_year: archived_school_year)
       end
       flash[:notice] = 'Schedule has been archived.'
       redirect_to schedules_path

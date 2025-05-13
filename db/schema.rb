@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_13_094431) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_13_102206) do
   create_table "cards", charset: "utf8mb4", force: :cascade do |t|
     t.string "uid"
     t.integer "status", default: 0
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_13_094431) do
     t.integer "year_level"
     t.integer "remarks"
     t.datetime "deleted_at"
+    t.string "original_school_year"
     t.index ["user_id"], name: "index_schedules_on_user_id"
   end
 
