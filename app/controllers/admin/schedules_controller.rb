@@ -20,7 +20,7 @@ class Admin::SchedulesController < AdminApplicationController
     @school_years = Schedule.distinct.pluck(:school_year).compact.sort
 
     # Build the base filtered query.
-    filtered_schedules = Schedule.includes(:user, :room)
+    filtered_schedules = Schedule.includes(:user, :room).where(remarks: nil)
                                  .joins(:room)
                                  .where(rooms: { room_status: Room.room_statuses[:Available] }) # <- This line filters only active rooms
                                  .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
@@ -76,6 +76,18 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def edit
+    if @schedule.nil?
+      redirect_to schedules_path, alert: "Schedule not found." and return
+    end
+
+    if @schedule.remarks.present?
+      redirect_to history_schedule_path, alert: "Editing is disabled for archived schedules." and return
+    end
+
+    if @schedule.room&.Unavailable?
+      redirect_to schedules_path, alert: "Editing is disabled for unavailable rooms." and return
+    end
+
     @room_statuses = fetch_room_statuses
   end
 
@@ -92,6 +104,11 @@ class Admin::SchedulesController < AdminApplicationController
   end
 
   def destroy
+    if @schedule.remarks.present?
+      redirect_to schedules_path, alert: 'Archived schedules cannot be deleted.'
+      return
+    end
+
     if @schedule.destroy
       redirect_to schedules_path, notice: 'Schedule was successfully deleted.'
     else

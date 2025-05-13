@@ -110,6 +110,56 @@ class Admin::HistoryController < AdminApplicationController
   end
 
   def schedule
+    if params[:encrypted_params].present?
+      begin
+        decrypted_params = Rack::Utils.parse_nested_query(EncryptionHelper.decrypt(params[:encrypted_params]))
+        params.merge!(decrypted_params)
+      rescue => e
+        Rails.logger.error "Error decrypting parameters: #{e.message}"
+        flash[:error] = "Invalid parameters."
+        redirect_to schedules_path and return
+      end
+    end
+
+    @days = Schedule.pluck(:day).uniq
+    @users = User.all # Fetch all users as objects
+    @rooms = Room.all # Fetch all rooms as objects
+    @school_years = Schedule.distinct.pluck(:school_year).compact.sort
+
+    # Build the base filtered query.
+    filtered_schedules = Schedule.includes(:user, :room).where(remarks: 'archived')
+                                 .joins(:room)
+                                 .where(rooms: { room_status: Room.room_statuses[:Available] }) # <- This line filters only active rooms
+                                 .order(Arel.sql("day ASC, school_year ASC, rooms.room_number ASC,
+                                              TIME_FORMAT(start_time, '%p') DESC,
+                                              TIME_FORMAT(start_time, '%h:%i %p') DESC"))
+
+    # Apply filters if present.
+    filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?
+    filtered_schedules = filtered_schedules.where(room_id: params[:room_id]) if params[:room_id].present?
+    filtered_schedules = filtered_schedules.where(school_year: params[:school_year]) if params[:school_year].present?
+
+    if params[:professor_name].present?
+      professor_query = params[:professor_name].downcase.strip
+      filtered_schedules = filtered_schedules.joins(:user).where(
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, ' ', users.lastname)) LIKE :query",
+        query: "%#{professor_query}%"
+      )
+    end
+
+    # For HTML, paginate the filtered query (e.g., 10 per page).
+    @schedules = filtered_schedules.page(params[:page]).per(10)
+
+    respond_to do |format|
+      format.html  # renders index.html.erb using @schedules (paginated)
+      format.pdf do
+        pdf = ScheduleHistoryPdf.new(filtered_schedules)  # full filtered set (no pagination)
+        send_data pdf.render,
+                  filename: "schedules.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
   end
 
   private
