@@ -62,9 +62,10 @@
           <div class="col-md-4 mb-3">
             <%= form.label :start_time, class: "form-label required-label" %>
             <div class="input-group">
-              <%= form.time_select :start_time,
-                                   { ampm: true, minute_step: 1, default: Time.current.change(hour: 0, min: 0) },
-                                   { class: "form-select me-2", required: true } %>
+              <%= form.time_field :start_time,
+                                  value: Time.current.change(hour: 0, min: 0).strftime("%H:%M"),
+                                  class: "form-control me-2",
+                                  required: true %>
               <div class="invalid-feedback">Start time is required</div>
             </div>
           </div>
@@ -72,9 +73,10 @@
           <div class="col-md-4 mb-3">
             <%= form.label :end_time, class: "form-label required-label" %>
             <div class="input-group">
-              <%= form.time_select :end_time,
-                                   { ampm: true, minute_step: 1, default: Time.current.change(hour: 0, min: 0) },
-                                   { class: "form-select me-2", required: true } %>
+              <%= form.time_field :end_time,
+                                  value: Time.current.change(hour: 0, min: 0).strftime("%H:%M"),
+                                  class: "form-control me-2",
+                                  required: true %>
               <div class="invalid-feedback">End time is required</div>
             </div>
           </div>

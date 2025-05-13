@@ -24,9 +24,10 @@ class Admin::SchedulesController < AdminApplicationController
                                  .where(remarks: nil)
                                  .joins(:room)
                                  .where(rooms: { room_status: Room.room_statuses[:Available] })
-                                 .order(Arel.sql("schedules.created_at DESC, day ASC, school_year ASC, rooms.room_number ASC,
-                                              TIME_FORMAT(start_time, '%p') DESC,
-                                              TIME_FORMAT(start_time, '%h:%i %p') DESC"))
+                                 .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(schedules.created_at), UNIX_TIMESTAMP(schedules.updated_at)) DESC,
+                                                  day ASC, school_year ASC, rooms.room_number ASC,
+                                                  TIME_FORMAT(start_time, '%p') DESC,
+                                                  TIME_FORMAT(start_time, '%h:%i %p') DESC"))
 
     # Apply filters if present.
     filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?
@@ -45,9 +46,9 @@ class Admin::SchedulesController < AdminApplicationController
     @schedules = filtered_schedules.page(params[:page]).per(10)
 
     respond_to do |format|
-      format.html  # renders index.html.erb using @schedules (paginated)
+      format.html # renders index.html.erb using @schedules (paginated)
       format.pdf do
-        pdf = SchedulePdf.new(filtered_schedules)  # full filtered set (no pagination)
+        pdf = SchedulePdf.new(filtered_schedules) # full filtered set (no pagination)
         send_data pdf.render,
                   filename: "schedules.pdf",
                   type: "application/pdf",
