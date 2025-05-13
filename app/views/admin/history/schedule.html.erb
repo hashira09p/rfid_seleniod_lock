@@ -124,7 +124,7 @@
             <td data-label="Start Time"><%= schedule.start_time.strftime('%I:%M %p') %></td>
             <td data-label="End Time"><%= schedule.end_time.strftime('%I:%M %p') %></td>
             <td data-label="Room Number"><%= schedule.room&.room_number || 'No Room' %></td>
-            <td data-label="School Year"><%= schedule.school_year || 'No School Year' %></td>
+            <td data-label="School Year"><%= schedule.original_school_year || 'No School Year' %></td>
 
             <% if schedule.first_sem? %>
               <td data-label="Semester">1st Sem</td>
