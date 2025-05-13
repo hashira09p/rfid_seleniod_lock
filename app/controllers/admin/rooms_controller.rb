@@ -15,7 +15,8 @@ class Admin::RoomsController < AdminApplicationController
     end
 
     # Build the base, filtered query.
-    rooms_query = Room.where(remarks: nil).order(:room_number)
+    rooms_query = Room.where(remarks: nil)
+                      .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(created_at), UNIX_TIMESTAMP(updated_at)) DESC, room_number ASC"))
     rooms_query = rooms_query.where('room_number LIKE ?', "%#{params[:room_number].strip}%") if params[:room_number].present?
     rooms_query = rooms_query.where(room_status: params[:room_status]) if params[:room_status].present?
 

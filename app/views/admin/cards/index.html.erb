@@ -85,7 +85,9 @@
       <% else %>
         <% @cards.each_with_index do |card, index| %>
           <tr>
-            <td data-label="#"><%= index + 1 %></td>
+            <td data-label="#">
+              <%= (@cards.current_page - 1) * @cards.limit_value + index + 1 %>
+            </td>
             <td data-label="Card Number"><%= card.uid %></td>
             <td data-label="Name">
               <% if card.user.present? %>

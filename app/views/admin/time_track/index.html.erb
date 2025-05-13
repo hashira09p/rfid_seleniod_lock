@@ -98,7 +98,9 @@
       <% else %>
         <% @time_tracks.each_with_index do |track, index| %>
           <tr>
-            <td data-label="#"><%= index + 1 %></td>
+            <td data-label="#">
+              <%= (@time_tracks.current_page - 1) * @time_tracks.limit_value + index + 1 %>
+            </td>
             <td data-label="Room Number"><%= track.room.room_number || "No Room Assigned" %></td>
             <td data-label="Professor Name">
               <%= "#{track.user.firstname} #{track.user.middlename} #{track.user.lastname}" %>

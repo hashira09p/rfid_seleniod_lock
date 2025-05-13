@@ -93,13 +93,12 @@
           <td colspan="13" class="text-center text-muted">No Matching Schedules Found</td>
         </tr>
       <% else %>
-        <% row_number = 1 %>
-        <% @schedules.each do |schedule| %>
+        <% @schedules.each_with_index do |schedule, index| %>
           <% next if schedule.room&.Unavailable? %>
-
           <tr>
-            <td data-label="#"><%= row_number %></td>
-            <% row_number += 1 %>
+            <td data-label="#">
+              <%= (@schedules.current_page - 1) * @schedules.limit_value + index + 1 %>
+            </td>
 
             <td data-label="Description"><%= schedule.description.humanize %></td>
             <td data-label="Professor Name">
