@@ -13,12 +13,6 @@
             <i class="bi bi-credit-card text-success" style="font-size: 1.8rem;"></i>
           </div>
           <h5 class="mb-0 fw-bold text-success"><%= @card.uid_type.capitalize %> Details</h5>
-
-          <%# if @card.card? %>
-<!--            <h5 class="mb-0 fw-bold text-success">Card Details</h5>-->
-          <%# else %>
-<!--            <h5 class="mb-0 fw-bold text-success">Tag Details</h5>-->
-          <%# end %>
         </div>
       </div>
 
@@ -123,7 +117,22 @@
       <% end %>
 
       <%= form_with(model: @card, method: :put, local: true, html: { novalidate: true, class: "needs-validation" }) do |form| %>
-        <%= form.hidden_field :uid, id: 'rfid-uid-input' %>
+        <div class="mb-3">
+          <div class="form-section-title">RFID Number</div>
+
+          <p>Scanned RFID number:
+            <turbo-frame id="rfid-uid-placeholder" class="fw-bold"><%= @card.uid %></turbo-frame>
+            <%= turbo_stream_from "rfid_scans" %>
+          </p>
+
+          <% if current_admin_user.super_admin? %>
+            <%= form.label :uid, "RFID Number", class: "form-label mt-2" %>
+            <%= form.text_field :uid, class: "form-control", id: "rfid-uid-input", required: true %>
+            <div class="invalid-feedback">RFID number is required</div>
+          <% else %>
+            <%= form.hidden_field :uid, id: "rfid-uid-input" %>
+          <% end %>
+        </div>
 
         <div class="form-section-title mt-2"><%= @card.uid_type.capitalize %> Information</div>
 
@@ -141,13 +150,28 @@
 
         <% if @card.user.present? %>
           <div class="form-section-title mt-3">Assignment Information</div>
-          <div class="mb-3">
-            <label class="form-label">Assigned Professor</label>
-            <input type="text" class="form-control bg-light" readonly
-                   value="<%= "#{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} (#{@card.user.email})" %>"
-                   style="cursor: not-allowed;">
-            <span class="field-hint">To reassign this <%= @card.uid_type %>, please deactivate it and register a new one</span>
-          </div>
+
+          <% if current_admin_user.super_admin? %>
+            <div class="mb-3">
+              <%= form.label :user_id, "Assigned Professor", class: "form-label required-label" %>
+              <%= form.select :user_id,
+                              User.active
+                                  .where.not(role: :super_admin)
+                                  .order(:firstname)
+                                  .map { |u| ["#{[u.firstname, u.middlename, u.lastname].compact.join(' ')} (#{u.email})", u.id] },
+                              { include_blank: "Select Professor" },
+                              { class: "form-select", required: true } %>
+              <span class="field-hint">You may reassign this <%= @card.uid_type %> to another active professor</span>
+            </div>
+          <% else %>
+            <div class="mb-3">
+              <label class="form-label">Assigned Professor</label>
+              <input type="text" class="form-control bg-light" readonly
+                     value="<%= "#{@card.user.firstname} #{@card.user.middlename} #{@card.user.lastname} (#{@card.user.email})" %>"
+                     style="cursor: not-allowed;">
+              <span class="field-hint">To reassign this <%= @card.uid_type %>, please deactivate it and register a new one</span>
+            </div>
+          <% end %>
         <% end %>
 
         <div class="form-footer">
