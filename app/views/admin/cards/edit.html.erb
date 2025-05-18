@@ -120,16 +120,18 @@
         <div class="mb-3">
           <div class="form-section-title">RFID Number</div>
 
-          <p>Scanned RFID number:
-            <turbo-frame id="rfid-uid-placeholder" class="fw-bold"><%= @card.uid %></turbo-frame>
-            <%= turbo_stream_from "rfid_scans" %>
-          </p>
-
           <% if current_admin_user.super_admin? %>
+            <p>Scanned RFID number:
+              <turbo-frame id="rfid-uid-placeholder" class="fw-bold"><%= @card.uid %></turbo-frame>
+              <%= turbo_stream_from "rfid_scans" %>
+            </p>
+
             <%= form.label :uid, "RFID Number", class: "form-label mt-2" %>
             <%= form.text_field :uid, class: "form-control", id: "rfid-uid-input", required: true %>
             <div class="invalid-feedback">RFID number is required</div>
+
           <% else %>
+            <p>RFID number: <span class="fw-bold"><%= @card.uid %></span></p>
             <%= form.hidden_field :uid, id: "rfid-uid-input" %>
           <% end %>
         </div>
