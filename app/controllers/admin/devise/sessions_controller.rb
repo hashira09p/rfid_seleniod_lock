@@ -13,12 +13,14 @@ class Admin::Devise::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     sign_out(current_admin_user) if current_admin_user # prevent "already signed in" error
-    user_admin = User.admin.find_by(email: params[:admin_user][:email])
-    if user_admin
-      flash[:notice] = "Welcome, #{user_admin.firstname}"
+
+    user = User.find_by(email: params[:admin_user][:email])
+
+    if user&.admin? || user&.super_admin?
+      flash[:notice] = "Welcome, #{user.firstname}"
       super
-    elsif user_admin.nil?
-      flash[:alert] = 'Invalid Account or account is not an admin.'
+    else
+      flash[:alert] = 'Invalid account or insufficient privileges.'
       redirect_to new_admin_user_session_path
     end
   end

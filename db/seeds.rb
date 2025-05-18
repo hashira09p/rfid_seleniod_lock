@@ -9,6 +9,9 @@
 # Admin reset password
 # User.find(1).update(password: "123456")
 
+# SUPER ADMIN
+User.create(id: 8, firstname: "Super", lastname: "Admin", academic_college: 0, role: 2, email: "super_admin@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
+
 # USERS
 User.create(id: 1, firstname: "Aimee", middlename: "Guardaya", lastname: "Acoba", academic_college: 5, role: 0, email: "aimee_acoba@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
 User.create(id: 2, firstname: "Marc Ardie", lastname: "Ardiente", academic_college: 1, role: 1, email: "marcardie_ardiente@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
