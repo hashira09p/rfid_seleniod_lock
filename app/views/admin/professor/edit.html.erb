@@ -129,10 +129,18 @@
 
         <div class="mb-3">
           <%= form.label :email, "Email Address", class: "form-label required-label" %>
-          <div class="input-group">
-            <%= form.email_field :email, class: "form-control bg-light", readonly: true, value: @user.email, style: "cursor: not-allowed;" %>
-          </div>
-          <span class="field-hint">Email cannot be edited</span>
+
+          <% if current_admin_user.super_admin? %>
+            <div class="input-group">
+              <%= form.email_field :email, class: "form-control", required: true, value: @user.email, autocomplete: "email" %>
+            </div>
+            <span class="field-hint">You can edit this email address</span>
+          <% else %>
+            <div class="input-group">
+              <%= form.email_field :email, class: "form-control bg-light", readonly: true, value: @user.email, style: "cursor: not-allowed;" %>
+            </div>
+            <span class="field-hint">Email cannot be edited</span>
+          <% end %>
         </div>
 
         <div class="row g-3">
@@ -146,12 +154,20 @@
           </div>
 
           <div class="col-md-6 mb-3">
-            <%= form.label :role, "Role", class: "form-label" %>
-            <div class="input-group">
-              <%= form.hidden_field :role, value: @user.role %>
-              <input type="text" class="form-control bg-light" value="<%= @user.role.humanize %>" readonly style="cursor: not-allowed;" />
-            </div>
-            <span class="field-hint">Role cannot be edited</span>
+            <%= form.label :role, "Role", class: "form-label required-label" %>
+
+            <% if current_admin_user.super_admin? %>
+              <%= form.select :role,
+                              User.roles.except("super_admin").keys.map { |r| [r.titleize, r] },
+                              { include_blank: "Select Role" },
+                              class: "form-select", required: true %>
+            <% else %>
+              <div class="input-group">
+                <%= form.hidden_field :role, value: @user.role %>
+                <input type="text" class="form-control bg-light" value="<%= @user.role.humanize %>" readonly style="cursor: not-allowed;" />
+              </div>
+              <span class="field-hint">Role cannot be edited</span>
+            <% end %>
           </div>
         </div>
 

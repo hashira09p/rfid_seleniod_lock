@@ -65,6 +65,38 @@
           <span class="field-hint form-span">The primary college this professor is affiliated with</span>
         </div>
 
+        <% if current_admin_user.super_admin? %>
+          <div class="mb-3 mt-3">
+            <%= form.label :role, "User Role", class: "form-label required-label" %>
+            <%= form.select :role,
+                            User.roles.except("super_admin").keys.map { |r| [r.titleize, r] },
+                            { include_blank: "Select User Role" },
+                            class: "form-select", required: true %>
+            <div class="invalid-feedback">Please select a role</div>
+            <span class="field-hint form-span">Assign whether this user is a Professor or Admin</span>
+          </div>
+        <% end %>
+
+        <% if current_admin_user.super_admin? %>
+          <div class="form-section-title mt-3">Account Security</div>
+
+          <div class="mb-3">
+            <%= form.label :password, "Password", class: "form-label required-label" %>
+            <div class="input-group">
+              <%= form.password_field :password, class: "form-control", placeholder: "Enter password", required: true %>
+              <div class="invalid-feedback">Password is required</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :password_confirmation, "Confirm Password", class: "form-label required-label" %>
+            <div class="input-group">
+              <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Re-enter password", required: true %>
+              <div class="invalid-feedback">Password confirmation is required</div>
+            </div>
+          </div>
+        <% end %>
+
         <div class="form-footer">
           <div class="btn-group-responsive">
             <%= link_to professor_index_path, class: "btn btn-reset me-md-2" do %>
@@ -87,7 +119,7 @@
 
 <script>
     // Form validation script
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const forms = document.querySelectorAll('.needs-validation');
 
         Array.from(forms).forEach(form => {

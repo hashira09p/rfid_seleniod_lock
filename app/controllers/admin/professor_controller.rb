@@ -52,15 +52,17 @@ class Admin::ProfessorController < AdminApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.role = "professor"
+
+    # Only assign default role if not a super admin
+    @user.role = "professor" unless current_admin_user.super_admin?
     @user.status = "active"
     @user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
 
     surname = @user.lastname&.upcase || "DEFAULT"
     generated_password = "#{surname}123!"
 
-    @user.password = generated_password
-    @user.password_confirmation = generated_password
+    @user.password = generated_password unless current_admin_user.super_admin?
+    @user.password_confirmation = generated_password unless current_admin_user.super_admin?
 
     if @user.save
       flash[:notice] = "Professor #{@user.firstname} #{@user.lastname} created successfully!"
@@ -90,6 +92,24 @@ class Admin::ProfessorController < AdminApplicationController
   end
 
   def destroy
+    # Prevent deleting other super admins
+    if @user.super_admin?
+      flash[:alert] = "Super Admin account cannot be deleted."
+      redirect_to professor_index_path and return
+    end
+
+    # Prevent Admins from deleting Admins or Super Admins
+    if current_admin_user.admin? && (@user.admin? || @user.super_admin?)
+      flash[:alert] = "You are not authorized to delete this account."
+      redirect_to professor_index_path and return
+    end
+
+    # Optional: Prevent self-deletion
+    if current_admin_user == @user
+      flash[:alert] = "You cannot delete your own account."
+      redirect_to professor_index_path and return
+    end
+
     if @user.remarks.nil?
       archived_email = @user.email.sub('@', "_archived_#{Time.now.to_i}@")
 
@@ -106,9 +126,9 @@ class Admin::ProfessorController < AdminApplicationController
         flash[:notice] = 'Archived professor permanently deleted.'
         redirect_to history_professor_path
       else
-        flash[:alert] = "Failed to update professor: #{@user.errors.full_messages.join(', ')}"
-        redirect_to history_professor_path
+        flash[:alert] = "Failed to delete user: #{@user.errors.full_messages.join(', ')}"
       end
+      redirect_to history_professor_path
     end
   end
 
