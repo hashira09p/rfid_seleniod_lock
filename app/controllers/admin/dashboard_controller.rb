@@ -1,8 +1,8 @@
 class Admin::DashboardController < AdminApplicationController
   def index
-    @total_users = User.where(remarks: nil).count
-    @active_users = User.where(status: 1, remarks: nil).count
-    @inactive_users = User.where(status: 0, remarks: nil).count
+    @total_users = User.where(remarks: nil).where.not(role: :super_admin).count
+    @active_users = User.where(status: 1, remarks: nil).where.not(role: :super_admin).count
+    @inactive_users = User.where(status: 0, remarks: nil).where.not(role: :super_admin).count
 
     @total_cards = Card.where(remarks: nil).count
     @active_cards = Card.where(status: 1, remarks: nil).count

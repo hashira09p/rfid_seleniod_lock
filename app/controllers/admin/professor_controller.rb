@@ -14,7 +14,7 @@ class Admin::ProfessorController < AdminApplicationController
       end
     end
 
-    users_query = User.where(remarks: nil)
+    users_query = User.where(remarks: nil).where.not(role: :super_admin)
                       .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(users.created_at), UNIX_TIMESTAMP(users.updated_at)) DESC"))
 
     if params[:fullname].present?
