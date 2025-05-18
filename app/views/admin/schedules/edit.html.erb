@@ -236,7 +236,7 @@
           <%= form.label :user_id, "Professor", class: "form-label required-label" %>
           <div class="input-group">
             <%= form.select :user_id,
-                            User.where(status: "active").order(:firstname)
+                            User.where(status: "active").where.not(role: :super_admin).order(:firstname)
                                 .map { |user| ["#{user.firstname} #{user.middlename} #{user.lastname}", user.id] },
                             { include_blank: "Select Professor" },
                             { class: "form-select", id: "user-select", required: true } %>
