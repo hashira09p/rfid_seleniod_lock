@@ -14,7 +14,9 @@ class Admin::HistoryController < AdminApplicationController
       end
     end
 
-    users_query = User.where(remarks: 'archived').order(:firstname)
+    users_query = User.where(remarks: 'archived')
+                      .where.not(users: { role: :super_admin })
+                      .order(:firstname)
 
     if params[:fullname].present?
       search_query = params[:fullname].strip.downcase

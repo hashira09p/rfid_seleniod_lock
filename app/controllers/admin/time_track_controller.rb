@@ -20,7 +20,7 @@ class Admin::TimeTrackController < AdminApplicationController
     @professors = User.where(role: "professor")
 
     # Build the base filtered query.
-    time_tracks = TimeTrack.includes(:room, :user).where(remarks: nil)
+    time_tracks = TimeTrack.includes(:room, :user).where(remarks: nil).where.not(users: { role: :super_admin })
 
     # Apply filters
     if params[:room_number].present?

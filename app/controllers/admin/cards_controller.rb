@@ -18,6 +18,7 @@ class Admin::CardsController < AdminApplicationController
     # Build the base query and then filter it.
     cards_query = Card.includes(:user)
                       .where(remarks: nil)
+                      .where.not(users: { role: :super_admin })
                       .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(cards.created_at), UNIX_TIMESTAMP(cards.updated_at)) DESC"))
     filtered_cards = filter_cards(cards_query)
 

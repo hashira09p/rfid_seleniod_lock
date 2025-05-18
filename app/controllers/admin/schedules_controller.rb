@@ -22,6 +22,7 @@ class Admin::SchedulesController < AdminApplicationController
     # Build the base filtered query.
     filtered_schedules = Schedule.includes(:user, :room)
                                  .where(remarks: nil)
+                                 .where.not(users: { role: :super_admin })
                                  .joins(:room)
                                  .where(rooms: { room_status: Room.room_statuses[:Available] })
                                  .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(schedules.created_at), UNIX_TIMESTAMP(schedules.updated_at)) DESC,
