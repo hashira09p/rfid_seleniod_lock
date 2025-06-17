@@ -14,7 +14,7 @@ class Admin::Devise::SessionsController < Devise::SessionsController
   def create
     sign_out(current_admin_user) if current_admin_user # prevent "already signed in" error
 
-    user = User.find_by(email: params[:admin_user][:email])
+    user = User.find_by(email: params[:user][:email])
 
     if user&.admin? || user&.super_admin?
       flash[:notice] = "Welcome, #{user.firstname}"
