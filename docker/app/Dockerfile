@@ -1,4 +1,4 @@
-FROM ruby:3.3.7
+FROM ruby:3.3.0
 RUN bundle config --global frozen 0
 
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \

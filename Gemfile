@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.7"
+ruby "3.3.0"
 gem 'base64', require: false
 gem 'mutex_m', require: false
 
@@ -15,9 +15,8 @@ gem "sprockets-rails"
 
 gem 'rack-cors'
 
-
-# Use mysql as the database for Active Record
-gem "mysql2", "~> 0.5"
+# Use postgresql as the database for Active Record
+gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
