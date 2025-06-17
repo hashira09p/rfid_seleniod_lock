@@ -62,6 +62,19 @@ Rails.application.routes.draw do
     root 'professor/professor#index', as: :professor_root
   end
 
+  # Default admin authentication routes (for main domain)
+  scope module: 'admin' do
+    devise_for :users, controllers: {
+      sessions: 'admin/devise/sessions',
+      confirmations: 'admin/devise/confirmations',
+      mailers: 'admin/devise/mailers',
+      passwords: 'admin/devise/passwords',
+      registrations: 'admin/devise/registrations',
+      shared: 'admin/devise/shared',
+      unlocks: 'admin/devise/unlocks'
+    }
+  end
+
   # Default root route when no domain constraints match
   root 'admin/dashboard#index'
 end
