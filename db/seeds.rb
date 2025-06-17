@@ -9,77 +9,189 @@
 # Admin reset password
 # User.find(1).update(password: "123456")
 
+puts "🌱 Starting database seeding..."
+
 # SUPER ADMIN
-User.create(id: 8, firstname: "Super", lastname: "Admin", academic_college: 0, role: 2, email: "super_admin@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
+super_admin = User.find_or_create_by(email: "super_admin@tup.edu.ph") do |user|
+  user.firstname = "Super"
+  user.lastname = "Admin"
+  user.academic_college = 0
+  user.role = 2
+  user.password = "123456"
+  user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
+  user.status = 1
+end
+puts "✅ Super Admin: #{super_admin.email}"
 
 # USERS
-User.create(id: 1, firstname: "Aimee", middlename: "Guardaya", lastname: "Acoba", academic_college: 5, role: 0, email: "aimee_acoba@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 2, firstname: "Marc Ardie", lastname: "Ardiente", academic_college: 1, role: 1, email: "marcardie_ardiente@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 3, firstname: "Minabelle", lastname: "Villafurte", academic_college: 1, role: 1, email: "minabelle_villafuerte@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 4, firstname: "Jonel", lastname: "Macalisang", academic_college: 1, role: 1, email: "jonel_macalisang@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 5, firstname: "Hilda", lastname: "Robino", academic_college: 1, role: 1, email: "hilda_robino@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 6, firstname: "Ian", lastname: "De Los Trinos", academic_college: 1, role: 1, email: "ian_delostrinos@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
-User.create(id: 7, firstname: "Dennis", lastname: "Tabucol", academic_college: 1, role: 1, email: "dennis_tabucol@tup.edu.ph", password: "123456", api_token: "6dbe948bb56f1d6827fbbd8321c7ad14", created_at: Time.now, updated_at: Time.now, status: 1)
+users_data = [
+  { firstname: "Aimee", middlename: "Guardaya", lastname: "Acoba", academic_college: 5, role: 0, email: "aimee_acoba@tup.edu.ph" },
+  { firstname: "Marc Ardie", lastname: "Ardiente", academic_college: 1, role: 1, email: "marcardie_ardiente@tup.edu.ph" },
+  { firstname: "Minabelle", lastname: "Villafurte", academic_college: 1, role: 1, email: "minabelle_villafuerte@tup.edu.ph" },
+  { firstname: "Jonel", lastname: "Macalisang", academic_college: 1, role: 1, email: "jonel_macalisang@tup.edu.ph" },
+  { firstname: "Hilda", lastname: "Robino", academic_college: 1, role: 1, email: "hilda_robino@tup.edu.ph" },
+  { firstname: "Ian", lastname: "De Los Trinos", academic_college: 1, role: 1, email: "ian_delostrinos@tup.edu.ph" },
+  { firstname: "Dennis", lastname: "Tabucol", academic_college: 1, role: 1, email: "dennis_tabucol@tup.edu.ph" }
+]
+
+users_data.each do |user_data|
+  user = User.find_or_create_by(email: user_data[:email]) do |u|
+    u.firstname = user_data[:firstname]
+    u.middlename = user_data[:middlename] if user_data[:middlename]
+    u.lastname = user_data[:lastname]
+    u.academic_college = user_data[:academic_college]
+    u.role = user_data[:role]
+    u.password = "123456"
+    u.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
+    u.status = 1
+  end
+  puts "✅ User: #{user.email}"
+end
 
 # CARDS
-Card.create(id: 1, uid: "CARD001", status: 1, user_id: 1, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 2, uid: "CARD002", status: 1, user_id: 2, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 3, uid: "CARD003", status: 1, user_id: 3, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 4, uid: "CARD004", status: 1, user_id: 4, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 5, uid: "CARD005", status: 1, user_id: 5, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 6, uid: "CARD006", status: 1, user_id: 6, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 7, uid: "CARD007", status: 1, user_id: 7, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 8, uid: "CARD008", status: 1, user_id: 8, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Card.create(id: 9, uid: "CARD009", status: 1, user_id: 9, uid_type: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
+User.all.each_with_index do |user, index|
+  next if Card.exists?(user_id: user.id)
+  
+  card = Card.create!(
+    uid: "CARD#{(index + 1).to_s.rjust(3, '0')}",
+    status: 1,
+    user_id: user.id,
+    uid_type: 0,
+    remarks: nil
+  )
+  puts "✅ Card: #{card.uid} for #{user.email}"
+end
 
 # ROOMS
-Room.create(id: 1, room_number: 408, room_status: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Room.create(id: 2, room_number: 409, room_status: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Room.create(id: 3, room_number: 410, room_status: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Room.create(id: 4, room_number: 411, room_status: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Room.create(id: 5, room_number: 412, room_status: 0, remarks: nil, created_at: Time.now, updated_at: Time.now)
+rooms_data = [
+  { room_number: 408, room_status: 1 },
+  { room_number: 409, room_status: 1 },
+  { room_number: 410, room_status: 0 },
+  { room_number: 411, room_status: 0 },
+  { room_number: 412, room_status: 0 }
+]
+
+rooms_data.each do |room_data|
+  room = Room.find_or_create_by(room_number: room_data[:room_number]) do |r|
+    r.room_status = room_data[:room_status]
+    r.remarks = nil
+  end
+  puts "✅ Room: #{room.room_number}"
+end
 
 # SCHEDULES
-# MARC ARDIE ARDIENTE
-Schedule.create(id: 1, user_id: 2, description: 0, subject: "CPET2L-M", day: 2, start_time: "07:00", end_time: "10:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 2, user_id: 2, description: 0, subject: "CPET2L-M", day: 4, start_time: "07:00", end_time: "10:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 3, user_id: 2, description: 0, subject: "CPET9L-M", day: 5, start_time: "10:30", end_time: "13:30", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 2, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 4, user_id: 2, description: 0, subject: "CPET15L-M", day: 1, start_time: "09:00", end_time: "12:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 5, user_id: 2, description: 0, subject: "CPET15L-M", day: 1, start_time: "12:30", end_time: "15:30", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 6, user_id: 2, description: 0, subject: "CPET15L-M", day: 2, start_time: "12:30", end_time: "15:30", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 7, user_id: 2, description: 0, subject: "CPET15L-M", day: 4, start_time: "12:30", end_time: "15:30", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 8, user_id: 2, description: 1, subject: "ELECTIVE2-M", day: 5, start_time: "07:00", end_time: "10:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 4, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 9, user_id: 2, description: 1, subject: "ELECTIVE2-M", day: 5, start_time: "14:00", end_time: "17:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 4, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 10, user_id: 2, description: 1, subject: "ELECTIVE2-M", day: 2, start_time: "10:30", end_time: "12:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 4, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 11, user_id: 2, description: 1, subject: "ELECTIVE2-M", day: 4, start_time: "10:30", end_time: "12:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 4, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 12, user_id: 2, description: 1, subject: "ELECTIVE2-M", day: 3, start_time: "09:00", end_time: "12:00", room_id: 1, school_year: "2024-2025", semester: 1, year_level: 4, remarks: nil, created_at: Time.now, updated_at: Time.now)
+marc_user = User.find_by(email: "marcardie_ardiente@tup.edu.ph")
+minabelle_user = User.find_by(email: "minabelle_villafuerte@tup.edu.ph")
+jonel_user = User.find_by(email: "jonel_macalisang@tup.edu.ph")
+room_408 = Room.find_by(room_number: 408)
+room_409 = Room.find_by(room_number: 409)
+room_410 = Room.find_by(room_number: 410)
 
-# MINABELLE VILLAFUERTE
-Schedule.create(id: 13, user_id: 3, description: 0, subject: "CPET2L-M", day: 2, start_time: "07:00", end_time: "10:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 14, user_id: 3, description: 0, subject: "CPET2L-M", day: 2, start_time: "12:30", end_time: "15:30", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 15, user_id: 3, description: 0, subject: "CPET2L-M", day: 3, start_time: "07:00", end_time: "10:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 16, user_id: 3, description: 0, subject: "CPET2L-M", day: 3, start_time: "12:30", end_time: "15:30", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 17, user_id: 3, description: 0, subject: "CPTR1L-M", day: 5, start_time: "12:30", end_time: "15:30", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 18, user_id: 3, description: 0, subject: "CPTR1L-M", day: 1, start_time: "07:00", end_time: "10:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 19, user_id: 3, description: 1, subject: "CPET10-M", day: 1, start_time: "12:30", end_time: "15:30", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 2, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 20, user_id: 3, description: 1, subject: "CPET10-M", day: 4, start_time: "12:30", end_time: "15:30", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 2, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 21, user_id: 3, description: 1, subject: "CPET8-M", day: 2, start_time: "10:30", end_time: "12:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 2, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 22, user_id: 3, description: 1, subject: "CPET8-M", day: 4, start_time: "10:30", end_time: "12:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 2, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 23, user_id: 3, description: 1, subject: "BET3-M", day: 2, start_time: "07:00", end_time: "10:00", room_id: 4, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 24, user_id: 3, description: 1, subject: "BET3-M", day: 3, start_time: "10:30", end_time: "12:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 25, user_id: 3, description: 1, subject: "BET3-M", day: 5, start_time: "10:30", end_time: "12:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 26, user_id: 3, description: 1, subject: "ELECTIVE1-M", day: 4, start_time: "07:00", end_time: "10:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 27, user_id: 3, description: 1, subject: "ELECTIVE1-M", day: 5, start_time: "07:00", end_time: "10:00", room_id: 2, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
+if marc_user && room_408
+  marc_schedules = [
+    { description: 0, subject: "CPET2L-M", day: 2, start_time: "07:00", end_time: "10:00", year_level: 1 },
+    { description: 0, subject: "CPET9L-M", day: 5, start_time: "10:30", end_time: "13:30", year_level: 2 },
+    { description: 1, subject: "ELECTIVE2-M", day: 3, start_time: "09:00", end_time: "12:00", year_level: 4 }
+  ]
 
-# JONEL MACALISANG
-Schedule.create(id: 28, user_id: 4, description: 1, subject: "CAD-M", day: 1, start_time: "10:30", end_time: "13:30", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 29, user_id: 4, description: 1, subject: "CAD-M", day: 3, start_time: "10:30", end_time: "13:30", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 1, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 30, user_id: 4, description: 1, subject: "CpET14-M", day: 5, start_time: "12:30", end_time: "15:30", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 31, user_id: 4, description: 1, subject: "CpET14-M", day: 2, start_time: "10:30", end_time: "12:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 32, user_id: 4, description: 1, subject: "CpET14-M", day: 4, start_time: "10:30", end_time: "12:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 33, user_id: 4, description: 0, subject: "CpET14L-M", day: 2, start_time: "12:30", end_time: "15:30", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 34, user_id: 4, description: 0, subject: "CpET14L-M", day: 4, start_time: "12:30", end_time: "15:30", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 35, user_id: 4, description: 0, subject: "CpET14L-M", day: 2, start_time: "16:00", end_time: "19:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 36, user_id: 4, description: 0, subject: "CpET14L-M", day: 4, start_time: "16:00", end_time: "19:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 37, user_id: 4, description: 0, subject: "CpET14L-M", day: 1, start_time: "16:00", end_time: "19:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
-Schedule.create(id: 38, user_id: 4, description: 0, subject: "CpET14L-M", day: 3, start_time: "16:00", end_time: "19:00", room_id: 3, school_year: "2024-2025", semester: 1, year_level: 3, remarks: nil, created_at: Time.now, updated_at: Time.now)
+  marc_schedules.each do |schedule_data|
+    next if Schedule.exists?(
+      user_id: marc_user.id,
+      subject: schedule_data[:subject],
+      day: schedule_data[:day],
+      start_time: schedule_data[:start_time]
+    )
+    
+    Schedule.create!(
+      user_id: marc_user.id,
+      description: schedule_data[:description],
+      subject: schedule_data[:subject],
+      day: schedule_data[:day],
+      start_time: schedule_data[:start_time],
+      end_time: schedule_data[:end_time],
+      room_id: room_408.id,
+      school_year: "2024-2025",
+      semester: 1,
+      year_level: schedule_data[:year_level],
+      remarks: nil
+    )
+    puts "✅ Schedule: #{schedule_data[:subject]} for #{marc_user.email}"
+  end
+end
+
+if minabelle_user && room_409
+  # MINABELLE VILLAFUERTE schedules
+  minabelle_schedules = [
+    { description: 0, subject: "CPET2L-M", day: 2, start_time: "07:00", end_time: "10:00", year_level: 1 },
+    { description: 0, subject: "CPET2L-M", day: 2, start_time: "12:30", end_time: "15:30", year_level: 1 },
+    { description: 0, subject: "CPET2L-M", day: 3, start_time: "07:00", end_time: "10:00", year_level: 1 },
+    { description: 0, subject: "CPET2L-M", day: 3, start_time: "12:30", end_time: "15:30", year_level: 1 },
+    { description: 0, subject: "CPTR1L-M", day: 5, start_time: "12:30", end_time: "15:30", year_level: 1 },
+    { description: 0, subject: "CPTR1L-M", day: 1, start_time: "07:00", end_time: "10:00", year_level: 1 },
+    { description: 1, subject: "CPET10-M", day: 1, start_time: "12:30", end_time: "15:30", year_level: 2 },
+    { description: 1, subject: "CPET10-M", day: 4, start_time: "12:30", end_time: "15:30", year_level: 2 },
+    { description: 1, subject: "CPET8-M", day: 2, start_time: "10:30", end_time: "12:00", year_level: 2 },
+    { description: 1, subject: "CPET8-M", day: 4, start_time: "10:30", end_time: "12:00", year_level: 2 },
+    { description: 1, subject: "BET3-M", day: 2, start_time: "07:00", end_time: "10:00", year_level: 3 },
+    { description: 1, subject: "BET3-M", day: 3, start_time: "10:30", end_time: "12:00", year_level: 3 },
+    { description: 1, subject: "BET3-M", day: 5, start_time: "10:30", end_time: "12:00", year_level: 3 },
+    { description: 1, subject: "ELECTIVE1-M", day: 4, start_time: "07:00", end_time: "10:00", year_level: 3 },
+    { description: 1, subject: "ELECTIVE1-M", day: 5, start_time: "07:00", end_time: "10:00", year_level: 3 }
+  ]
+
+  minabelle_schedules.each do |schedule_data|
+    schedule = Schedule.find_or_create_by(
+      user_id: minabelle_user.id,
+      subject: schedule_data[:subject],
+      day: schedule_data[:day],
+      start_time: schedule_data[:start_time]
+    ) do |s|
+      s.description = schedule_data[:description]
+      s.end_time = schedule_data[:end_time]
+      s.room_id = room_409.id
+      s.school_year = "2024-2025"
+      s.semester = 1
+      s.year_level = schedule_data[:year_level]
+      s.remarks = nil
+    end
+    puts "✅ Schedule created/found: #{schedule.subject} for #{minabelle_user.email}"
+  end
+end
+
+if jonel_user && room_410
+  # JONEL MACALISANG schedules
+  jonel_schedules = [
+    { description: 1, subject: "CAD-M", day: 1, start_time: "10:30", end_time: "13:30", year_level: 1 },
+    { description: 1, subject: "CAD-M", day: 3, start_time: "10:30", end_time: "13:30", year_level: 1 },
+    { description: 1, subject: "CpET14-M", day: 5, start_time: "12:30", end_time: "15:30", year_level: 3 },
+    { description: 1, subject: "CpET14-M", day: 2, start_time: "10:30", end_time: "12:00", year_level: 3 },
+    { description: 1, subject: "CpET14-M", day: 4, start_time: "10:30", end_time: "12:00", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 2, start_time: "12:30", end_time: "15:30", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 4, start_time: "12:30", end_time: "15:30", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 2, start_time: "16:00", end_time: "19:00", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 4, start_time: "16:00", end_time: "19:00", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 1, start_time: "16:00", end_time: "19:00", year_level: 3 },
+    { description: 0, subject: "CpET14L-M", day: 3, start_time: "16:00", end_time: "19:00", year_level: 3 }
+  ]
+
+  jonel_schedules.each do |schedule_data|
+    schedule = Schedule.find_or_create_by(
+      user_id: jonel_user.id,
+      subject: schedule_data[:subject],
+      day: schedule_data[:day],
+      start_time: schedule_data[:start_time]
+    ) do |s|
+      s.description = schedule_data[:description]
+      s.end_time = schedule_data[:end_time]
+      s.room_id = room_410.id
+      s.school_year = "2024-2025"
+      s.semester = 1
+      s.year_level = schedule_data[:year_level]
+      s.remarks = nil
+    end
+    puts "✅ Schedule created/found: #{schedule.subject} for #{jonel_user.email}"
+  end
+end
+
+puts "🎉 Database seeding completed!"
+puts "🔐 Login: super_admin@tup.edu.ph / 123456"
