@@ -130,7 +130,7 @@
         <div class="mb-3">
           <%= form.label :email, "Email Address", class: "form-label required-label" %>
 
-          <% if current_admin_user.super_admin? %>
+          <% if current_user.super_admin? %>
             <div class="input-group">
               <%= form.email_field :email, class: "form-control", required: true, value: @user.email, autocomplete: "email" %>
             </div>
@@ -156,7 +156,7 @@
           <div class="col-md-6 mb-3">
             <%= form.label :role, "Role", class: "form-label required-label" %>
 
-            <% if current_admin_user.super_admin? %>
+            <% if current_user.super_admin? %>
               <%= form.select :role,
                               User.roles.except("super_admin").keys.map { |r| [r.titleize, r] },
                               { include_blank: "Select Role" },

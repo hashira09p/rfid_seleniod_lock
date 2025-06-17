@@ -1,5 +1,5 @@
 class Admin::TimeTrackController < AdminApplicationController
-  before_action :authenticate_admin_user!
+  before_action :authenticate_user!
   before_action :time_track_params, only: [:create, :update]
   before_action :set_time_track, only: [:edit, :update, :destroy]
 

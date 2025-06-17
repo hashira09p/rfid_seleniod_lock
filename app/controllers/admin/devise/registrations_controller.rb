@@ -32,7 +32,7 @@ class Admin::Devise::RegistrationsController < Devise::RegistrationsController
       bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
 
       flash[:notice] = "Profile updated successfully!"
-      redirect_to edit_admin_user_registration_path and return
+      redirect_to edit_user_registration_path and return
     else
       flash[:alert] = "Failed to update profile: #{resource.errors.full_messages.join(', ')}"
       render :edit

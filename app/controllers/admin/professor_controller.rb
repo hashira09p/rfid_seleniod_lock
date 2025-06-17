@@ -1,5 +1,5 @@
 class Admin::ProfessorController < AdminApplicationController
-  before_action :authenticate_admin_user!, except: [:create]
+  before_action :authenticate_user!, except: [:create]
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
@@ -55,15 +55,15 @@ class Admin::ProfessorController < AdminApplicationController
     @user = User.new(user_params)
 
     # Only assign default role if not a super admin
-    @user.role = "professor" unless current_admin_user.super_admin?
+    @user.role = "professor" unless current_user.super_admin?
     @user.status = "active"
     @user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
 
     surname = @user.lastname&.upcase || "DEFAULT"
     generated_password = "#{surname}123!"
 
-    @user.password = generated_password unless current_admin_user.super_admin?
-    @user.password_confirmation = generated_password unless current_admin_user.super_admin?
+    @user.password = generated_password unless current_user.super_admin?
+    @user.password_confirmation = generated_password unless current_user.super_admin?
 
     if @user.save
       flash[:notice] = "Professor #{@user.firstname} #{@user.lastname} created successfully!"
@@ -100,13 +100,13 @@ class Admin::ProfessorController < AdminApplicationController
     end
 
     # Prevent Admins from deleting Admins or Super Admins
-    if current_admin_user.admin? && (@user.admin? || @user.super_admin?)
+    if current_user.admin? && (@user.admin? || @user.super_admin?)
       flash[:alert] = "You are not authorized to delete this account."
       redirect_to professor_index_path and return
     end
 
     # Optional: Prevent self-deletion
-    if current_admin_user == @user
+    if current_user == @user
       flash[:alert] = "You cannot delete your own account."
       redirect_to professor_index_path and return
     end

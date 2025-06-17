@@ -8,7 +8,7 @@
 
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><%= link_to "Dashboard", admin_root_path, class: "text-decoration-none" %></li>
+        <li class="breadcrumb-item"><%= link_to "Dashboard", root_path, class: "text-decoration-none" %></li>
         <li class="breadcrumb-item active fw-semibold">Edit Profile</li>
       </ol>
     </nav>
@@ -138,7 +138,7 @@
 
         <div class="form-footer">
           <div>
-            <%= link_to admin_root_path, class: "btn btn-reset me-2" do %>
+            <%= link_to root_path, class: "btn btn-reset me-2" do %>
               <i class="bi bi-arrow-left me-1"></i> Cancel
             <% end %>
           </div>

@@ -1,5 +1,5 @@
 class Admin::RoomDisplayController < AdminApplicationController
-  before_action :authenticate_admin_user!, except: [:room_statuses]
+  before_action :authenticate_user!, except: [:room_statuses]
 
   def index
     @rooms = Room.all.includes(:schedules).where(remarks: nil).order(:room_number)

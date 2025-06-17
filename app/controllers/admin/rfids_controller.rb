@@ -1,7 +1,7 @@
 class Admin::RfidsController < AdminApplicationController
   before_action :authenticate_with_api_token, only: [:create]
   skip_before_action :verify_authenticity_token, only: [:create]
-  before_action :authenticate_admin_user!, except: [:create]
+  before_action :authenticate_user!, except: [:create]
 
   def index; end
 

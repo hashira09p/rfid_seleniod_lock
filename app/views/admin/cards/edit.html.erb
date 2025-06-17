@@ -120,7 +120,7 @@
         <div class="mb-3">
           <div class="form-section-title">RFID Number</div>
 
-          <% if current_admin_user.super_admin? %>
+          <% if current_user.super_admin? %>
             <p>Scanned RFID number:
               <turbo-frame id="rfid-uid-placeholder" class="fw-bold"><%= @card.uid %></turbo-frame>
               <%= turbo_stream_from "rfid_scans" %>
@@ -153,7 +153,7 @@
         <% if @card.user.present? %>
           <div class="form-section-title mt-3">Assignment Information</div>
 
-          <% if current_admin_user.super_admin? %>
+          <% if current_user.super_admin? %>
             <div class="mb-3">
               <%= form.label :user_id, "Assigned Professor", class: "form-label required-label" %>
               <%= form.select :user_id,
