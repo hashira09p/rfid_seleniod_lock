@@ -59,4 +59,7 @@ Rails.application.routes.draw do
 
   # Default root route
   root 'admin/dashboard#index'
+  
+  # Add admin_root_path helper for compatibility
+  get '/admin', to: 'admin/dashboard#index', as: :admin_root
 end
