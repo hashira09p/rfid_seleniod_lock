@@ -12,7 +12,7 @@ class Admin::Devise::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    sign_out(current_admin_user) if current_admin_user # prevent "already signed in" error
+    sign_out(current_user) if current_user # prevent "already signed in" error
 
     user = User.find_by(email: params[:user][:email])
 
@@ -21,7 +21,7 @@ class Admin::Devise::SessionsController < Devise::SessionsController
       super
     else
       flash[:alert] = 'Invalid account or insufficient privileges.'
-      redirect_to new_admin_user_session_path
+      redirect_to new_user_session_path
     end
   end
 
