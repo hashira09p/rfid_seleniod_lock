@@ -19,7 +19,7 @@ class Admin::CardsController < AdminApplicationController
     cards_query = Card.includes(:user)
                       .where(remarks: nil)
                       .where.not(users: { role: :super_admin })
-                      .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(cards.created_at), UNIX_TIMESTAMP(cards.updated_at)) DESC"))
+                      .order(Arel.sql("GREATEST(EXTRACT(EPOCH FROM cards.created_at), EXTRACT(EPOCH FROM cards.updated_at)) DESC"))
     filtered_cards = filter_cards(cards_query)
 
     # For HTML, paginate the results; for PDF, use the full filtered set.

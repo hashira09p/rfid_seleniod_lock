@@ -25,10 +25,10 @@ class Admin::SchedulesController < AdminApplicationController
                                  .where.not(users: { role: :super_admin })
                                  .joins(:room)
                                  .where(rooms: { room_status: Room.room_statuses[:Available] })
-                                 .order(Arel.sql("GREATEST(UNIX_TIMESTAMP(schedules.created_at), UNIX_TIMESTAMP(schedules.updated_at)) DESC,
+                                 .order(Arel.sql("GREATEST(EXTRACT(EPOCH FROM schedules.created_at), EXTRACT(EPOCH FROM schedules.updated_at)) DESC,
                                                   day ASC, school_year ASC, rooms.room_number ASC,
-                                                  TIME_FORMAT(start_time, '%p') DESC,
-                                                  TIME_FORMAT(start_time, '%h:%i %p') DESC"))
+                                                  TO_CHAR(start_time, 'AM') DESC,
+                                                  TO_CHAR(start_time, 'HH12:MI AM') DESC"))
 
     # Apply filters if present.
     filtered_schedules = filtered_schedules.where(day: params[:day]) if params[:day].present?
