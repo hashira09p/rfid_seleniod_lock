@@ -61,4 +61,7 @@ Rails.application.routes.draw do
     end
     root 'professor/professor#index', as: :professor_root
   end
+
+  # Default root route when no domain constraints match
+  root 'admin/dashboard#index'
 end

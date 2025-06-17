@@ -7,5 +7,7 @@ development:
 production:
   admin:
     - "admin.com"
+    - "classroom-access-monitoring.onrender.com"
   professor:
     - "professor.com"
+    - "classroom-access-monitoring.onrender.com"
