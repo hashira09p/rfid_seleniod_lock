@@ -5,8 +5,6 @@ ruby "3.3.7"
 gem 'base64', require: false
 gem 'mutex_m', require: false
 
-gem 'webpacker', '~> 5.4'
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8", ">= 7.0.8.4"
 
