@@ -38,7 +38,7 @@ class Admin::SchedulesController < AdminApplicationController
     if params[:professor_name].present?
       professor_query = params[:professor_name].downcase.strip
       filtered_schedules = filtered_schedules.joins(:user).where(
-        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, ' ', users.lastname)) LIKE :query",
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE :query",
         query: "%#{professor_query}%"
       )
     end

@@ -22,8 +22,8 @@ class Admin::HistoryController < AdminApplicationController
       search_query = params[:fullname].strip.downcase
       users_query = users_query.where(
         'LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query OR ' \
-          'LOWER(CONCAT(firstname, " ", middlename, " ", lastname)) LIKE :query OR ' \
-          'LOWER(CONCAT(firstname, " ", lastname)) LIKE :query',
+          'LOWER(CONCAT(firstname, \' \', middlename, \' \', lastname)) LIKE :query OR ' \
+          'LOWER(CONCAT(firstname, \' \', lastname)) LIKE :query',
         query: "%#{search_query}%"
       )
     end
@@ -144,7 +144,7 @@ class Admin::HistoryController < AdminApplicationController
     if params[:professor_name].present?
       professor_query = params[:professor_name].downcase.strip
       filtered_schedules = filtered_schedules.joins(:user).where(
-        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, ' ', users.lastname)) LIKE :query",
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE :query",
         query: "%#{professor_query}%"
       )
     end
@@ -174,8 +174,8 @@ class Admin::HistoryController < AdminApplicationController
       q = "%#{params[:fullname].strip.downcase}%"
       scope = scope.joins(:user).where(
         'LOWER(users.firstname) LIKE :q OR LOWER(users.middlename) LIKE :q OR LOWER(users.lastname) LIKE :q OR ' \
-          'LOWER(CONCAT(users.firstname, " ", users.middlename, " ", users.lastname)) LIKE :q OR ' \
-          'LOWER(CONCAT(users.firstname, " ", users.lastname)) LIKE :q', q: q
+          'LOWER(CONCAT(users.firstname, \' \', users.middlename, \' \', users.lastname)) LIKE :q OR ' \
+          'LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE :q', q: q
       )
     end
     scope
