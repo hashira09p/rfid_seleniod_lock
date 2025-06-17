@@ -75,6 +75,9 @@ Rails.application.routes.draw do
     }
   end
 
+  # Handle common routing mistakes
+  get '/professor', to: 'application#redirect_professor'
+  
   # Default root route when no domain constraints match
   root 'admin/dashboard#index'
 end
