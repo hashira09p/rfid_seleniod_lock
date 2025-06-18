@@ -30,9 +30,11 @@
             </div>
           </div>
         <% elsif type == 'alert' %>
-          <div class="alert alert-danger error-container mb-3 auto-dismiss" role="alert" data-auto-dismiss="7000">
+          <div class="custom-error-alert mb-3 auto-dismiss" role="alert" data-auto-dismiss="7000">
             <div class="d-flex align-items-center">
-              <i class="bx bx-error-circle me-2" style="font-size: 20px;"></i>
+              <div class="error-icon-circle me-3">
+                <i class="bx bx-error-circle"></i>
+              </div>
               <span><%= message %></span>
             </div>
           </div>
