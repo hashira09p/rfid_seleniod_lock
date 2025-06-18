@@ -79,16 +79,7 @@
 
 
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
-  <div id="loginToast" class="toast align-items-center text-white bg-danger border-0"
-       role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="toastMessage">Invalid login credentials.</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto"
-              data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
+
 
 <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" %>
 
@@ -101,9 +92,7 @@
         const messageContainer = document.getElementById('messageContainer');
         const cardLogo         = document.getElementById('cardLogo');
         const loadingLogo      = document.getElementById('loadingLogo');
-        const toastEl          = document.getElementById('loginToast');
-        const toastMsg         = document.getElementById('toastMessage');
-        const toast            = new bootstrap.Toast(toastEl);
+
 
         function toggleLoginButton() {
             if (emailInput.value.trim() && passwordInput.value.trim()) {
@@ -238,10 +227,45 @@
                       loginButton.disabled = false;
                       loginButton.classList.remove('processing');
 
+                      // Create custom error alert instead of toast
+                      const existingAlert = loginForm.querySelector('.custom-error-alert');
+                      if (existingAlert) {
+                          existingAlert.remove();
+                      }
+
+                      const errorAlert = document.createElement('div');
+                      errorAlert.className = 'custom-error-alert mb-3 auto-dismiss';
+                      errorAlert.setAttribute('role', 'alert');
+                      errorAlert.setAttribute('data-auto-dismiss', '7000');
+                      
                       const tmp = document.createElement('div');
                       tmp.innerHTML = html;
-                      toastMsg.textContent = tmp.querySelector('.alert')?.textContent || 'Login failed.';
-                      toast.show();
+                      const errorMessage = tmp.querySelector('.custom-error-alert')?.textContent?.trim() || 'Login failed.';
+                      
+                      errorAlert.innerHTML = `
+                          <div class="d-flex align-items-center">
+                              <div class="error-icon-circle me-3">
+                                  <i class="bx bx-error-circle"></i>
+                              </div>
+                              <span>${errorMessage}</span>
+                          </div>
+                      `;
+
+                      // Insert after the form opening tag
+                      loginForm.insertBefore(errorAlert, loginForm.firstChild);
+
+                      // Apply auto-dismiss functionality to the new alert
+                      const dismissTime = 7000;
+                      setTimeout(() => {
+                          errorAlert.style.transition = 'all 0.5s ease-out';
+                          errorAlert.style.opacity = '0';
+                          errorAlert.style.transform = 'translateY(-20px)';
+                          setTimeout(() => {
+                              if (errorAlert.parentNode) {
+                                  errorAlert.parentNode.removeChild(errorAlert);
+                              }
+                          }, 500);
+                      }, dismissTime);
                   } else {
                       cardLogo.classList.add('fade-out');
                       loginForm.classList.add('fade-out');
@@ -267,8 +291,42 @@
                   loginButton.value = 'Login';
                   loginButton.disabled = false;
                   loginButton.classList.remove('processing');
-                  toastMsg.textContent = "Something went wrong. Try again.";
-                  toast.show();
+                  
+                  // Create custom error alert instead of toast
+                  const existingAlert = loginForm.querySelector('.custom-error-alert');
+                  if (existingAlert) {
+                      existingAlert.remove();
+                  }
+
+                  const errorAlert = document.createElement('div');
+                  errorAlert.className = 'custom-error-alert mb-3 auto-dismiss';
+                  errorAlert.setAttribute('role', 'alert');
+                  errorAlert.setAttribute('data-auto-dismiss', '7000');
+                  
+                  errorAlert.innerHTML = `
+                      <div class="d-flex align-items-center">
+                          <div class="error-icon-circle me-3">
+                              <i class="bx bx-error-circle"></i>
+                          </div>
+                          <span>Something went wrong. Try again.</span>
+                      </div>
+                  `;
+
+                  // Insert after the form opening tag
+                  loginForm.insertBefore(errorAlert, loginForm.firstChild);
+
+                  // Apply auto-dismiss functionality to the new alert
+                  const dismissTime = 7000;
+                  setTimeout(() => {
+                      errorAlert.style.transition = 'all 0.5s ease-out';
+                      errorAlert.style.opacity = '0';
+                      errorAlert.style.transform = 'translateY(-20px)';
+                      setTimeout(() => {
+                          if (errorAlert.parentNode) {
+                              errorAlert.parentNode.removeChild(errorAlert);
+                          }
+                      }, 500);
+                  }, dismissTime);
               });
         });
     });
