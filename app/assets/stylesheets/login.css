@@ -266,6 +266,39 @@ body::before {
     }
 }
 
+/* Auto-dismiss animations */
+.auto-dismiss {
+    animation: slideInError 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.auto-dismiss::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.7), rgba(255,255,255,0.3));
+    width: 100%;
+    animation: progressBar 7s linear forwards;
+    opacity: 0.6;
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+/* Hover to pause auto-dismiss */
+.auto-dismiss:hover::after {
+    animation-play-state: paused;
+}
+
 /* Success Message Styling (for when reset is successful) */
 .alert-success {
     background: rgba(25, 135, 84, 0.1) !important;

@@ -20,8 +20,12 @@ class Admin::Devise::SessionsController < Devise::SessionsController
       flash[:notice] = "Welcome, #{user.firstname}"
       super
     else
-      flash[:alert] = 'Invalid account or insufficient privileges.'
-      redirect_to new_user_session_path
+      # Set flash.now for immediate display without redirect
+      flash.now[:alert] = 'Invalid account or insufficient privileges.'
+      # Build resource for form display
+      self.resource = resource_class.new(sign_in_params)
+      clean_up_passwords(resource)
+      render :new, status: :unprocessable_entity
     end
   end
 

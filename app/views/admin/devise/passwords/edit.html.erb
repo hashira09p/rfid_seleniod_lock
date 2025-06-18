@@ -23,14 +23,14 @@
 
       <% flash.each do |type, message| %>
         <% if type == 'notice' %>
-          <div class="alert alert-success mb-3" role="alert">
+          <div class="alert alert-success mb-3 auto-dismiss" role="alert" data-auto-dismiss="7000">
             <div class="d-flex align-items-center">
               <i class="bx bx-check-circle me-2" style="font-size: 20px;"></i>
               <span><%= message %></span>
             </div>
           </div>
         <% elsif type == 'alert' %>
-          <div class="alert alert-danger mb-3" role="alert">
+          <div class="alert alert-danger error-container mb-3 auto-dismiss" role="alert" data-auto-dismiss="7000">
             <div class="d-flex align-items-center">
               <i class="bx bx-error-circle me-2" style="font-size: 20px;"></i>
               <span><%= message %></span>
@@ -124,6 +124,43 @@
             confirmPasswordInput.addEventListener('input', toggleResetButton);
             toggleResetButton();
         }
+
+        // Auto-dismiss functionality for flash messages
+        const autoDismissAlerts = document.querySelectorAll('.auto-dismiss');
+        autoDismissAlerts.forEach(alert => {
+            const dismissTime = parseInt(alert.getAttribute('data-auto-dismiss')) || 7000;
+            let timeoutId;
+            let startTime = Date.now();
+            let remainingTime = dismissTime;
+
+            const startDismissTimer = () => {
+                timeoutId = setTimeout(() => {
+                    alert.style.transition = 'all 0.5s ease-out';
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    }, 500);
+                }, remainingTime);
+            };
+
+            // Start initial timer
+            startDismissTimer();
+
+            // Pause timer on hover
+            alert.addEventListener('mouseenter', () => {
+                clearTimeout(timeoutId);
+                remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
+            });
+
+            // Resume timer when mouse leaves
+            alert.addEventListener('mouseleave', () => {
+                startTime = Date.now();
+                startDismissTimer();
+            });
+        });
 
         if (resetForm) {
             resetForm.addEventListener('submit', (e) => {
