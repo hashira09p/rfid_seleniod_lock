@@ -115,12 +115,40 @@
             }
         });
 
+        // Remember Me functionality
+        const rememberMeCheckbox = document.getElementById('remember-me');
+        const rememberMeLabel = document.querySelector('label[for="remember-me"]');
+        
+        if (rememberMeCheckbox && rememberMeLabel) {
+            // Add visual feedback when checkbox state changes
+            rememberMeCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    rememberMeLabel.style.color = '#0faa43';
+                    rememberMeLabel.style.fontWeight = '500';
+                } else {
+                    rememberMeLabel.style.color = 'rgba(255, 255, 255, 0.9)';
+                    rememberMeLabel.style.fontWeight = '400';
+                }
+            });
+        }
+
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             loginButton.value = 'Logging in…';
             loginButton.disabled = true;
             loginButton.classList.add('processing');
+
+            // Get form data including remember_me checkbox
+            const formData = new FormData(loginForm);
+            
+            // Ensure remember_me is included (checkboxes need special handling)
+            const rememberMeCheckbox = document.getElementById('remember-me');
+            if (rememberMeCheckbox && rememberMeCheckbox.checked) {
+                formData.set('user[remember_me]', '1');
+            } else {
+                formData.set('user[remember_me]', '0');
+            }
 
             fetch(loginForm.action, {
                 method: 'POST',
@@ -129,7 +157,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
                 },
-                body: new URLSearchParams(new FormData(loginForm)).toString()
+                body: new URLSearchParams(formData).toString()
             })
               .then(res => res.text())
               .then(html => {
