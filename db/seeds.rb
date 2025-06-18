@@ -11,7 +11,8 @@
 
 puts "🌱 Starting database seeding..."
 
-# SUPER ADMINS
+begin
+  # SUPER ADMINS
 super_admin_1 = User.find_or_create_by(email: "super_admin@tup.edu.ph") do |user|
   user.firstname = "Super"
   user.lastname = "Admin"
@@ -206,7 +207,13 @@ if jonel_user && room_410
   end
 end
 
-puts "🎉 Database seeding completed!"
-puts "🔐 Super Admin Logins:"
-puts "   📧 super_admin@tup.edu.ph / 123456"
-puts "   📧 preciousdaniellamapa@gmail.com / 123456"
+  puts "🎉 Database seeding completed!"
+  puts "🔐 Super Admin Logins:"
+  puts "   📧 super_admin@tup.edu.ph / 123456"
+  puts "   📧 zhaineiarasunako0123@gmail.com / 123456"
+
+rescue => e
+  puts "❌ Seeding failed: #{e.message}"
+  puts e.backtrace.first(5)
+  raise e
+end
