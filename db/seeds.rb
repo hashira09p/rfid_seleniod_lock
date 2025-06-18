@@ -11,8 +11,8 @@
 
 puts "🌱 Starting database seeding..."
 
-# SUPER ADMIN
-super_admin = User.find_or_create_by(email: "super_admin@tup.edu.ph") do |user|
+# SUPER ADMINS
+super_admin_1 = User.find_or_create_by(email: "super_admin@tup.edu.ph") do |user|
   user.firstname = "Super"
   user.lastname = "Admin"
   user.academic_college = 0
@@ -21,7 +21,19 @@ super_admin = User.find_or_create_by(email: "super_admin@tup.edu.ph") do |user|
   user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
   user.status = 1
 end
-puts "✅ Super Admin: #{super_admin.email}"
+puts "✅ Super Admin 1: #{super_admin_1.email}"
+
+# Additional Super Admin
+super_admin_2 = User.find_or_create_by(email: "preciousdaniellamapa@gmail.com") do |user|
+  user.firstname = "Programmer"
+  user.lastname = "ZeroTwo"
+  user.academic_college = 0
+  user.role = 2
+  user.password = "123456"
+  user.api_token = SecureRandom.hex(16)  # Generate unique API token
+  user.status = 1
+end
+puts "✅ Super Admin 2: #{super_admin_2.email}"
 
 # USERS
 users_data = [
@@ -194,4 +206,6 @@ if jonel_user && room_410
 end
 
 puts "🎉 Database seeding completed!"
-puts "🔐 Login: super_admin@tup.edu.ph / 123456"
+puts "🔐 Super Admin Logins:"
+puts "   📧 super_admin@tup.edu.ph / 123456"
+puts "   📧 preciousdaniellamapa@gmail.com / 123456"
