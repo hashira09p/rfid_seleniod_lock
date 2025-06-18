@@ -1,40 +1,40 @@
 Rails.application.routes.draw do
   # Main admin routes (moved outside domain constraints for Render compatibility)
-  scope module: 'admin' do
-    devise_for :users, controllers: {
-      sessions: 'admin/devise/sessions',
-      confirmations: 'admin/devise/confirmations',
-      mailers: 'admin/devise/mailers',
-      passwords: 'admin/devise/passwords',
-      registrations: 'admin/devise/registrations',
-      shared: 'admin/devise/shared',
-      unlocks: 'admin/devise/unlocks'
+    scope module: 'admin' do
+      devise_for :users, controllers: {
+        sessions: 'admin/devise/sessions',
+        confirmations: 'admin/devise/confirmations',
+        mailers: 'admin/devise/mailers',
+        passwords: 'admin/devise/passwords',
+        registrations: 'admin/devise/registrations',
+        shared: 'admin/devise/shared',
+        unlocks: 'admin/devise/unlocks'
     }
 
-    resources :professor do
-      member do
-        patch :toggle_status
+      resources :professor do
+        member do
+          patch :toggle_status
+        end
       end
-    end
 
-    resources :rooms do
-      member do
-        patch :toggle_status
+      resources :rooms do
+        member do
+          patch :toggle_status
+        end
       end
-    end
 
-    resources :users
-    resources :schedules
-    resources :room_display
-    get "room_statuses", to: "room_display#room_statuses"
-    resources :time_track
-    resources :dashboard
+      resources :users
+      resources :schedules
+      resources :room_display
+      get "room_statuses", to: "room_display#room_statuses"
+      resources :time_track
+      resources :dashboard
 
-    get 'history/index'
-    get 'history/professor'
-    get 'history/card'
-    get 'history/room'
-    get 'history/schedule'
+      get 'history/index'
+      get 'history/professor'
+      get 'history/card'
+      get 'history/room'
+      get 'history/schedule'
 
     resources :rfids
     resources :cards do
