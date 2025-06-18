@@ -30,7 +30,7 @@ class Admin::TimeTrackController < AdminApplicationController
     if params[:professor_name].present?
       prof_query = params[:professor_name].downcase.strip
       time_tracks = time_tracks.joins(:user).where(
-        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE :query",
+        "LOWER(users.firstname) LIKE :query OR LOWER(users.lastname) LIKE :query OR LOWER(users.firstname || \' \' || users.lastname) LIKE :query",
         query: "%#{prof_query}%"
       )
     end

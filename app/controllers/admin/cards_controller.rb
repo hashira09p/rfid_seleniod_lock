@@ -154,8 +154,8 @@ class Admin::CardsController < AdminApplicationController
       q = "%#{params[:fullname].strip.downcase}%"
       scope = scope.joins(:user).where(
         'LOWER(users.firstname) LIKE :q OR LOWER(users.middlename) LIKE :q OR LOWER(users.lastname) LIKE :q OR ' \
-          'LOWER(CONCAT(users.firstname, \' \', users.middlename, \' \', users.lastname)) LIKE :q OR ' \
-          'LOWER(CONCAT(users.firstname, \' \', users.lastname)) LIKE :q', q: q
+                  'LOWER(users.firstname || \' \' || COALESCE(users.middlename, \'\') || \' \' || users.lastname) LIKE :q OR ' \
+        'LOWER(users.firstname || \' \' || users.lastname) LIKE :q', q: q
       )
     end
     scope

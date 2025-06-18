@@ -22,8 +22,8 @@ class Admin::ProfessorController < AdminApplicationController
       search_query = params[:fullname].strip.downcase
       users_query = users_query.where(
         'LOWER(firstname) LIKE :query OR LOWER(middlename) LIKE :query OR LOWER(lastname) LIKE :query OR ' \
-          'LOWER(CONCAT(firstname, \' \', middlename, \' \', lastname)) LIKE :query OR ' \
-          'LOWER(CONCAT(firstname, \' \', lastname)) LIKE :query',
+          'LOWER(firstname || \' \' || COALESCE(middlename, \'\') || \' \' || lastname) LIKE :query OR ' \
+          'LOWER(firstname || \' \' || lastname) LIKE :query',
         query: "%#{search_query}%"
       )
     end
