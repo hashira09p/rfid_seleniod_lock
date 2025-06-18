@@ -45,7 +45,7 @@ users_data = [
   { firstname: "Hilda", lastname: "Robino", academic_college: 1, role: 1, email: "hilda_robino@tup.edu.ph" },
   { firstname: "Ian", lastname: "De Los Trinos", academic_college: 1, role: 1, email: "ian_delostrinos@tup.edu.ph" },
   { firstname: "Dennis", lastname: "Tabucol", academic_college: 1, role: 1, email: "dennis_tabucol@tup.edu.ph" },
-  { firstname: "Precious Daniella", lastname: "Mapa", academic_college: 1, role: 1, email: "preciousdaniellamapa@gmail.com" }
+  { firstname: "Precious Daniella", lastname: "Mapa", academic_college: 1, role: 0, email: "preciousdaniellamapa@gmail.com" }
 ]
 
 users_data.each do |user_data|
@@ -109,27 +109,25 @@ if marc_user && room_408
   ]
 
   marc_schedules.each do |schedule_data|
-    next if Schedule.exists?(
-      user_id: marc_user.id,
-      subject: schedule_data[:subject],
-      day: schedule_data[:day],
-      start_time: schedule_data[:start_time]
-    )
-    
-    Schedule.create!(
-      user_id: marc_user.id,
-      description: schedule_data[:description],
-      subject: schedule_data[:subject],
-      day: schedule_data[:day],
-      start_time: schedule_data[:start_time],
-      end_time: schedule_data[:end_time],
-      room_id: room_408.id,
-      school_year: "2024-2025",
-      semester: 1,
-      year_level: schedule_data[:year_level],
-      remarks: nil
-    )
-    puts "✅ Schedule: #{schedule_data[:subject]} for #{marc_user.email}"
+    begin
+      schedule = Schedule.find_or_create_by(
+        user_id: marc_user.id,
+        subject: schedule_data[:subject],
+        day: schedule_data[:day],
+        start_time: schedule_data[:start_time],
+        room_id: room_408.id
+      ) do |s|
+        s.description = schedule_data[:description]
+        s.end_time = schedule_data[:end_time]
+        s.school_year = "2024-2025"
+        s.semester = 1
+        s.year_level = schedule_data[:year_level]
+        s.remarks = nil
+      end
+      puts "✅ Schedule created/found: #{schedule_data[:subject]} for #{marc_user.email}"
+    rescue ActiveRecord::RecordInvalid => e
+      puts "⚠️  Skipped overlapping schedule: #{schedule_data[:subject]} for #{marc_user.email} - #{e.message}"
+    end
   end
 end
 
@@ -154,21 +152,25 @@ if minabelle_user && room_409
   ]
 
   minabelle_schedules.each do |schedule_data|
-    schedule = Schedule.find_or_create_by(
-      user_id: minabelle_user.id,
-      subject: schedule_data[:subject],
-      day: schedule_data[:day],
-      start_time: schedule_data[:start_time]
-    ) do |s|
-      s.description = schedule_data[:description]
-      s.end_time = schedule_data[:end_time]
-      s.room_id = room_409.id
-      s.school_year = "2024-2025"
-      s.semester = 1
-      s.year_level = schedule_data[:year_level]
-      s.remarks = nil
+    begin
+      schedule = Schedule.find_or_create_by(
+        user_id: minabelle_user.id,
+        subject: schedule_data[:subject],
+        day: schedule_data[:day],
+        start_time: schedule_data[:start_time],
+        room_id: room_409.id
+      ) do |s|
+        s.description = schedule_data[:description]
+        s.end_time = schedule_data[:end_time]
+        s.school_year = "2024-2025"
+        s.semester = 1
+        s.year_level = schedule_data[:year_level]
+        s.remarks = nil
+      end
+      puts "✅ Schedule created/found: #{schedule.subject} for #{minabelle_user.email}"
+    rescue ActiveRecord::RecordInvalid => e
+      puts "⚠️  Skipped overlapping schedule: #{schedule_data[:subject]} for #{minabelle_user.email} - #{e.message}"
     end
-    puts "✅ Schedule created/found: #{schedule.subject} for #{minabelle_user.email}"
   end
 end
 
@@ -189,21 +191,25 @@ if jonel_user && room_410
   ]
 
   jonel_schedules.each do |schedule_data|
-    schedule = Schedule.find_or_create_by(
-      user_id: jonel_user.id,
-      subject: schedule_data[:subject],
-      day: schedule_data[:day],
-      start_time: schedule_data[:start_time]
-    ) do |s|
-      s.description = schedule_data[:description]
-      s.end_time = schedule_data[:end_time]
-      s.room_id = room_410.id
-      s.school_year = "2024-2025"
-      s.semester = 1
-      s.year_level = schedule_data[:year_level]
-      s.remarks = nil
+    begin
+      schedule = Schedule.find_or_create_by(
+        user_id: jonel_user.id,
+        subject: schedule_data[:subject],
+        day: schedule_data[:day],
+        start_time: schedule_data[:start_time],
+        room_id: room_410.id
+      ) do |s|
+        s.description = schedule_data[:description]
+        s.end_time = schedule_data[:end_time]
+        s.school_year = "2024-2025"
+        s.semester = 1
+        s.year_level = schedule_data[:year_level]
+        s.remarks = nil
+      end
+      puts "✅ Schedule created/found: #{schedule.subject} for #{jonel_user.email}"
+    rescue ActiveRecord::RecordInvalid => e
+      puts "⚠️  Skipped overlapping schedule: #{schedule_data[:subject]} for #{jonel_user.email} - #{e.message}"
     end
-    puts "✅ Schedule created/found: #{schedule.subject} for #{jonel_user.email}"
   end
 end
 
