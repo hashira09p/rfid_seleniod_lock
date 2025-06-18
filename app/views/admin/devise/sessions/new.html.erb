@@ -26,13 +26,6 @@
               <span><%= message %></span>
             </div>
           </div>
-        <% elsif type == 'alert' %>
-          <div class="alert alert-danger error-container mb-3 auto-dismiss" role="alert" data-auto-dismiss="7000">
-            <div class="d-flex align-items-center">
-              <i class="bx bx-error-circle me-2" style="font-size: 20px;"></i>
-              <span><%= message %></span>
-            </div>
-          </div>
         <% end %>
       <% end %>
 
@@ -74,6 +67,21 @@
 
   </div>
 </div>
+
+<!-- Floating Error Notification (like Welcome message) -->
+<% flash.each do |type, message| %>
+  <% if type == 'alert' %>
+    <div class="floating-notification error-notification auto-dismiss" data-auto-dismiss="7000">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <i class="bx bx-error-circle me-2" style="font-size: 20px;"></i>
+          <span><%= message %></span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" onclick="this.parentElement.parentElement.remove()"></button>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
   <div id="loginToast" class="toast align-items-center text-white bg-danger border-0"
@@ -125,14 +133,25 @@
 
             const startDismissTimer = () => {
                 timeoutId = setTimeout(() => {
-                    alert.style.transition = 'all 0.5s ease-out';
-                    alert.style.opacity = '0';
-                    alert.style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        if (alert.parentNode) {
-                            alert.parentNode.removeChild(alert);
-                        }
-                    }, 500);
+                    // Different animation for floating notifications
+                    if (alert.classList.contains('floating-notification')) {
+                        alert.classList.add('fade-out');
+                        setTimeout(() => {
+                            if (alert.parentNode) {
+                                alert.parentNode.removeChild(alert);
+                            }
+                        }, 400);
+                    } else {
+                        // Original animation for form alerts
+                        alert.style.transition = 'all 0.5s ease-out';
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-20px)';
+                        setTimeout(() => {
+                            if (alert.parentNode) {
+                                alert.parentNode.removeChild(alert);
+                            }
+                        }, 500);
+                    }
                 }, remainingTime);
             };
 
