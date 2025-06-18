@@ -24,13 +24,13 @@ end
 puts "✅ Super Admin 1: #{super_admin_1.email}"
 
 # Additional Super Admin
-super_admin_2 = User.find_or_create_by(email: "preciousdaniellamapa@gmail.com") do |user|
+super_admin_2 = User.find_or_create_by(email: "zhaineiarasunako0123@gmail.com") do |user|
   user.firstname = "Programmer"
   user.lastname = "ZeroTwo"
   user.academic_college = 0
   user.role = 2
   user.password = "123456"
-  user.api_token = SecureRandom.hex(16)  # Generate unique API token
+  user.api_token = "6dbe948bb56f1d6827fbbd8321c7ad14"
   user.status = 1
 end
 puts "✅ Super Admin 2: #{super_admin_2.email}"
@@ -43,7 +43,8 @@ users_data = [
   { firstname: "Jonel", lastname: "Macalisang", academic_college: 1, role: 1, email: "jonel_macalisang@tup.edu.ph" },
   { firstname: "Hilda", lastname: "Robino", academic_college: 1, role: 1, email: "hilda_robino@tup.edu.ph" },
   { firstname: "Ian", lastname: "De Los Trinos", academic_college: 1, role: 1, email: "ian_delostrinos@tup.edu.ph" },
-  { firstname: "Dennis", lastname: "Tabucol", academic_college: 1, role: 1, email: "dennis_tabucol@tup.edu.ph" }
+  { firstname: "Dennis", lastname: "Tabucol", academic_college: 1, role: 1, email: "dennis_tabucol@tup.edu.ph" },
+  { firstname: "Precious Daniella", lastname: "Mapa", academic_college: 1, role: 1, email: "preciousdaniellamapa@gmail.com" }
 ]
 
 users_data.each do |user_data|
