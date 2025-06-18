@@ -7,9 +7,22 @@ class Admin::Devise::PasswordsController < Devise::PasswordsController
   # end
 
   # POST /resource/password
-  # def create
-  #   super
-  # end
+  def create
+    begin
+      super
+    rescue StandardError => e
+      Rails.logger.error "Password reset email delivery failed: #{e.message}"
+      
+      # Check if email was found but delivery failed
+      if resource.persisted? && resource.errors.empty?
+        flash[:notice] = "If your email address exists in our database, you will receive password reset instructions. (Note: Email delivery is currently being configured)"
+        redirect_to new_user_session_path and return
+      end
+      
+      # If there were other errors, let super handle them
+      super
+    end
+  end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   # def edit

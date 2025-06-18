@@ -65,16 +65,24 @@ Rails.application.configure do
 
   # Configure mailer for production
   config.action_mailer.default_url_options = { host: 'classroom-access-monitoring.onrender.com', protocol: 'https' }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
-    port: 587,
-    domain: 'classroom-access-monitoring.onrender.com',
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: 'plain',
-    enable_starttls_auto: true
-  }
+  
+  # Use SMTP if credentials are available, otherwise use test delivery method
+  if ENV['SMTP_USERNAME'].present? && ENV['SMTP_PASSWORD'].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: 'smtp.gmail.com',
+      port: 587,
+      domain: 'classroom-access-monitoring.onrender.com',
+      user_name: ENV['SMTP_USERNAME'],
+      password: ENV['SMTP_PASSWORD'],
+      authentication: 'plain',
+      enable_starttls_auto: true
+    }
+  else
+    # Fallback to test delivery method (logs emails instead of sending)
+    config.action_mailer.delivery_method = :test
+    Rails.logger.info "SMTP credentials not found. Using test delivery method."
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
