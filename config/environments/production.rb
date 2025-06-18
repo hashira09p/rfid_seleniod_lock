@@ -81,7 +81,7 @@ Rails.application.configure do
   else
     # Fallback to test delivery method (logs emails instead of sending)
     config.action_mailer.delivery_method = :test
-    Rails.logger.info "SMTP credentials not found. Using test delivery method."
+    puts "SMTP credentials not found. Using test delivery method."
   end
 
   # Ignore bad email addresses and do not raise email delivery errors.
