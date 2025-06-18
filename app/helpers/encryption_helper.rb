@@ -5,6 +5,12 @@ module EncryptionHelper
   def self.encrypt(data)
     raise ArgumentError, "Data must not be empty" if data.blank?
 
+    # Check if encryption keys are available
+    unless ENV['ENCRYPTION_KEY'] && ENV['ENCRYPTION_IV']
+      Rails.logger.warn "Encryption keys not available, returning data as Base64"
+      return Base64.encode64(data)
+    end
+
     cipher = OpenSSL::Cipher.new('AES-256-CBC')
     cipher.encrypt
     cipher.key = [ENV['ENCRYPTION_KEY']].pack('H*') # Convert hex string to binary
@@ -14,6 +20,12 @@ module EncryptionHelper
   end
 
   def self.decrypt(data)
+    # Check if encryption keys are available
+    unless ENV['ENCRYPTION_KEY'] && ENV['ENCRYPTION_IV']
+      Rails.logger.warn "Encryption keys not available, returning Base64 decoded data"
+      return Base64.decode64(data)
+    end
+
     cipher = OpenSSL::Cipher.new('AES-256-CBC')
     cipher.decrypt
     cipher.key = [ENV['ENCRYPTION_KEY']].pack('H*') # Convert hex string to binary

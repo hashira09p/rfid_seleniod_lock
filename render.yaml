@@ -18,6 +18,10 @@ services:
         value: production
       - key: RAILS_SERVE_STATIC_FILES
         value: true
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: ENCRYPTION_IV
+        sync: false
 
 databases:
   - name: classroom-access-db
