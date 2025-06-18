@@ -44,9 +44,9 @@
         <%= f.submit "Login", class: "btn-login", id: "loginButton" %>
       </div>
 
-<!--      <div class="forgot-password mt-3">-->
-        <%#= link_to "Forgot your password?", new_password_path(resource_name), class: "text-light small fw-light", style: "opacity: 0.85; text-decoration: none;" %>
-<!--      </div>-->
+      <div class="forgot-password mt-3">
+        <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-light small fw-light", style: "opacity: 0.85; text-decoration: none;" %>
+      </div>
   <% end %>
 
     <div id="messageContainer" style="display: none;">

@@ -184,6 +184,28 @@ body::before {
     transform: translateY(-2px);
 }
 
+.forgot-password {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.forgot-password a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 300;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.forgot-password a:hover {
+    color: #ffffff;
+    opacity: 1;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
 .processing {
     cursor: not-allowed;
 }
