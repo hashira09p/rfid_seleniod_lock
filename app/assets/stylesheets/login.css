@@ -90,6 +90,30 @@ body::before {
     transform: scale(1.02);
 }
 
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #666;
+    z-index: 10;
+    transition: color 0.3s ease;
+    font-size: 18px;
+}
+
+.password-toggle-icon:hover {
+    color: #0faa43;
+}
+
+.password-input-container .form-control {
+    padding-right: 40px;
+}
+
 .btn-login {
     background: linear-gradient(135deg, #0faa43, #06441b);
     color: white;

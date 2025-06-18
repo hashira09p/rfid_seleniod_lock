@@ -1,4 +1,5 @@
 <%= stylesheet_link_tag "login", "data-turbo-track": "reload" %>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 <nav class="navbar navbar-expand-lg navbar-dark px-3 w-100">
   <a class="navbar-brand d-flex align-items-center" href="#">
@@ -24,7 +25,12 @@
 
       <div class="mb-3 text-start">
         <%= f.label :password, class: "form-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <div class="password-input-container">
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control", id: "passwordInput" %>
+          <span class="password-toggle-icon" id="togglePassword">
+            <i class="bx bx-show" id="eyeIcon"></i>
+          </span>
+        </div>
       </div>
 
       <% if devise_mapping.rememberable? %>
@@ -90,6 +96,24 @@
         emailInput.addEventListener('input', toggleLoginButton);
         passwordInput.addEventListener('input', toggleLoginButton);
         toggleLoginButton();
+
+        // Password visibility toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle eye icon
+            if (type === 'password') {
+                eyeIcon.classList.remove('bx-hide');
+                eyeIcon.classList.add('bx-show');
+            } else {
+                eyeIcon.classList.remove('bx-show');
+                eyeIcon.classList.add('bx-hide');
+            }
+        });
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
