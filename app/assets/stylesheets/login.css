@@ -206,6 +206,113 @@ body::before {
     transform: translateY(-1px);
 }
 
+/* Error Message Styling */
+.error-container {
+    background: rgba(220, 53, 69, 0.1) !important;
+    border: 1px solid rgba(220, 53, 69, 0.3) !important;
+    border-radius: 12px !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+    animation: slideInError 0.3s ease-out;
+}
+
+.error-container h6 {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-size: 14px;
+}
+
+.error-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.error-container .error-message {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 13px;
+    font-weight: 300;
+    margin-bottom: 4px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.error-container .error-message:before {
+    content: "•";
+    color: #dc3545;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.error-container .error-message:last-child {
+    margin-bottom: 0;
+}
+
+.error-container .bx-error-circle {
+    color: #dc3545;
+    filter: drop-shadow(0 0 4px rgba(220, 53, 69, 0.3));
+}
+
+@keyframes slideInError {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Success Message Styling (for when reset is successful) */
+.alert-success {
+    background: rgba(25, 135, 84, 0.1) !important;
+    border: 1px solid rgba(25, 135, 84, 0.3) !important;
+    border-radius: 12px !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.2);
+}
+
+.alert-success .bx {
+    color: #198754;
+    filter: drop-shadow(0 0 4px rgba(25, 135, 84, 0.3));
+}
+
+/* Input field validation states */
+.form-control.is-invalid {
+    border-color: rgba(220, 53, 69, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.1) !important;
+    background-image: none !important;
+}
+
+.form-control.is-valid {
+    border-color: rgba(25, 135, 84, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.1) !important;
+    background-image: none !important;
+}
+
+/* Enhanced error styling for better visibility */
+.alert-danger.error-container {
+    border-left: 4px solid #dc3545 !important;
+}
+
+.alert-success {
+    border-left: 4px solid #198754 !important;
+}
+
+/* Smooth transitions for all alerts */
+.alert {
+    transition: all 0.3s ease-in-out;
+}
+
+.alert:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
 .processing {
     cursor: not-allowed;
 }

@@ -21,6 +21,24 @@
       <%= render "devise/shared/error_messages", resource: resource %>
       <%= f.hidden_field :reset_password_token %>
 
+      <% flash.each do |type, message| %>
+        <% if type == 'notice' %>
+          <div class="alert alert-success mb-3" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bx bx-check-circle me-2" style="font-size: 20px;"></i>
+              <span><%= message %></span>
+            </div>
+          </div>
+        <% elsif type == 'alert' %>
+          <div class="alert alert-danger mb-3" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bx bx-error-circle me-2" style="font-size: 20px;"></i>
+              <span><%= message %></span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
       <div class="mb-3 text-start">
         <%= f.label :password, "New Password", class: "form-label" %>
         <div class="password-input-container">
